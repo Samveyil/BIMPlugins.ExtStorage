@@ -125,7 +125,7 @@
 
 	<PropertyGroup>
 		<PackageId>BIMPlugins.ExtStorage</PackageId>
-		<Version>$(RevitVersion).0.0</Version>
+		<Version>$(RevitVersion).0.1</Version>
 		<ProjectGuid>{9813B4DD-6800-47D6-BB50-D720A5FA90D0}</ProjectGuid>
 	</PropertyGroup>
 
