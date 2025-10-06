@@ -10,19 +10,7 @@ namespace BIMPlugins.ExtStorage.Methods
     {
         public static string GetImagePath(string dllName, string imageName)
         {
-#if R2019
-            return $@"/{dllName}_2019;component/Resources/{imageName}";
-#elif R2020
-            return $@"/{dllName}_2020;component/Resources/{imageName}";
-#elif R2021
-            return $@"/{dllName}_2021;component/Resources/{imageName}";
-#elif R2022
-            return $@"/{dllName}_2022;component/Resources/{imageName}";
-#elif R2023
-            return $@"/{dllName}_2023;component/Resources/{imageName}";
-#elif R2024
-            return $@"/{dllName}_2024;component/Resources/{imageName}";
-#endif
+            return $@"/{dllName};component/Resources/{imageName}";
         }
 
         public static void FindTab(UIControlledApplication application, string tabName)
