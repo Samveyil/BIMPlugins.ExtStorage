@@ -62,7 +62,7 @@
 
 	<PropertyGroup>
 		<PackageId>BIMPlugins.ExtStorage</PackageId>
-		<Version>$(RevitVersion).1.2</Version>
+		<Version>$(RevitVersion).1.4</Version>
 		<ProjectGuid>{9813B4DD-6800-47D6-BB50-D720A5FA90D0}</ProjectGuid>
 	</PropertyGroup>
 
@@ -95,8 +95,24 @@
 
 	<ItemGroup>
 		<PackageReference Include="JetBrains.Annotations" Version="2024.*" IncludeAssets="build; compile" PrivateAssets="All" />
-		<PackageReference Include="MaterialDesignThemes" Version="*" />
-		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitVersion).*" IncludeAssets="build; compile" PrivateAssets="All"/>
+		<PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
+		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitVersion).*" IncludeAssets="build; compile" PrivateAssets="All" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" IncludeAssets="build; compile" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\copy-32.png" />
+	  <Resource Include="Resources\ctrlV-25.png" />
+	  <Resource Include="Resources\find-32.png" />
+	  <Resource Include="Resources\getById-32.png" />
+	  <Resource Include="Resources\linking-32.png" />
+	  <Resource Include="Resources\minus-32.png" />
+	  <Resource Include="Resources\plus-32.png" />
+	  <Resource Include="Resources\search-32.png" />
+	  <Resource Include="Resources\sectionBox-32.png" />
+	  <Resource Include="Resources\sync.png" />
+	  <Resource Include="Resources\target-32.png" />
+	  <Resource Include="Resources\warning-32.png" />
+	  <Resource Include="Resources\xml-32.png" />
 	</ItemGroup>
 </Project>
