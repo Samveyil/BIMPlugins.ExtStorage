@@ -24,7 +24,8 @@
     "ExecutableTarget": {
       "type": "string",
       "enum": [
-        "Compile"
+        "Compile",
+        "PushToGitHubNugetRepository"
       ]
     },
     "Verbosity": {
@@ -98,6 +99,14 @@
   "allOf": [
     {
       "properties": {
+        "NugetApiKey": {
+          "type": "string",
+          "description": "API Key for the NuGet feed"
+        },
+        "NugetSource": {
+          "type": "string",
+          "description": "URL of the NuGet feed"
+        },
         "PluginName": {
           "type": "string",
           "description": "Name of the plugin to compile"
