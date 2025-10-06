@@ -1,5 +1,4 @@
-﻿using Autodesk.Revit.ApplicationServices;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MaterialDesignColors;
@@ -11,10 +10,10 @@ namespace BIMPlugins.ExtStorage
     public static class RevitAPI
     {
         public static UIApplication UIApplication { get; set; } = new Autodesk.Revit.UI.Events.RibbonItemEventArgs().Application;
-        public static Application Application { get => UIApplication.Application; }
+        public static Autodesk.Revit.ApplicationServices.Application Application { get => UIApplication.Application; }
         public static UIDocument UIDocument { get => UIApplication.ActiveUIDocument; }
         public static Document Document { get => UIDocument.Document; }
-        public static View ActiveView { get => Document.ActiveView; }
+        public static Autodesk.Revit.DB.View ActiveView { get => Document.ActiveView; }
 
         public static void InitializeMaterialDesign()
         {

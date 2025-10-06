@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using Binding = System.Windows.Data.Binding;
 
 namespace BIMPlugins.ExtStorage.Converters
 {

@@ -2,6 +2,7 @@
 using Autodesk.Revit.Exceptions;
 using BIMPlugins.ExtStorage.Methods;
 using System.Windows;
+using MessageBox = System.Windows.MessageBox;
 
 namespace BIMPlugins.ExtStorage.Extensions
 {
