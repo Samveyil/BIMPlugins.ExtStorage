@@ -29,6 +29,15 @@ class Build : NukeBuild
             if (project == null)
                 throw new FileNotFoundException("Not found!");
 
+            var matchedNupkgs = Directory
+                .GetFiles(RootDirectory, "*.nupkg", SearchOption.AllDirectories)
+                .ToList();
+
+            foreach (var nupkg in matchedNupkgs)
+            {
+                File.Delete(nupkg);
+            }
+
             var build = new List<string>();
             foreach (var (_, c) in project.Configurations)
             {
