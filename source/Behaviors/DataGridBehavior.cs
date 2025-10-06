@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace BIMPlugins.ExtStorage.Behaviors
 {
@@ -17,7 +16,7 @@ namespace BIMPlugins.ExtStorage.Behaviors
 
         private static void OnSelectedItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is DataGrid dataGrid)
+            if (d is System.Windows.Controls.DataGrid dataGrid)
             {
                 dataGrid.SelectedItems.Clear();
                 if (e.NewValue is IList items)

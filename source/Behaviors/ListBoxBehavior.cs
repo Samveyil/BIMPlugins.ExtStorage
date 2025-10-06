@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace BIMPlugins.ExtStorage.Behaviors
 {
@@ -17,7 +16,7 @@ namespace BIMPlugins.ExtStorage.Behaviors
 
         private static void OnSelectedItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is ListBox listBox)
+            if (d is System.Windows.Controls.ListBox listBox)
             {
                 listBox.SelectedItems.Clear();
                 if (e.NewValue is IList items)
