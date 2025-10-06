@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:BIMPlugins.ExtStorage.MessageBoxes"
         d:DataContext="{d:DesignInstance local:MessageViewModel}"
         mc:Ignorable="d"
-        Title="SE Plugins" MinHeight="150" MinWidth="300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="WidthAndHeight" Topmost="True">
+        Title="BIMPlugins" MinHeight="150" MinWidth="300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="WidthAndHeight" Topmost="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
