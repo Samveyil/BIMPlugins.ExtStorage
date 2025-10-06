@@ -62,7 +62,7 @@
 
 	<PropertyGroup>
 		<PackageId>BIMPlugins.ExtStorage</PackageId>
-		<Version>$(RevitVersion).0.5</Version>
+		<Version>$(RevitVersion).1.1</Version>
 		<ProjectGuid>{9813B4DD-6800-47D6-BB50-D720A5FA90D0}</ProjectGuid>
 	</PropertyGroup>
 
@@ -94,9 +94,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="JetBrains.Annotations" Version="2024.*" ExcludeAssets="runtime" />
+		<PackageReference Include="JetBrains.Annotations" Version="2024.*" IncludeAssets="build; compile" PrivateAssets="All" />
 		<PackageReference Include="MaterialDesignThemes" Version="*" />
-		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitVersion).*" ExcludeAssets="runtime" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" ExcludeAssets="runtime" />
+		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitVersion).*" IncludeAssets="build; compile" PrivateAssets="All"/>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" IncludeAssets="build; compile" />
 	</ItemGroup>
 </Project>
