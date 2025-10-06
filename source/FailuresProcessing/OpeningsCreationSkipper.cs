@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using System.Collections.Generic;
 
 namespace BIMPlugins.ExtStorage.FailuresProcessing
 {
