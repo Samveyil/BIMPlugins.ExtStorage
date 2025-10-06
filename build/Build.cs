@@ -1,21 +1,26 @@
-using System.Collections.Generic;
-using System.IO;
 using Nuke.Common;
-using Nuke.Common.Execution;
+using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
+using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.MSBuild;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.MSBuild.MSBuildTasks;
 
-[UnsetVisualStudioEnvironmentVariables]
 class Build : NukeBuild
 {
     public static int Main() => Execute<Build>(x => x.Compile);
 
     [Solution] readonly Solution Solution;
 
-    [Parameter("Name of the plugin to compile")]
-    readonly string PluginName = "BIMPlugins.ExtStorage";
+    [Parameter("Name of the plugin to compile")] readonly string PluginName = "BIMPlugins.ExtStorage";
+
+    [Parameter("URL of the NuGet feed")] readonly string NugetSource = @"https://nuget.pkg.github.com/Samveyil/index.json";
+    [Parameter("API Key for the NuGet feed")] readonly string NugetApiKey = "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";
 
     Target Compile => _ => _
         .Executes(() =>
@@ -50,6 +55,23 @@ class Build : NukeBuild
                     .SetProjectFile(project.Path)
                     .SetConfiguration(configuration)
                     .SetTargets("Rebuild"));
+            }
+        });
+
+    Target PushToGitHubNugetRepository => _ => _ 
+    .Executes(() =>
+        {
+            var matchedNupkgs = Directory
+                .GetFiles(RootDirectory, "*.nupkg", SearchOption.AllDirectories)
+                .ToList();
+
+            foreach (var nupkg in matchedNupkgs)
+            {
+                DotNetNuGetPush(s => s
+                    .SetTargetPath(nupkg)
+                    .SetApiKey(NugetApiKey)
+                    .SetSource(NugetSource)
+                );
             }
         });
 }
