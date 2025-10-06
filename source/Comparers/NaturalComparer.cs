@@ -1,4 +1,6 @@
-﻿namespace BIMPlugins.ExtStorage.Comparers
+﻿using System.Collections.Generic;
+
+namespace BIMPlugins.ExtStorage.Comparers
 {
     public class NaturalComparer : IComparer<string>
     {
