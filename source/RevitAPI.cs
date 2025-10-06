@@ -14,7 +14,7 @@ namespace BIMPlugins.ExtStorage
         public static Autodesk.Revit.ApplicationServices.Application Application { get => UIApplication.Application; }
         public static UIDocument UIDocument { get => UIApplication.ActiveUIDocument; }
         public static Document Document { get => UIDocument.Document; }
-        public static Autodesk.Revit.DB.View ActiveView { get => Document.ActiveView; }
+        public static View ActiveView { get => Document.ActiveView; }
 
         public static void InitializeMaterialDesign()
         {
