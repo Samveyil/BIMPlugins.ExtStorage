@@ -24,8 +24,9 @@
     "ExecutableTarget": {
       "type": "string",
       "enum": [
+        "Clean",
         "Compile",
-        "PushToGitHubNugetRepository"
+        "PushToNugetRepositiry"
       ]
     },
     "Verbosity": {
@@ -99,21 +100,30 @@
   "allOf": [
     {
       "properties": {
-        "NugetApiKey": {
-          "type": "string",
-          "description": "API Key for the NuGet feed"
+        "Configurations": {
+          "type": "array",
+          "description": "Build configurations to run sequentially",
+          "items": {
+            "type": "string",
+            "enum": [
+              "R2019",
+              "R2020",
+              "R2021",
+              "R2022",
+              "R2023",
+              "R2024",
+              "R2025",
+              "R2026"
+            ]
+          }
         },
-        "NugetSource": {
+        "ProjectName": {
           "type": "string",
-          "description": "URL of the NuGet feed"
-        },
-        "PluginName": {
-          "type": "string",
-          "description": "Name of the plugin to compile"
+          "description": "Project to build name"
         },
         "Solution": {
           "type": "string",
-          "description": "Path to a solution file that is automatically loaded"
+          "description": "Path to a solution file that is automatically loaded. Default is BIMPlugins.ExtStorage.sln"
         }
       }
     },

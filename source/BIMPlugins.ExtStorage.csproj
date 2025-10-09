@@ -86,6 +86,7 @@
 		<PackageProjectUrl>https://github.com/$(GitHubRepositoryOwner)/$(PackageId)</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/$(GitHubRepositoryOwner)/$(PackageId)</RepositoryUrl>
 		<RepositoryType>github</RepositoryType>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIconUrl />
 	</PropertyGroup>
 
@@ -94,10 +95,25 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="JetBrains.Annotations" Version="2024.*" IncludeAssets="build; compile" PrivateAssets="All" />
-		<PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
+		<PackageReference Include="MaterialDesignThemes" Version="5.2.1" IncludeAssets="build; compile" PrivateAssets="All"/>
 		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitVersion).*" IncludeAssets="build; compile" PrivateAssets="All" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" IncludeAssets="build; compile" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" IncludeAssets="build; compile" PrivateAssets="All" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+			<Visible>false</Visible>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+			<Visible>false</Visible>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
