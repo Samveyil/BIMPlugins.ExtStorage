@@ -8,14 +8,7 @@ Package with my developments
 
 ```C#
 var wall = new ElementId(123456).ToElement<Wall>();
-var parameterFilter = sheetParameter.Id.CreateEqualsFilter("ÊÆ3"); 
-```
-
-## ElementIdExtensions
-
-```C#
-var wall = new ElementId(123456).ToElement<Wall>();
-var parameterFilter = sheetParameter.Id.CreateEqualsFilter("ÊÆ3"); 
+var parameterFilter = sheetParameter.Id.CreateEqualsFilter("value"); 
 ```
 
 ## ElementExtensions
