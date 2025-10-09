@@ -5,8 +5,8 @@ using Nuke.Common.ProjectModel;
 public class Build : BIMPluginsBuild
 {
     protected override int MajorVersion => 0;
-    protected override int MinorVersion => 1;
-    protected override int MaintenanceVersion => 9;
+    protected override int MinorVersion => 2;
+    protected override int MaintenanceVersion => 0;
 
 
     [Solution("BIMPlugins.ExtStorage.sln")]
@@ -16,7 +16,7 @@ public class Build : BIMPluginsBuild
     public override string ProjectName { get; } = "BIMPlugins.ExtStorage";
 
     [Parameter("Build configurations to run sequentially")]
-    public override Configuration[] Configurations { get; } = new[] { Configuration.R2019, Configuration.R2020, Configuration.R2021, Configuration.R2022, Configuration.R2023, Configuration.R2024 };
+    public override Configuration[] Configurations { get; } = new[] { Configuration.R2019, Configuration.R2020, Configuration.R2021, Configuration.R2022, Configuration.R2023 };
 
     public static int Main() => Execute<Build>(x => x.Compile);
 }
