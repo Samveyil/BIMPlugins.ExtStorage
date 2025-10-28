@@ -35,7 +35,7 @@ namespace BIMPlugins.ExtStorage.Methods
         {
             Autodesk.Windows.RibbonButton button = new Autodesk.Windows.RibbonButton
             {
-                Id = "SE_Plugins_" + name,
+                Id = "BIMPlugins_" + name,
                 AllowInStatusBar = true,
                 AllowInToolBar = true,
                 GroupLocation = Autodesk.Private.Windows.RibbonItemGroupLocation.Single,
@@ -67,9 +67,9 @@ namespace BIMPlugins.ExtStorage.Methods
 
             RibbonPanelSource source = new RibbonPanelSource()
             {
-                Id = "SE Plugins_Modify",
-                Name = "SE Plugins",
-                Title = "SE Plugins"
+                Id = "BIMPlugins_Modify",
+                Name = "BIMPlugins",
+                Title = "BIMPlugins"
             };
             panel.Source = source;
 
