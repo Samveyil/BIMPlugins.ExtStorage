@@ -107,72 +107,119 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .ToElementIds();
         }
 
-        public static IList<Element> ToElements(this Document document, ElementFilter filter)
+        public static IList<Element> ToElements(this Document document, ElementFilter filter, bool toTypes=false)
         {
-            return new FilteredElementCollector(document)
-                .WhereElementIsNotElementType()
+            var collector = toTypes
+                ? new FilteredElementCollector(document).WhereElementIsElementType()
+                : new FilteredElementCollector(document).WhereElementIsNotElementType();
+
+            return collector
                 .WherePasses(filter)
                 .ToElements();
         }
-        public static IList<Element> ToElements(this Document document, BuiltInCategory category)
+        public static IList<Element> ToElements(this Document document, BuiltInCategory category, bool toTypes = false)
         {
-            return new FilteredElementCollector(document)
-                .OfCategory(category)
-                .WhereElementIsNotElementType()
-                .ToElements();
+            return toTypes
+                ? new FilteredElementCollector(document)
+                    .OfCategory(category)
+                    .WhereElementIsElementType()
+                    .ToElements()
+                : new FilteredElementCollector(document)
+                    .OfCategory(category)
+                    .WhereElementIsNotElementType()
+                    .ToElements();
         }
-        public static IList<Element> ToElements(this Document document, BuiltInCategory category, ElementFilter filter)
+        public static IList<Element> ToElements(this Document document, BuiltInCategory category, ElementFilter filter, bool toTypes = false)
         {
-            return new FilteredElementCollector(document)
-                .OfCategory(category)
-                .WhereElementIsNotElementType()
-                .WherePasses(filter)
-                .ToElements();
+            return toTypes
+                ? new FilteredElementCollector(document)
+                    .OfCategory(category)
+                    .WhereElementIsElementType()
+                    .WherePasses(filter)
+                    .ToElements()
+                : new FilteredElementCollector(document)
+                    .OfCategory(category)
+                    .WhereElementIsNotElementType()
+                    .WherePasses(filter)
+                    .ToElements();
         }
-        public static IList<Element> ToElements(this Document document, BuiltInCategory category, ElementId viewId)
+        public static IList<Element> ToElements(this Document document, BuiltInCategory category, ElementId viewId, bool toTypes = false)
         {
-            return new FilteredElementCollector(document, viewId)
-                .OfCategory(category)
-                .WhereElementIsNotElementType()
-                .ToElements();
+            return toTypes
+                ? new FilteredElementCollector(document, viewId)
+                    .OfCategory(category)
+                    .WhereElementIsElementType()
+                    .ToElements()
+                : new FilteredElementCollector(document, viewId)
+                    .OfCategory(category)
+                    .WhereElementIsNotElementType()
+                    .ToElements();
         }
-        public static IList<Element> ToElements(this Document document, BuiltInCategory category, ElementId viewId, ElementFilter filter)
+        public static IList<Element> ToElements(this Document document, BuiltInCategory category, ElementId viewId, ElementFilter filter, bool toTypes = false)
         {
-            return new FilteredElementCollector(document, viewId)
-                .OfCategory(category)
-                .WhereElementIsNotElementType()
-                .WherePasses(filter)
-                .ToElements();
+            return toTypes
+                ? new FilteredElementCollector(document, viewId)
+                    .OfCategory(category)
+                    .WhereElementIsElementType()
+                    .WherePasses(filter)
+                    .ToElements()
+                : new FilteredElementCollector(document, viewId)
+                    .OfCategory(category)
+                    .WhereElementIsNotElementType()
+                    .WherePasses(filter)
+                    .ToElements();
         }
-        public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category)
+        public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, bool toTypes = false)
         {
-            return new FilteredElementCollector(document)
-                .OfCategory(category)
-                .WhereElementIsNotElementType()
-                .ToElementIds();
+            return toTypes
+                ? new FilteredElementCollector(document)
+                    .OfCategory(category)
+                    .WhereElementIsElementType()
+                    .ToElementIds()
+                : new FilteredElementCollector(document)
+                    .OfCategory(category)
+                    .WhereElementIsNotElementType()
+                    .ToElementIds();
         }
-        public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, ElementFilter filter)
+        public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, ElementFilter filter, bool toTypes = false)
         {
-            return new FilteredElementCollector(document)
-                .OfCategory(category)
-                .WhereElementIsNotElementType()
-                .WherePasses(filter)
-                .ToElementIds();
+            return toTypes
+                ? new FilteredElementCollector(document)
+                    .OfCategory(category)
+                    .WhereElementIsElementType()
+                    .WherePasses(filter)
+                    .ToElementIds()
+                : new FilteredElementCollector(document)
+                    .OfCategory(category)
+                    .WhereElementIsNotElementType()
+                    .WherePasses(filter)
+                    .ToElementIds();
         }
-        public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, ElementId viewId)
+        public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, ElementId viewId, bool toTypes = false)
         {
-            return new FilteredElementCollector(document, viewId)
-                .OfCategory(category)
-                .WhereElementIsNotElementType()
-                .ToElementIds();
+            return toTypes
+                ? new FilteredElementCollector(document, viewId)
+                    .OfCategory(category)
+                    .WhereElementIsElementType()
+                    .ToElementIds()
+                : new FilteredElementCollector(document, viewId)
+                    .OfCategory(category)
+                    .WhereElementIsNotElementType()
+                    .ToElementIds();
         }
-        public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, ElementId viewId, ElementFilter filter)
+        public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, ElementId viewId, ElementFilter filter, bool toTypes = false)
         {
-            return new FilteredElementCollector(document, viewId)
-                .OfCategory(category)
-                .WhereElementIsNotElementType()
-                .WherePasses(filter)
-                .ToElementIds();
+            return toTypes
+                ? new FilteredElementCollector(document, viewId)
+                    .OfCategory(category)
+                    .WhereElementIsElementType()
+                    .WherePasses(filter)
+                    .ToElementIds()
+                : new FilteredElementCollector(document, viewId)
+                    .OfCategory(category)
+                    .WhereElementIsNotElementType()
+                    .WherePasses(filter)
+                    .ToElementIds();
         }
 
         public static IEnumerable<Element> ToModelElements(this Document document)
