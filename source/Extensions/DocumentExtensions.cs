@@ -60,6 +60,13 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .OfClass(typeof(T))
                 .Cast<T>();
         }
+        public static IEnumerable<T> ToElements<T>(this Document document, BuiltInCategory category) where T : Element
+        {
+            return new FilteredElementCollector(document)
+                .OfClass(typeof(T))
+                .OfCategory(category)
+                .Cast<T>();
+        }
         public static IEnumerable<T> ToElements<T>(this Document document, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document)
@@ -80,10 +87,25 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .WherePasses(filter)
                 .Cast<T>();
         }
+        public static IEnumerable<T> ToElements<T>(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter) where T : Element
+        {
+            return new FilteredElementCollector(document, viewId)
+                .OfClass(typeof(T))
+                .OfCategory(category)
+                .WherePasses(filter)
+                .Cast<T>();
+        }
         public static ICollection<ElementId> ToElementIds<T>(this Document document)
         {
             return new FilteredElementCollector(document)
                 .OfClass(typeof(T))
+                .ToElementIds();
+        }
+        public static ICollection<ElementId> ToElementIds<T>(this Document document, BuiltInCategory category)
+        {
+            return new FilteredElementCollector(document)
+                .OfClass(typeof(T))
+                .OfCategory(category)
                 .ToElementIds();
         }
         public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementFilter filter)
@@ -103,6 +125,14 @@ namespace BIMPlugins.ExtStorage.Extensions
         {
             return new FilteredElementCollector(document, viewId)
                 .OfClass(typeof(T))
+                .WherePasses(filter)
+                .ToElementIds();
+        }
+        public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter)
+        {
+            return new FilteredElementCollector(document, viewId)
+                .OfClass(typeof(T))
+                .OfCategory(category)
                 .WherePasses(filter)
                 .ToElementIds();
         }
