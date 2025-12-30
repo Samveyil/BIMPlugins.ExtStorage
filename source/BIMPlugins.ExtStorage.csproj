@@ -95,7 +95,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MaterialDesignThemes" Version="5.2.1" IncludeAssets="build; compile" PrivateAssets="All"/>
+		<PackageReference Include="MaterialDesignThemes" Version="5.2.1" IncludeAssets="build; compile" PrivateAssets="All" />
 		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitVersion).*" IncludeAssets="build; compile" PrivateAssets="All" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" IncludeAssets="build; compile" PrivateAssets="All" />
 	</ItemGroup>
