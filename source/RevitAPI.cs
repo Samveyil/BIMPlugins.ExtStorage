@@ -1,10 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using CommunityToolkit.Mvvm.ComponentModel;
-using MaterialDesignColors;
-using MaterialDesignThemes.Wpf;
 using System;
-using System.Windows.Media;
 
 namespace BIMPlugins.ExtStorage
 {
@@ -16,22 +12,10 @@ namespace BIMPlugins.ExtStorage
         public static Document Document { get => UIDocument.Document; }
         public static View ActiveView { get => Document.ActiveView; }
 
-        public static void InitializeMaterialDesign()
+        public class MyEventHandler<T>(T target, Action<T> action) : IExternalEventHandler
         {
-            var card = new Card();
-            var hue = new Hue("Dammy", Colors.Black, Colors.White);
-        }
-
-        public class MyEventHandler<T> : IExternalEventHandler where T : ObservableObject
-        {
-            private readonly T _target;
-            private readonly Action<T> _action;
-
-            public MyEventHandler(T target, Action<T> action)
-            {
-                _target = target;
-                _action = action;
-            }
+            private readonly T _target = target;
+            private readonly Action<T> _action = action;
 
             public void Execute(UIApplication app)
             {
@@ -45,10 +29,7 @@ namespace BIMPlugins.ExtStorage
                 }
             }
 
-            public string GetName()
-            {
-                return "GenericEventHandler";
-            }
+            public string GetName() => "GenericEventHandler";
         }
     }
 }
