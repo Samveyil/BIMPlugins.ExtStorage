@@ -23,7 +23,11 @@ namespace BIMPlugins.ExtStorage.Extensions
             return null;
         }
 
+#if !R2025_OR_GREATER
         public static bool InsertParameter(this BindingMap bindingMap, string paramName, Guid paramGuid, List<Category> categories, bool isInstance=true, BuiltInParameterGroup parameterGroup=BuiltInParameterGroup.INVALID)
+#else
+        public static bool InsertParameter(this BindingMap bindingMap, string paramName, Guid paramGuid, List<Category> categories, bool isInstance = true)
+#endif
         {
             var hasParameter = false;
 
@@ -80,9 +84,11 @@ namespace BIMPlugins.ExtStorage.Extensions
                 using (Transaction t = new Transaction(RevitAPI.Document, "Загрузка параметра"))
                 {
                     t.Start();
-
+#if !R2025_OR_GREATER
                     result = bindingMap.Insert(extDef, binding, parameterGroup);
-
+#else
+                    result = bindingMap.Insert(extDef, binding);
+#endif
                     t.Commit();
                 }
 
