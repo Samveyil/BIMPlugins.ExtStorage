@@ -101,6 +101,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Resources\**" />
+	  <EmbeddedResource Remove="Resources\**" />
+	  <None Remove="Resources\**" />
+	  <Page Remove="Resources\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitVersion).*" IncludeAssets="build; compile" PrivateAssets="All" />
 	</ItemGroup>
 
@@ -118,21 +125,5 @@
 			<PackagePath></PackagePath>
 			<Visible>false</Visible>
 		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Resource Include="Resources\copy-32.png" />
-	  <Resource Include="Resources\ctrlV-25.png" />
-	  <Resource Include="Resources\find-32.png" />
-	  <Resource Include="Resources\getById-32.png" />
-	  <Resource Include="Resources\linking-32.png" />
-	  <Resource Include="Resources\minus-32.png" />
-	  <Resource Include="Resources\plus-32.png" />
-	  <Resource Include="Resources\search-32.png" />
-	  <Resource Include="Resources\sectionBox-32.png" />
-	  <Resource Include="Resources\sync.png" />
-	  <Resource Include="Resources\target-32.png" />
-	  <Resource Include="Resources\warning-32.png" />
-	  <Resource Include="Resources\xml-32.png" />
 	</ItemGroup>
 </Project>
