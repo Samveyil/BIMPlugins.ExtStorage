@@ -17,7 +17,7 @@ namespace BIMPlugins.ExtStorage.Methods
                 List<WorksetId> worksetIds = [];
                 foreach (WorksetPreview workset in worksets)
                 {
-                    if (!workset.Name.Contains("#"))
+                    if (!workset.Name.StartsWith("#") && !workset.Name.StartsWith("!"))
                     {
                         worksetIds.Add(workset.Id);
                     }
@@ -33,6 +33,18 @@ namespace BIMPlugins.ExtStorage.Methods
             catch (RevitServerCommunicationException) { }
 
             return opts;
+        }
+
+        public static SaveAsOptions SetSaveAsOptions()
+        {
+            WorksharingSaveAsOptions worksharingOptions = new WorksharingSaveAsOptions();
+            worksharingOptions.SaveAsCentral = true;
+            
+            SaveAsOptions saveOptions = new SaveAsOptions();
+            saveOptions.OverwriteExistingFile = true;
+            saveOptions.SetWorksharingOptions(worksharingOptions);
+            
+            return saveOptions;
         }
     }
 }
