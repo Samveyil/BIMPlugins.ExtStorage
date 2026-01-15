@@ -1,7 +1,11 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Events;
+using BIMPlugins.ExtStorage.Methods;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace BIMPlugins.ExtStorage.Extensions
 {
@@ -327,6 +331,85 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .Where(e => e.GetBuiltInCategory() != BuiltInCategory.OST_Parts)
                 .Select(e => e.Id)
                 .ToList();
+        }
+
+        public static void PurgeUnused(this Document document)
+        {
+            RevitAPI.UIApplication.DialogBoxShowing += new EventHandler<DialogBoxShowingEventArgs>(ExMethods.WarningDialogHide);
+
+            string desiredRule = "Проект содержит неиспользуемые семейства и типоразмеры";
+
+            PerformanceAdviser perfAdviser = PerformanceAdviser.GetPerformanceAdviser();
+
+            IList<PerformanceAdviserRuleId> allRulesList = perfAdviser.GetAllRuleIds();
+            IList<PerformanceAdviserRuleId> rulesToExecute = new List<PerformanceAdviserRuleId>();
+            foreach (PerformanceAdviserRuleId r in allRulesList)
+            {
+                if (perfAdviser.GetRuleName(r).Equals(desiredRule))
+                    rulesToExecute.Add(r);
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                IList<FailureMessage> failureMessages = perfAdviser.ExecuteRules(document, rulesToExecute);
+                if (failureMessages.Count() != 0)
+                {
+                    ICollection<ElementId> failingElementsIds = failureMessages[0].GetFailingElements();
+                    using (Transaction t = new Transaction(document, "Удалить неиспользуемое"))
+                    {
+                        t.Start();
+
+                        foreach (ElementId eid in failingElementsIds)
+                        {
+                            try
+                            {
+                                document.Delete(eid);
+                            }
+                            catch { }
+                        }
+
+                        t.Commit();
+                    }
+                }
+
+                List<ElementId> unusedAssetIds = [];
+
+                try
+                {
+                    AddUnusedAssets(document, GetUnusedAssets(document, "GetUnusedMaterials"), unusedAssetIds);
+                    AddUnusedAssets(document, GetUnusedAssets(document, "GetUnusedAppearances"), unusedAssetIds);
+                    AddUnusedAssets(document, GetUnusedAssets(document, "GetUnusedStructures"), unusedAssetIds);
+                    AddUnusedAssets(document, GetUnusedAssets(document, "GetUnusedThermals"), unusedAssetIds);
+
+                    using (Transaction t = new Transaction(document, "Удалить неиспользуемое"))
+                    {
+                        t.Start();
+
+                        document.Delete(unusedAssetIds);
+
+                        t.Commit();
+                    }
+                }
+                catch { }
+            }
+
+            RevitAPI.UIApplication.DialogBoxShowing -= new EventHandler<DialogBoxShowingEventArgs>(ExMethods.WarningDialogHide);
+        }
+        private static ICollection<ElementId> GetUnusedAssets(Document doc, string methodName)
+        {
+            MethodInfo method = typeof(Document).GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
+            if (method != null)
+                return (ICollection<ElementId>)method.Invoke(doc, null);
+            return new List<ElementId>();
+        }
+        private static void AddUnusedAssets(Document doc, ICollection<ElementId> elementIds, List<ElementId> ids)
+        {
+            foreach (var id in elementIds)
+            {
+                Element elem = doc.GetElement(id);
+                if (elem != null)
+                    ids.Add(id);
+            }
         }
     }
 }

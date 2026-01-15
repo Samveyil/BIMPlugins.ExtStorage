@@ -27,7 +27,6 @@ namespace BIMPlugins.ExtStorage.Methods
                 worksetConfig.Open(worksetIds);
 
                 opts.SetOpenWorksetsConfiguration(worksetConfig);
-
             }
             catch (CentralModelException) { }
             catch (RevitServerCommunicationException) { }
