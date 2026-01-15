@@ -6,25 +6,26 @@ namespace BIMPlugins.ExtStorage.Methods
 {
     public static class FileMethods
     {
-        public static OpenOptions SetOpenOptions(ModelPath projectPath, DetachFromCentralOption detachOption = DetachFromCentralOption.DetachAndPreserveWorksets)
+        public static OpenOptions SetOpenOptions(ModelPath projectPath, DetachFromCentralOption detachOption = DetachFromCentralOption.DetachAndPreserveWorksets, bool closeAllWorksets=true)
         {
-            OpenOptions opts = new OpenOptions();
-            opts.DetachFromCentralOption = detachOption;
+            OpenOptions opts = new OpenOptions() { DetachFromCentralOption = detachOption};
 
             try
             {
-                List<WorksetPreview> worksets = (List<WorksetPreview>)WorksharingUtils.GetUserWorksetInfo(projectPath);
-                List<WorksetId> worksetIds = [];
-                foreach (WorksetPreview workset in worksets)
+                var worksetConfig = new WorksetConfiguration(WorksetConfigurationOption.CloseAllWorksets);
+                
+                if (!closeAllWorksets)
                 {
-                    if (!workset.Name.StartsWith("#") && !workset.Name.StartsWith("!"))
+                    List<WorksetPreview> worksets = (List<WorksetPreview>)WorksharingUtils.GetUserWorksetInfo(projectPath);
+                    List<WorksetId> worksetIds = [];
+                    foreach (WorksetPreview workset in worksets)
                     {
-                        worksetIds.Add(workset.Id);
+                        if (!workset.Name.StartsWith("#") && !workset.Name.StartsWith("!"))
+                            worksetIds.Add(workset.Id);
                     }
-                }
 
-                WorksetConfiguration worksetConfig = new WorksetConfiguration(WorksetConfigurationOption.CloseAllWorksets);
-                worksetConfig.Open(worksetIds);
+                    worksetConfig.Open(worksetIds);
+                }
 
                 opts.SetOpenWorksetsConfiguration(worksetConfig);
             }
@@ -33,7 +34,7 @@ namespace BIMPlugins.ExtStorage.Methods
 
             return opts;
         }
-
+        
         public static SaveAsOptions SetSaveAsOptions()
         {
             WorksharingSaveAsOptions worksharingOptions = new WorksharingSaveAsOptions();
