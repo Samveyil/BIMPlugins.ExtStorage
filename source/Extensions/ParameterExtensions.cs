@@ -62,10 +62,16 @@ namespace BIMPlugins.ExtStorage.Extensions
         {
             return parameter.Definition.ParameterType;
         }
+        
+        public static BuiltInParameterGroup GetParameterGroup(this Parameter parameter)
+        {
+            return parameter.Definition.ParameterGroup;
+        }
         public static BuiltInParameterGroup GetParameterGroup(this FamilyParameter parameter)
         {
             return parameter.Definition.ParameterGroup;
         }
+        
         public static DisplayUnitType GetUnitType(this Parameter parameter)
         {
             return parameter.DisplayUnitType;
@@ -80,10 +86,16 @@ namespace BIMPlugins.ExtStorage.Extensions
         {
             return parameter.Definition.GetDataType();
         }
+        
+        public static ForgeTypeId GetParameterGroup(this Parameter parameter)
+        {
+            return parameter.Definition.GetGroupTypeId();
+        }
         public static ForgeTypeId GetParameterGroup(this FamilyParameter parameter)
         {
             return parameter.Definition.GetGroupTypeId();
         }
+        
         public static ForgeTypeId GetUnitType(this Parameter parameter)
         {
             return parameter.GetUnitTypeId();
