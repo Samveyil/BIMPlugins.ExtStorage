@@ -91,6 +91,13 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .WherePasses(filter)
                 .Cast<T>();
         }
+        public static IEnumerable<T> ToElements<T>(this Document document, ElementId viewId, BuiltInCategory category) where T : Element
+        {
+            return new FilteredElementCollector(document, viewId)
+                .OfClass(typeof(T))
+                .OfCategory(category)
+                .Cast<T>();
+        }
         public static IEnumerable<T> ToElements<T>(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document, viewId)
@@ -130,6 +137,13 @@ namespace BIMPlugins.ExtStorage.Extensions
             return new FilteredElementCollector(document, viewId)
                 .OfClass(typeof(T))
                 .WherePasses(filter)
+                .ToElementIds();
+        }
+        public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId, BuiltInCategory category)
+        {
+            return new FilteredElementCollector(document, viewId)
+                .OfClass(typeof(T))
+                .OfCategory(category)
                 .ToElementIds();
         }
         public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter)
@@ -177,7 +191,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .WherePasses(filter)
                     .ToElements();
         }
-        public static IList<Element> ToElements(this Document document, BuiltInCategory category, ElementId viewId, bool toTypes = false)
+        public static IList<Element> ToElements(this Document document, ElementId viewId, BuiltInCategory category, bool toTypes = false)
         {
             return toTypes
                 ? new FilteredElementCollector(document, viewId)
@@ -189,7 +203,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .WhereElementIsNotElementType()
                     .ToElements();
         }
-        public static IList<Element> ToElements(this Document document, BuiltInCategory category, ElementId viewId, ElementFilter filter, bool toTypes = false)
+        public static IList<Element> ToElements(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter, bool toTypes = false)
         {
             return toTypes
                 ? new FilteredElementCollector(document, viewId)
@@ -229,7 +243,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .WherePasses(filter)
                     .ToElementIds();
         }
-        public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, ElementId viewId, bool toTypes = false)
+        public static ICollection<ElementId> ToElementIds(this Document document, ElementId viewId, BuiltInCategory category, bool toTypes = false)
         {
             return toTypes
                 ? new FilteredElementCollector(document, viewId)
@@ -241,7 +255,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .WhereElementIsNotElementType()
                     .ToElementIds();
         }
-        public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, ElementId viewId, ElementFilter filter, bool toTypes = false)
+        public static ICollection<ElementId> ToElementIds(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter, bool toTypes = false)
         {
             return toTypes
                 ? new FilteredElementCollector(document, viewId)
