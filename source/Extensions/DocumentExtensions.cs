@@ -71,6 +71,14 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .OfCategory(category)
                 .Cast<T>();
         }
+        public static IEnumerable<T> ToElements<T>(this Document document, BuiltInCategory category, ElementFilter filter) where T : Element
+        {
+            return new FilteredElementCollector(document)
+                .OfClass(typeof(T))
+                .OfCategory(category)
+                .WherePasses(filter)
+                .Cast<T>();
+        }
         public static IEnumerable<T> ToElements<T>(this Document document, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document)
@@ -117,6 +125,14 @@ namespace BIMPlugins.ExtStorage.Extensions
             return new FilteredElementCollector(document)
                 .OfClass(typeof(T))
                 .OfCategory(category)
+                .ToElementIds();
+        }
+        public static ICollection<ElementId> ToElementIds<T>(this Document document, BuiltInCategory category, ElementFilter filter)
+        {
+            return new FilteredElementCollector(document)
+                .OfClass(typeof(T))
+                .OfCategory(category)
+                .WherePasses(filter)
                 .ToElementIds();
         }
         public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementFilter filter)
