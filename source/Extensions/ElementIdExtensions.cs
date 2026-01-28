@@ -73,6 +73,11 @@ namespace BIMPlugins.ExtStorage.Extensions
             var filterRule = ParameterFilterRuleFactory.CreateHasValueParameterRule(parameterId);
             return new ElementParameterFilter(filterRule);
         }
+        public static ElementParameterFilter CreateHasNoValueFilter(this ElementId parameterId)
+        {
+            var filterRule = ParameterFilterRuleFactory.CreateHasNoValueParameterRule(parameterId);
+            return new ElementParameterFilter(filterRule);
+        }
 #endif
         public static ElementParameterFilter CreateContainsFilter(this ElementId parameterId, string value)
         {
@@ -80,6 +85,53 @@ namespace BIMPlugins.ExtStorage.Extensions
             var filterRule = ParameterFilterRuleFactory.CreateContainsRule(parameterId, value, false);
 #else
             var filterRule = ParameterFilterRuleFactory.CreateContainsRule(parameterId, value);
+#endif
+            return new ElementParameterFilter(filterRule);
+        }
+        public static ElementParameterFilter CreateNotContainsFilter(this ElementId parameterId, string value)
+        {
+#if !R2023_OR_GREATER
+            var filterRule = ParameterFilterRuleFactory.CreateNotContainsRule(parameterId, value, false);
+#else
+            var filterRule = ParameterFilterRuleFactory.CreateNotContainsRule(parameterId, value);
+#endif
+            return new ElementParameterFilter(filterRule);
+        }
+
+        public static ElementParameterFilter CreateBeginsWithFilter(this ElementId parameterId, string value)
+        {
+#if !R2023_OR_GREATER
+            var filterRule = ParameterFilterRuleFactory.CreateBeginsWithRule(parameterId, value, false);
+#else
+            var filterRule = ParameterFilterRuleFactory.CreateBeginsWithRule(parameterId, value);
+#endif
+            return new ElementParameterFilter(filterRule);
+        }
+        public static ElementParameterFilter CreateNotBeginsWithFilter(this ElementId parameterId, string value)
+        {
+#if !R2023_OR_GREATER
+            var filterRule = ParameterFilterRuleFactory.CreateNotBeginsWithRule(parameterId, value, false);
+#else
+            var filterRule = ParameterFilterRuleFactory.CreateNotBeginsWithRule(parameterId, value);
+#endif
+            return new ElementParameterFilter(filterRule);
+        }
+        
+        public static ElementParameterFilter CreateEndsWithFilter(this ElementId parameterId, string value)
+        {
+#if !R2023_OR_GREATER
+            var filterRule = ParameterFilterRuleFactory.CreateEndsWithRule(parameterId, value, false);
+#else
+            var filterRule = ParameterFilterRuleFactory.CreateEndsWithRule(parameterId, value);
+#endif
+            return new ElementParameterFilter(filterRule);
+        }
+        public static ElementParameterFilter CreateNotEndsWithFilter(this ElementId parameterId, string value)
+        {
+#if !R2023_OR_GREATER
+            var filterRule = ParameterFilterRuleFactory.CreateNotEndsWithRule(parameterId, value, false);
+#else
+            var filterRule = ParameterFilterRuleFactory.CreateNotEndsWithRule(parameterId, value);
 #endif
             return new ElementParameterFilter(filterRule);
         }

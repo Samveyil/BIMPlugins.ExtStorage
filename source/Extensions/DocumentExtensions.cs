@@ -217,6 +217,17 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .WherePasses(filter)
                     .ToElements();
         }
+        
+        public static ICollection<ElementId> ToElementIds(this Document document, ElementFilter filter, bool toTypes = false)
+        {
+            var collector = toTypes
+                ? new FilteredElementCollector(document).WhereElementIsElementType()
+                : new FilteredElementCollector(document).WhereElementIsNotElementType();
+
+            return collector
+                .WherePasses(filter)
+                .ToElementIds();
+        }
         public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, bool toTypes = false)
         {
             return toTypes
