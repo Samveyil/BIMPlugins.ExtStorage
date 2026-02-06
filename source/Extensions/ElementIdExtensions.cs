@@ -51,6 +51,30 @@ namespace BIMPlugins.ExtStorage.Extensions
             var filterRule = ParameterFilterRuleFactory.CreateEqualsRule(parameterId, value);
             return new ElementParameterFilter(filterRule);
         }
+        public static ElementParameterFilter CreateNotEqualsFilter(this ElementId parameterId, string value)
+        {
+#if !R2023_OR_GREATER
+            var filterRule = ParameterFilterRuleFactory.CreateNotEqualsRule(parameterId, value, false);
+#else
+            var filterRule = ParameterFilterRuleFactory.CreateNotEqualsRule(parameterId, value);
+#endif
+            return new ElementParameterFilter(filterRule);
+        }
+        public static ElementParameterFilter CreateNotEqualsFilter(this ElementId parameterId, double value)
+        {
+            var filterRule = ParameterFilterRuleFactory.CreateNotEqualsRule(parameterId, value, double.Epsilon);
+            return new ElementParameterFilter(filterRule);
+        }
+        public static ElementParameterFilter CreateNotEqualsFilter(this ElementId parameterId, int value)
+        {
+            var filterRule = ParameterFilterRuleFactory.CreateNotEqualsRule(parameterId, value);
+            return new ElementParameterFilter(filterRule);
+        }
+        public static ElementParameterFilter CreateNotEqualsFilter(this ElementId parameterId, ElementId value)
+        {
+            var filterRule = ParameterFilterRuleFactory.CreateNotEqualsRule(parameterId, value);
+            return new ElementParameterFilter(filterRule);
+        }
 
         public static ElementParameterFilter CreateGreaterOrEqualFilter(this ElementId parameterId, double value)
         {
