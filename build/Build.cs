@@ -6,7 +6,7 @@ public class Build : BIMPluginsBuild
 {
     protected override int MajorVersion => 0;
     protected override int MinorVersion => 3;
-    protected override int MaintenanceVersion => 5;
+    protected override int MaintenanceVersion => 6;
 
 
     [Solution("BIMPlugins.ExtStorage.sln")]
@@ -16,7 +16,7 @@ public class Build : BIMPluginsBuild
     public override string ProjectName { get; } = "BIMPlugins.ExtStorage";
 
     [Parameter("Build configurations to run sequentially")]
-    public override Configuration[] Configurations { get; } = new[] { Configuration.R2019, Configuration.R2020, Configuration.R2021, Configuration.R2022, Configuration.R2023 };
+    public override string[] Configurations { get; } = new[] { "R2019", "R2020", "R2021", "R2022", "R2023" };
 
     public static int Main() => Execute<Build>(x => x.Compile);
 }
