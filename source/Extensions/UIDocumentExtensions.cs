@@ -60,22 +60,33 @@ namespace BIMPlugins.ExtStorage.Extensions
                 return null;
             }
         }
-        public static Element PickObject<T>(this UIDocument uiDoc, string statusPrompt) where T : Element
+        public static T PickObject<T>(this UIDocument uiDoc, string statusPrompt) where T : Element
         {
             try
             {
-                return uiDoc.Selection.PickObject(ObjectType.Element, new ClassSelectionFilter(typeof(T)), statusPrompt).ToElement();
+                return uiDoc.Selection.PickObject(ObjectType.Element, new ClassSelectionFilter(typeof(T)), statusPrompt).ToElement<T>();
             }
             catch
             {
                 return null;
             }
         }
-        public static Element PickObject<T>(this UIDocument uiDoc, BuiltInCategory category, string statusPrompt) where T : Element
+        public static T PickObject<T>(this UIDocument uiDoc, BuiltInCategory category, string statusPrompt) where T : Element
         {
             try
             {
-                return uiDoc.Selection.PickObject(ObjectType.Element, new ClassCategorySelectionFilter(typeof(T), category), statusPrompt).ToElement();
+                return uiDoc.Selection.PickObject(ObjectType.Element, new ClassCategorySelectionFilter(typeof(T), category), statusPrompt).ToElement<T>();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public static T PickObject<T>(this UIDocument uiDoc, ISelectionFilter filter, string statusPrompt) where T : Element
+        {
+            try
+            {
+                return uiDoc.Selection.PickObject(ObjectType.Element, filter, statusPrompt).ToElement() as T;
             }
             catch
             {
@@ -116,22 +127,33 @@ namespace BIMPlugins.ExtStorage.Extensions
                 return null;
             }
         }
-        public static IEnumerable<Element> PickObjects<T>(this UIDocument uiDoc, string statusPrompt) where T : Element
+        public static IEnumerable<T> PickObjects<T>(this UIDocument uiDoc, string statusPrompt) where T : Element
         {
             try
             {
-                return uiDoc.Selection.PickObjects(ObjectType.Element, new ClassSelectionFilter(typeof(T)), statusPrompt).Select(r => r.ToElement());
+                return uiDoc.Selection.PickObjects(ObjectType.Element, new ClassSelectionFilter(typeof(T)), statusPrompt).Select(r => r.ToElement<T>());
             }
             catch
             {
                 return null;
             }
         }
-        public static IEnumerable<Element> PickObjects<T>(this UIDocument uiDoc, BuiltInCategory category, string statusPrompt) where T : Element
+        public static IEnumerable<T> PickObjects<T>(this UIDocument uiDoc, BuiltInCategory category, string statusPrompt) where T : Element
         {
             try
             {
-                return uiDoc.Selection.PickObjects(ObjectType.Element, new ClassCategorySelectionFilter(typeof(T), category), statusPrompt).Select(r => r.ToElement());
+                return uiDoc.Selection.PickObjects(ObjectType.Element, new ClassCategorySelectionFilter(typeof(T), category), statusPrompt).Select(r => r.ToElement<T>());
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public static IEnumerable<T> PickObjects<T>(this UIDocument uiDoc, ISelectionFilter filter, string statusPrompt) where T : Element
+        {
+            try
+            {
+                return uiDoc.Selection.PickObjects(ObjectType.Element, filter, statusPrompt).Select(r => r.ToElement<T>());
             }
             catch
             {
