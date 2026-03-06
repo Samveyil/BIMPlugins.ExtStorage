@@ -10,13 +10,10 @@ public class Build : BIMPluginsBuild
 
 
     [Solution("BIMPlugins.ExtStorage.sln")]
-    public override Solution Solution { get; }
+    protected override Solution Solution { get; }
 
-    [Parameter("Project to build name")]
-    public override string ProjectName { get; } = "BIMPlugins.ExtStorage";
-
-    [Parameter("Build configurations to run sequentially")]
-    public override string[] Configurations { get; } = new[] { "R2019", "R2020", "R2021", "R2022", "R2023" };
+    [Parameter("Имя проекта для сборки")]
+    protected override string ProjectName { get; } = "BIMPlugins.ExtStorage";
 
     public static int Main() => Execute<Build>(x => x.Compile);
 }
