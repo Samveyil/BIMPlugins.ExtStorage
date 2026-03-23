@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.UI;
 using Autodesk.Windows;
 using System;
+using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -29,6 +30,11 @@ namespace BIMPlugins.ExtStorage.Methods
             {
                 application.CreateRibbonTab(tabName);
             }
+        }
+        public static Autodesk.Revit.UI.RibbonPanel GetRibbonPanel(UIControlledApplication application, string tabName, string panelName)
+        {
+            return application.GetRibbonPanels(tabName).FirstOrDefault(p => p.Name == panelName)
+                ?? application.CreateRibbonPanel(tabName, panelName);
         }
 
         public static Autodesk.Windows.RibbonButton CreateAWButton(ICommand command, string name, string text, string imagePath, string toolTip)
