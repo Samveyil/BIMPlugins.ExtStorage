@@ -1,7 +1,5 @@
-﻿using Autodesk.Revit.UI;
-using Autodesk.Windows;
+﻿using Autodesk.Windows;
 using System;
-using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -12,29 +10,6 @@ namespace BIMPlugins.ExtStorage.Methods
         public static string GetImagePath(string dllName, string imageName)
         {
             return $@"/{dllName};component/Resources/{imageName}";
-        }
-
-        public static void FindTab(UIControlledApplication application, string tabName)
-        {
-            RibbonControl ribon = ComponentManager.Ribbon;
-            bool checkExsistTab = false;
-            foreach (RibbonTab tab in ribon.Tabs)
-            {
-                if (tab.AutomationName == tabName)
-                {
-                    checkExsistTab = true;
-                    break;
-                }
-            }
-            if (!checkExsistTab)
-            {
-                application.CreateRibbonTab(tabName);
-            }
-        }
-        public static Autodesk.Revit.UI.RibbonPanel GetRibbonPanel(UIControlledApplication application, string tabName, string panelName)
-        {
-            return application.GetRibbonPanels(tabName).FirstOrDefault(p => p.Name == panelName)
-                ?? application.CreateRibbonPanel(tabName, panelName);
         }
 
         public static Autodesk.Windows.RibbonButton CreateAWButton(ICommand command, string name, string text, string imagePath, string toolTip)
