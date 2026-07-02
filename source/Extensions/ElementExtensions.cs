@@ -52,14 +52,19 @@ namespace BIMPlugins.ExtStorage.Extensions
             return null;
         }
 
-        public enum LocationType { Direction, StartPoint, EndPoint }
-        public static XYZ ToLocationCoordinates(this Element element, LocationType type = LocationType.Direction)
+        public enum LocationType { Origin, Direction, StartPoint, EndPoint }
+        public static Line ToLine(this Element element)
+        {
+            return (element.Location as LocationCurve).Curve as Line;
+        }
+        public static XYZ ToPoint(this Element element, LocationType type = LocationType.Origin)
         {
             return element.Location switch
             {
                 LocationPoint locationPoint => locationPoint.Point,
                 LocationCurve { Curve: Line line } => type switch
                 {
+                    LocationType.Origin => line.Origin,
                     LocationType.Direction => line.Direction,
                     LocationType.StartPoint => line.GetEndPoint(0),
                     _ => line.GetEndPoint(1)
