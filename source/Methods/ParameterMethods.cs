@@ -11,11 +11,11 @@ namespace BIMPlugins.ExtStorage.Methods
     public static class ParameterMethods
     {
 #if !R2021_OR_GREATER
-        /// <summary>Converts a unit type string to its corresponding <see cref="DisplayUnitType"/> enumeration value.</summary>
+        /// <summary>Converts a unit type string to its corresponding <see cref="Autodesk.Revit.DB.DisplayUnitType"/> enumeration value.</summary>
         /// <param name="unitType">The unit type string. Supported values: <c>mm</c>, <c>cm</c>, <c>m</c>, <c>m2</c>, <c>m3</c>, <c>general</c>, <c>degrees</c>, <c>degreesMinutes</c>, <c>W</c>, <c>V</c>.</param>
         /// <returns>
-        /// The <see cref="DisplayUnitType"/> corresponding to the input string.
-        /// If the input is not recognized, defaults to <see cref="DisplayUnitType.DUT_MILLIMETERS"/>.
+        /// The <see cref="Autodesk.Revit.DB.DisplayUnitType"/> corresponding to the input string.
+        /// If the input is not recognized, defaults to <see cref="Autodesk.Revit.DB.DisplayUnitType.DUT_MILLIMETERS"/>.
         /// </returns>
         public static DisplayUnitType GetUnitType(string unitType = "mm")
         {
@@ -36,11 +36,11 @@ namespace BIMPlugins.ExtStorage.Methods
         }
 
 #else
-        /// <summary>Converts a unit type string to its corresponding <see cref="ForgeTypeId"/> unit type identifier.</summary>
+        /// <summary>Converts a unit type string to its corresponding <see cref="Autodesk.Revit.DB.ForgeTypeId"/> unit type identifier.</summary>
         /// <param name="unitType">The unit type string. Supported values: <c>mm</c>, <c>cm</c>, <c>m</c>, <c>m2</c>, <c>m3</c>, <c>general</c>, <c>degrees</c>, <c>degreesMinutes</c>, <c>W</c>, <c>V</c>.</param>
         /// <returns>
-        /// The <see cref="ForgeTypeId"/> corresponding to the input string.
-        /// If the input is not recognized, defaults to <see cref="UnitTypeId.Millimeters"/>.
+        /// The <see cref="Autodesk.Revit.DB.ForgeTypeId"/> corresponding to the input string.
+        /// If the input is not recognized, defaults to <see cref="Autodesk.Revit.DB.UnitTypeId.Millimeters"/>.
         /// </returns>
         public static ForgeTypeId GetUnitType(string unitType = "mm")
         {
@@ -129,7 +129,7 @@ namespace BIMPlugins.ExtStorage.Methods
 
         /// <summary>Gets a dictionary of all shared parameter names and their corresponding GUIDs from the current shared parameter file.</summary>
         /// <returns>
-        /// A <see cref="Dictionary{string, Guid}"/> where the key is the parameter name and the value is the parameter GUID.
+        /// A <see cref="Dictionary{TKey, TValue}"/> where the key is the parameter name and the value is the parameter GUID.
         /// Returns <see langword="null"/> if the shared parameter file is not configured.
         /// </returns>
         public static Dictionary<string, Guid> GetSharedParameterGUIDsDict()
@@ -163,10 +163,10 @@ namespace BIMPlugins.ExtStorage.Methods
             return guidsDict;
         }
 
-        /// <summary>Retrieves an <see cref="ExternalDefinition"/> by parameter name and GUID from the current shared parameter file.</summary>
+        /// <summary>Retrieves an <see cref="Autodesk.Revit.DB.ExternalDefinition"/> by parameter name and GUID from the current shared parameter file.</summary>
         /// <param name="parameterName">The name of the shared parameter to search for.</param>
         /// <param name="guid">The GUID of the shared parameter to search for.</param>
-        /// <returns>The <see cref="ExternalDefinition"/> if found; otherwise, <see langword="null"/>.</returns>
+        /// <returns>The <see cref="Autodesk.Revit.DB.ExternalDefinition"/> if found; otherwise, <see langword="null"/>.</returns>
         /// <remarks>
         /// Both the <paramref name="parameterName"/> and <paramref name="guid"/> must match for the definition to be returned.
         /// Returns <see langword="null"/> if the shared parameter file is not configured or no matching definition is found.

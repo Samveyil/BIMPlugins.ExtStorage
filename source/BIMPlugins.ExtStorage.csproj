@@ -69,6 +69,7 @@
 	<PropertyGroup>
 		<PackageId>BIMPlugins.ExtStorage</PackageId>
 		<ProjectGuid>{9813B4DD-6800-47D6-BB50-D720A5FA90D0}</ProjectGuid>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -97,6 +98,7 @@
 
 	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
