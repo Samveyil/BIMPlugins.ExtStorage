@@ -8,6 +8,9 @@ namespace BIMPlugins.ExtStorage.Methods
 {
     public static class ExMethods
     {
+        /// <summary>Opens a text file, reads all the text in the file, and then closes the file.</summary>
+        /// <remarks>Note: if the specified file does not exist, the method will return <see langword="null"/>.</remarks>
+        /// <returns>A string containing all the text in the file.</returns>
         public static string ReadTextFile(string filePath)
         {
             if (File.Exists(filePath))
@@ -64,6 +67,11 @@ namespace BIMPlugins.ExtStorage.Methods
             }
         }
 
+
+        /// <summary>Creates a DirectShape object and adds it to document.</summary>
+        /// <param name="geometryObjects">Shape of this object expressed as a collection of GeometryObjects. The supported types of GeometryObjects are: Solid, Mesh, GeometryInstance, Point and Curve.</param>
+        /// <param name="builtInCategory">Id of the category assigned to this DirectShape. Must be a valid category id.</param>
+        /// <returns>The created DirectShape object.</returns>
         public static DirectShape CreateDirectShape(List<GeometryObject> geometryObjects, BuiltInCategory builtInCategory=BuiltInCategory.OST_GenericModel)
         {
             var directShape = DirectShape.CreateElement(RevitAPI.Document, new ElementId(builtInCategory));

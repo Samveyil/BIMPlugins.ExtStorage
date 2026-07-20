@@ -11,6 +11,12 @@ namespace BIMPlugins.ExtStorage.Methods
     public static class ParameterMethods
     {
 #if !R2021_OR_GREATER
+        /// <summary>Converts a unit type string to its corresponding <see cref="DisplayUnitType"/> enumeration value.</summary>
+        /// <param name="unitType">The unit type string. Supported values: <c>mm</c>, <c>cm</c>, <c>m</c>, <c>m2</c>, <c>m3</c>, <c>general</c>, <c>degrees</c>, <c>degreesMinutes</c>, <c>W</c>, <c>V</c>.</param>
+        /// <returns>
+        /// The <see cref="DisplayUnitType"/> corresponding to the input string.
+        /// If the input is not recognized, defaults to <see cref="DisplayUnitType.DUT_MILLIMETERS"/>.
+        /// </returns>
         public static DisplayUnitType GetUnitType(string unitType = "mm")
         {
             return unitType switch
@@ -30,6 +36,12 @@ namespace BIMPlugins.ExtStorage.Methods
         }
 
 #else
+        /// <summary>Converts a unit type string to its corresponding <see cref="ForgeTypeId"/> unit type identifier.</summary>
+        /// <param name="unitType">The unit type string. Supported values: <c>mm</c>, <c>cm</c>, <c>m</c>, <c>m2</c>, <c>m3</c>, <c>general</c>, <c>degrees</c>, <c>degreesMinutes</c>, <c>W</c>, <c>V</c>.</param>
+        /// <returns>
+        /// The <see cref="ForgeTypeId"/> corresponding to the input string.
+        /// If the input is not recognized, defaults to <see cref="UnitTypeId.Millimeters"/>.
+        /// </returns>
         public static ForgeTypeId GetUnitType(string unitType = "mm")
         {
             return unitType switch
@@ -49,13 +61,8 @@ namespace BIMPlugins.ExtStorage.Methods
         }
 #endif
 
-        public static SharedParameterElement GetSharedParameterByName(string name)
-        {
-            return new FilteredElementCollector(RevitAPI.Document)
-                .OfClass(typeof(SharedParameterElement))
-                .FirstOrDefault(p => p.Name == name) as SharedParameterElement;
-        }
-
+        /// <summary>Retrieves a list of GUIDs of all shared parameters defined in the current shared parameter file.</summary>
+        /// <returns>A list of <see cref="Guid"/> objects representing the shared parameter GUIDs, or <see langword="null"/> if the shared parameter file is not specified.</returns>
         public static List<Guid> GetSharedParameterGUIDs()
         {
             List<Guid> guids = new List<Guid>();
@@ -81,13 +88,15 @@ namespace BIMPlugins.ExtStorage.Methods
             }
             catch (ArgumentException)
             {
-                MessageBox.Show("Укажите файл ФОП в Revit", "Ошибка в работе плагина", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
 
             return guids;
         }
 
+        /// <summary>Gets the GUID of a shared parameter by its name from the current shared parameter file.</summary>
+        /// <param name="parameterName">The name of the shared parameter to search for.</param>
+        /// <returns>The <see cref="Guid"/> of the shared parameter if found; otherwise, an empty <see cref="Guid"/>.</returns>
         public static Guid GetSharedParameterGUIDByName(string parameterName)
         {
             Guid guid = new Guid();
@@ -112,13 +121,17 @@ namespace BIMPlugins.ExtStorage.Methods
             }
             catch (ArgumentException)
             {
-                MessageBox.Show("Укажите файл ФОП в Revit", "Ошибка в работе плагина", MessageBoxButton.OK, MessageBoxImage.Error);
                 return new Guid();
             }
 
             return guid;
         }
 
+        /// <summary>Gets a dictionary of all shared parameter names and their corresponding GUIDs from the current shared parameter file.</summary>
+        /// <returns>
+        /// A <see cref="Dictionary{string, Guid}"/> where the key is the parameter name and the value is the parameter GUID.
+        /// Returns <see langword="null"/> if the shared parameter file is not configured.
+        /// </returns>
         public static Dictionary<string, Guid> GetSharedParameterGUIDsDict()
         {
             Dictionary<string, Guid> guidsDict = [];
@@ -144,13 +157,20 @@ namespace BIMPlugins.ExtStorage.Methods
             }
             catch (ArgumentException)
             {
-                MessageBox.Show("Укажите файл ФОП в Revit", "Ошибка в работе плагина", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
 
             return guidsDict;
         }
 
+        /// <summary>Retrieves an <see cref="ExternalDefinition"/> by parameter name and GUID from the current shared parameter file.</summary>
+        /// <param name="parameterName">The name of the shared parameter to search for.</param>
+        /// <param name="guid">The GUID of the shared parameter to search for.</param>
+        /// <returns>The <see cref="ExternalDefinition"/> if found; otherwise, <see langword="null"/>.</returns>
+        /// <remarks>
+        /// Both the <paramref name="parameterName"/> and <paramref name="guid"/> must match for the definition to be returned.
+        /// Returns <see langword="null"/> if the shared parameter file is not configured or no matching definition is found.
+        /// </remarks>
         public static ExternalDefinition FindExternalDefinition(string parameterName, Guid guid)
         {
             foreach (DefinitionGroup group in RevitAPI.Application.OpenSharedParameterFile().Groups)

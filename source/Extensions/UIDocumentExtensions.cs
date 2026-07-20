@@ -25,8 +25,14 @@ namespace BIMPlugins.ExtStorage.Extensions
             public bool AllowReference(Reference reference, XYZ position) => true;
         }
 
+        /// <summary>Returns the set of elements that are currently selected.</summary>
+        /// <returns>The collection of <see cref="Element"/> objects that are currently selected.</returns>
         public static IEnumerable<Element> ToSelectedElements(this UIDocument uiDoc) => uiDoc.Selection.GetElementIds().Select(id => id.ToElement());
 
+        /// <summary>Prompts the user to select one object while showing a custom status prompt string.</summary>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>An element selected by user.</returns>
         public static Element PickObject(this UIDocument uiDoc, string statusPrompt)
         {
             try
@@ -38,6 +44,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 return null;
             }
         }
+
+        /// <summary>Prompts the user to select one object which passes a custom filter while showing a custom status prompt string.</summary>
+        /// <param name="filter">The selection filter.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>An element selected by user.</returns>
         public static Element PickObject(this UIDocument uiDoc, ISelectionFilter filter, string statusPrompt)
         {
             try
@@ -49,6 +61,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 return null;
             }
         }
+
+        /// <summary>Prompts the user to select one object filtered by the specified category while showing a custom status prompt string.</summary>
+        /// <param name="category">The built-in category to filter the selection.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>An element selected by user.</returns>
         public static Element PickObject(this UIDocument uiDoc, BuiltInCategory category, string statusPrompt)
         {
             try
@@ -60,6 +78,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 return null;
             }
         }
+
+        /// <summary>Prompts the user to select one object filtered by the specified element type while showing a custom status prompt string.</summary>
+        /// <typeparam name="T">The element type to filter the selection (must inherit from Element).</typeparam>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>An element selected by user cast to type <typeparamref name="T"/>.</returns>
         public static T PickObject<T>(this UIDocument uiDoc, string statusPrompt) where T : Element
         {
             try
@@ -71,6 +95,13 @@ namespace BIMPlugins.ExtStorage.Extensions
                 return null;
             }
         }
+
+        /// <summary>Prompts the user to select one object filtered by the specified element type and category while showing a custom status prompt string.</summary>
+        /// <typeparam name="T">The element type to filter the selection (must inherit from Element).</typeparam>
+        /// <param name="category">The built-in category to filter the selection.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>An element selected by user cast to type <typeparamref name="T"/>.</returns>
         public static T PickObject<T>(this UIDocument uiDoc, BuiltInCategory category, string statusPrompt) where T : Element
         {
             try
@@ -82,6 +113,13 @@ namespace BIMPlugins.ExtStorage.Extensions
                 return null;
             }
         }
+
+        /// <summary>Prompts the user to select one object filtered by the specified element type and a custom filter while showing a custom status prompt string.</summary>
+        /// <typeparam name="T">The element type to filter the selection (must inherit from Element).</typeparam>
+        /// <param name="filter">The selection filter.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>An element selected by user cast to type <typeparamref name="T"/>.</returns>
         public static T PickObject<T>(this UIDocument uiDoc, ISelectionFilter filter, string statusPrompt) where T : Element
         {
             try
@@ -94,6 +132,11 @@ namespace BIMPlugins.ExtStorage.Extensions
             }
         }
 
+
+        /// <summary>Prompts the user to select multiple objects while showing a custom status prompt string.</summary>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>A collection of elements selected by the user.</returns>
         public static IEnumerable<Element> PickObjects(this UIDocument uiDoc, string statusPrompt)
         {
             try
@@ -105,6 +148,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 return null;
             }
         }
+
+        /// <summary>Prompts the user to select multiple objects which pass a custom filter while showing a custom status prompt string.</summary>
+        /// <param name="filter">The selection filter.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>A collection of elements selected by the user.</returns>
         public static IEnumerable<Element> PickObjects(this UIDocument uiDoc, ISelectionFilter filter, string statusPrompt)
         {
             try
@@ -116,6 +165,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 return null;
             }
         }
+
+        /// <summary>Prompts the user to select multiple objects filtered by the specified category while showing a custom status prompt string.</summary>
+        /// <param name="category">The built-in category to filter the selection.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>A collection of elements selected by user.</returns>
         public static IEnumerable<Element> PickObjects(this UIDocument uiDoc, BuiltInCategory category, string statusPrompt)
         {
             try
@@ -127,6 +182,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 return null;
             }
         }
+
+        /// <summary>Prompts the user to select multiple objects filtered by the specified element type while showing a custom status prompt string.</summary>
+        /// <typeparam name="T">The element type to filter the selection (must inherit from Element).</typeparam>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>A collection of elements of type <typeparamref name="T"/> selected by user.</returns>
         public static IEnumerable<T> PickObjects<T>(this UIDocument uiDoc, string statusPrompt) where T : Element
         {
             try
@@ -138,6 +199,13 @@ namespace BIMPlugins.ExtStorage.Extensions
                 return null;
             }
         }
+
+        /// <summary>Prompts the user to select multiple objects filtered by the specified element type and category while showing a custom status prompt string.</summary>
+        /// <typeparam name="T">The element type to filter the selection (must inherit from Element).</typeparam>
+        /// <param name="category">The built-in category to filter the selection.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>A collection of elements of type <typeparamref name="T"/> selected by user.</returns>
         public static IEnumerable<T> PickObjects<T>(this UIDocument uiDoc, BuiltInCategory category, string statusPrompt) where T : Element
         {
             try
@@ -149,6 +217,13 @@ namespace BIMPlugins.ExtStorage.Extensions
                 return null;
             }
         }
+
+        /// <summary>Prompts the user to select multiple objects filtered by the specified element type and a custom filter while showing a custom status prompt string.</summary>
+        /// <typeparam name="T">The element type to filter the selection (must inherit from Element).</typeparam>
+        /// <param name="filter">The selection filter.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>A collection of elements of type <typeparamref name="T"/> selected by user.</returns>
         public static IEnumerable<T> PickObjects<T>(this UIDocument uiDoc, ISelectionFilter filter, string statusPrompt) where T : Element
         {
             try

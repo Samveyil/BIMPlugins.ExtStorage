@@ -5,17 +5,26 @@ namespace BIMPlugins.ExtStorage.Extensions
 {
     public static class ElementExtensions
     {
+        /// <summary>Returns the element's type.</summary>
+        /// <param name="doc">The owning document. Passing <see langword="null"/> will return the active document</param>
+        /// <returns>The element's type.</returns>
         public static ElementType ToElementType(this Element element, Document doc = null)
         {
             doc ??= RevitAPI.Document;
             return element.GetTypeId().ToElement<ElementType>(doc);
         }
+
+        /// <summary>Returns the element's type.</summary>
+        /// <param name="doc">The owning document. Passing <see langword="null"/> will return the active document</param>
+        /// <returns>The element's type.</returns>
         public static T ToElementType<T>(this Element element, Document doc = null) where T : ElementType
         {
             doc ??= RevitAPI.Document;
             return element.GetTypeId().ToElement<T>(doc);
         }
 
+
+        /// <summary>Retrieves the category of the element.</summary>
         public static BuiltInCategory GetBuiltInCategory(this Element element)
         {
             if (element.Category.Id.GetValue() < 0)
@@ -25,7 +34,11 @@ namespace BIMPlugins.ExtStorage.Extensions
             
             return BuiltInCategory.INVALID;
         }
-        
+
+
+        /// <summary>Retrieves the element's solid.</summary>
+        /// <param name="options">User preferences for parsing of geometry. Passing <see langword="null"/> will return a default Options object.</param>
+        /// <returns>The element's solid. This return may be <see langword="null"/> if there is no matching geometry.</returns>
         public static Solid ToSolid(this Element element, Options options = null)
         {
             options ??= new Options() { DetailLevel = ViewDetailLevel.Fine };
@@ -52,11 +65,17 @@ namespace BIMPlugins.ExtStorage.Extensions
             return null;
         }
 
+        /// <summary>A list of points to retrieve from the line.</summary>
         public enum LocationType { Origin, Direction, StartPoint, EndPoint }
+
+        /// <summary>Retrieves the location line of the element.</summary>
         public static Line ToLine(this Element element)
         {
             return (element.Location as LocationCurve).Curve as Line;
         }
+
+        /// <summary>Retrieves the location point of the element.</summary>
+        /// <param name="type">Line's point to retrieve.</param>
         public static XYZ ToPoint(this Element element, LocationType type = LocationType.Origin)
         {
             return element.Location switch
@@ -73,6 +92,10 @@ namespace BIMPlugins.ExtStorage.Extensions
             };
         }
 
+
+        /// <summary>Retrieves the parameter from the element via the given name.</summary>
+        /// <param name="parameterName">The name of the parameter to be retrieved.</param>
+        /// <returns>The matching parameter.</returns>
         public static Parameter ToParameter(this Element element, string parameterName)
         {
             var parameters = element.GetParameters(parameterName);
@@ -90,6 +113,10 @@ namespace BIMPlugins.ExtStorage.Extensions
 
             return sharedParameter ?? element.LookupParameter(parameterName);
         }
+
+        /// <summary>Retrieves the parameter from the element via the given id.</summary>
+        /// <param name="parameterId">The id of the parameter to be retrieved.</param>
+        /// <returns>The matching parameter.</returns>
         public static Parameter ToParameter(this Element element, ElementId parameterId)
         {
             return element.Parameters.Cast<Parameter>().FirstOrDefault(p => p.Id.ToString() == parameterId.ToString());
