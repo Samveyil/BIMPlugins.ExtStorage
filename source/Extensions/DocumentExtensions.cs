@@ -11,6 +11,13 @@ namespace BIMPlugins.ExtStorage.Extensions
 {
     public static class DocumentExtensions
     {
+        /// <summary>
+        /// Performs reload latest until the model in the current session is up to date and
+        /// then saves changes back to central. A save to central is performed even if no
+        /// changes were made.
+        ///</summary>
+        /// <param name="comment">User description of changes made since the last Sync with Central.</param>
+        /// <remarks>This method will relinquish the current the user-defined's ownership of all worksets and all elements.</remarks>
         public static void SynchronizeWithCentral(this Document document, string comment)
         {
             TransactWithCentralOptions transact = new TransactWithCentralOptions();
@@ -22,6 +29,11 @@ namespace BIMPlugins.ExtStorage.Extensions
             document.SynchronizeWithCentral(transact, synchronize);
         }
 
+        /// <summary>Retrieves the View3D which has the given name.</summary>
+        /// <param name="viewName">The name of the View3D to be retrieved.</param>
+        /// <param name="setAsActive">True to set the View3D as active.</param>
+        /// <remarks>Note if the View3D to be retrieved does not exists this method create a new one.</remarks>
+        /// <returns>The matching View3D.</returns>
         public static View3D GetView3D(this Document document, string viewName, bool setAsActive=true)
         {
             var view3D = new FilteredElementCollector(document)
@@ -58,12 +70,21 @@ namespace BIMPlugins.ExtStorage.Extensions
             return view3D;
         }
 
+
+        /// <summary>Returns the complete set of elements that pass the ElementClassFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
         public static IEnumerable<T> ToElements<T>(this Document document) where T : Element
         {
             return new FilteredElementCollector(document)
                 .OfClass(typeof(T))
                 .Cast<T>();
         }
+
+        /// <summary>Returns the complete set of elements that pass the ElementClassFilter and the ElementCategoryFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="category">The category.</param>
+        /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
         public static IEnumerable<T> ToElements<T>(this Document document, BuiltInCategory category) where T : Element
         {
             return new FilteredElementCollector(document)
@@ -71,6 +92,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .OfCategory(category)
                 .Cast<T>();
         }
+
+        /// <summary>Returns the complete set of elements that pass the ElementClassFilter, the ElementCategoryFilter and the the user-defined-defined ElementFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="category">The category.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
         public static IEnumerable<T> ToElements<T>(this Document document, BuiltInCategory category, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document)
@@ -79,6 +106,11 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .WherePasses(filter)
                 .Cast<T>();
         }
+
+        /// <summary>Returns the complete set of elements that pass the ElementClassFilter and the user-defined ElementFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="filter">The element filter.</param>
+        /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
         public static IEnumerable<T> ToElements<T>(this Document document, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document)
@@ -86,12 +118,23 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .WherePasses(filter)
                 .Cast<T>();
         }
+
+        /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="viewId">The view id.</param>
+        /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
         public static IEnumerable<T> ToElements<T>(this Document document, ElementId viewId) where T : Element
         {
             return new FilteredElementCollector(document, viewId)
                 .OfClass(typeof(T))
                 .Cast<T>();
         }
+
+        /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter and the user-defined ElementFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="viewId">The view id.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
         public static IEnumerable<T> ToElements<T>(this Document document, ElementId viewId, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document, viewId)
@@ -99,6 +142,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .WherePasses(filter)
                 .Cast<T>();
         }
+
+        /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter and the ElementCategoryFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="viewId">The view id.</param>
+        /// <param name="category">The category.</param>
+        /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
         public static IEnumerable<T> ToElements<T>(this Document document, ElementId viewId, BuiltInCategory category) where T : Element
         {
             return new FilteredElementCollector(document, viewId)
@@ -106,6 +155,13 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .OfCategory(category)
                 .Cast<T>();
         }
+
+        /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter, the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="viewId">The view id.</param>
+        /// <param name="category">The category.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
         public static IEnumerable<T> ToElements<T>(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document, viewId)
@@ -114,12 +170,22 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .WherePasses(filter)
                 .Cast<T>();
         }
+
+
+        /// <summary>Returns the complete set of element ids that pass the ElementClassFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds<T>(this Document document)
         {
             return new FilteredElementCollector(document)
                 .OfClass(typeof(T))
                 .ToElementIds();
         }
+
+        /// <summary>Returns the complete set of element ids that pass the ElementClassFilter and the ElementCategoryFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="category">The category.</param>
+        /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds<T>(this Document document, BuiltInCategory category)
         {
             return new FilteredElementCollector(document)
@@ -127,6 +193,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .OfCategory(category)
                 .ToElementIds();
         }
+
+        /// <summary>Returns the complete set of element ids that pass the ElementClassFilter, the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="category">The category.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds<T>(this Document document, BuiltInCategory category, ElementFilter filter)
         {
             return new FilteredElementCollector(document)
@@ -135,6 +207,11 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .WherePasses(filter)
                 .ToElementIds();
         }
+
+        /// <summary>Returns the complete set of element ids that pass the ElementClassFilter and the user-defined ElementFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="filter">The element filter.</param>
+        /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementFilter filter)
         {
             return new FilteredElementCollector(document)
@@ -142,12 +219,23 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .WherePasses(filter)
                 .ToElementIds();
         }
+
+        /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementClassFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="viewId">The view id.</param>
+        /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId)
         {
             return new FilteredElementCollector(document, viewId)
                 .OfClass(typeof(T))
                 .ToElementIds();
         }
+
+        /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementClassFilter and the user-defined ElementFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="viewId">The view id.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId, ElementFilter filter)
         {
             return new FilteredElementCollector(document, viewId)
@@ -155,6 +243,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .WherePasses(filter)
                 .ToElementIds();
         }
+
+        /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementClassFilter and the ElementCategoryFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="viewId">The view id.</param>
+        /// <param name="category">The category.</param>
+        /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId, BuiltInCategory category)
         {
             return new FilteredElementCollector(document, viewId)
@@ -162,6 +256,13 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .OfCategory(category)
                 .ToElementIds();
         }
+
+        /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementClassFilter, the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="viewId">The view id.</param>
+        /// <param name="category">The category.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter)
         {
             return new FilteredElementCollector(document, viewId)
@@ -171,6 +272,11 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .ToElementIds();
         }
 
+
+        /// <summary>Returns the complete set of elements that pass the user-defined ElementFilter.</summary>
+        /// <param name="filter">The element filter.</param>
+        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <returns>The complete set of elements.</returns>
         public static IList<Element> ToElements(this Document document, ElementFilter filter, bool toTypes=false)
         {
             var collector = toTypes
@@ -181,6 +287,11 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .WherePasses(filter)
                 .ToElements();
         }
+
+        /// <summary>Returns the complete set of elements that pass the ElementCategoryFilter.</summary>
+        /// <param name="category">The category.</param>
+        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <returns>The complete set of elements.</returns>
         public static IList<Element> ToElements(this Document document, BuiltInCategory category, bool toTypes = false)
         {
             return toTypes
@@ -193,6 +304,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .WhereElementIsNotElementType()
                     .ToElements();
         }
+
+        /// <summary>Returns the complete set of elements that pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <param name="category">The category.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <returns>The complete set of elements.</returns>
         public static IList<Element> ToElements(this Document document, BuiltInCategory category, ElementFilter filter, bool toTypes = false)
         {
             return toTypes
@@ -207,6 +324,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .WherePasses(filter)
                     .ToElements();
         }
+
+        /// <summary>Returns the complete set of elements that visible in a view and pass the ElementCategoryFilter.</summary>
+        /// <param name="viewId">The view id.</param>
+        /// <param name="category">The category.</param>
+        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <returns>The complete set of elements.</returns>
         public static IList<Element> ToElements(this Document document, ElementId viewId, BuiltInCategory category, bool toTypes = false)
         {
             return toTypes
@@ -219,6 +342,13 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .WhereElementIsNotElementType()
                     .ToElements();
         }
+
+        /// <summary>Returns the complete set of elements that visible in a view and pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <param name="viewId">The view id.</param>
+        /// <param name="category">The category.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <returns>The complete set of elements.</returns>
         public static IList<Element> ToElements(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter, bool toTypes = false)
         {
             return toTypes
@@ -233,7 +363,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .WherePasses(filter)
                     .ToElements();
         }
-        
+
+
+        /// <summary>Returns the complete set of element ids that pass the user-defined ElementFilter.</summary>
+        /// <param name="filter">The element filter.</param>
+        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds(this Document document, ElementFilter filter, bool toTypes = false)
         {
             var collector = toTypes
@@ -244,6 +379,11 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .WherePasses(filter)
                 .ToElementIds();
         }
+
+        /// <summary>Returns the complete set of element ids that pass the ElementCategoryFilter.</summary>
+        /// <param name="category">The category.</param>
+        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, bool toTypes = false)
         {
             return toTypes
@@ -256,6 +396,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .WhereElementIsNotElementType()
                     .ToElementIds();
         }
+
+        /// <summary>Returns the complete set of element ids that pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <param name="category">The category.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, ElementFilter filter, bool toTypes = false)
         {
             return toTypes
@@ -270,6 +416,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .WherePasses(filter)
                     .ToElementIds();
         }
+
+        /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementCategoryFilter.</summary>
+        /// <param name="viewId">The view id.</param>
+        /// <param name="category">The category.</param>
+        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds(this Document document, ElementId viewId, BuiltInCategory category, bool toTypes = false)
         {
             return toTypes
@@ -282,6 +434,13 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .WhereElementIsNotElementType()
                     .ToElementIds();
         }
+
+        /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <param name="viewId">The view id.</param>
+        /// <param name="category">The category.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter, bool toTypes = false)
         {
             return toTypes
@@ -296,6 +455,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .WherePasses(filter)
                     .ToElementIds();
         }
+
 
         public static IEnumerable<Element> ToModelElements(this Document document)
         {
@@ -374,6 +534,9 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .ToList();
         }
 
+
+        /// <summary>Delete elements that are not used in document.</summary>
+        /// <remarks>This method gets unused element ids that are available in the Purge Unused window in the Revit and delete them</remarks>
         public static void PurgeUnused(this Document document)
         {
             RevitAPI.UIApplication.DialogBoxShowing += new EventHandler<DialogBoxShowingEventArgs>(ExMethods.WarningDialogHide);
