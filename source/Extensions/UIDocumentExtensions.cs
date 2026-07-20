@@ -26,7 +26,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Returns the set of elements that are currently selected.</summary>
-        /// <returns>The collection of <see cref="Element"/> objects that are currently selected.</returns>
+        /// <returns>The collection of <see cref="Autodesk.Revit.DB.Element"/> objects that are currently selected.</returns>
         public static IEnumerable<Element> ToSelectedElements(this UIDocument uiDoc) => uiDoc.Selection.GetElementIds().Select(id => id.ToElement());
 
         /// <summary>Prompts the user to select one object while showing a custom status prompt string.</summary>

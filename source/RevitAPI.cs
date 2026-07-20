@@ -28,15 +28,15 @@ namespace BIMPlugins.ExtStorage
 
 
         /// <summary>
-        /// A generic <see cref="IExternalEventHandler"/> implementation that executes a custom action 
-        /// on a target object using <see cref="ExternalEvent"/>.
+        /// A generic <see cref="Autodesk.Revit.UI.IExternalEventHandler"/> implementation that executes a custom action 
+        /// on a target object using <see cref="Autodesk.Revit.UI.ExternalEvent"/>.
         /// </summary>
         /// <typeparam name="T">The type of the target object (typically a ViewModel).</typeparam>
         /// <remarks>
-        /// This handler is designed to be used with <see cref="ExternalEvent"/> to execute code 
+        /// This handler is designed to be used with <see cref="Autodesk.Revit.UI.ExternalEvent"/> to execute code 
         /// safely within the Revit API context without violating the API context boundaries.
         /// <br/>
-        /// Any exceptions thrown during execution are caught and displayed in a <see cref="TaskDialog"/>.
+        /// Any exceptions thrown during execution are caught and displayed in a <see cref="Autodesk.Revit.UI.TaskDialog"/>.
         /// </remarks>
         public class MyEventHandler<T>(T target, Action<T> action) : IExternalEventHandler
         {
