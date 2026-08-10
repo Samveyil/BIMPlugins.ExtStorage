@@ -38,8 +38,9 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Retrieves the element's solid.</summary>
         /// <param name="options">User preferences for parsing of geometry. Passing <see langword="null"/> will return a default Options object.</param>
+        /// <param name="isSymbolGeometry"><see langword="true"/> if computes the geometric representation of the symbol which generates this instance; otherwise, of the instance.</param>
         /// <returns>The element's solid. This return may be <see langword="null"/> if there is no matching geometry.</returns>
-        public static Solid ToSolid(this Element element, Options options = null)
+        public static Solid ToSolid(this Element element, Options options = null, bool isSymbolGeometry = false)
         {
             options ??= new Options() { DetailLevel = ViewDetailLevel.Fine };
 
@@ -48,7 +49,7 @@ namespace BIMPlugins.ExtStorage.Extensions
             {
                 if (geomObj is GeometryInstance geomInst)
                 {
-                    var solid = geomInst.GetInstanceGeometry()
+                    var solid = (isSymbolGeometry ? geomInst.GetSymbolGeometry() : geomInst.GetInstanceGeometry())
                         .OfType<Solid>()
                         .OrderByDescending(s => s.Volume)
                         .ThenByDescending(s => s.SurfaceArea)

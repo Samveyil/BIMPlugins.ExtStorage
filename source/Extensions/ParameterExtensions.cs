@@ -33,7 +33,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="value">The new value to which the parameter is to be set.</param>
         /// <remarks>Depending on the parameter's storage type, the input value is converted and passed to the corresponding
         /// Set overload — Set(double), Set(int), Set(string), or Set(ElementId).</remarks>
-        /// <returns>The SetValue method will return True if the parameter was successfully set to the new value, otherwise false.</returns>
+        /// <returns>The SetValue method will return <see langword="true"/> if the parameter was successfully set to the new value, otherwise <see langword="false"/>.</returns>
         public static bool SetValue(this Parameter parameter, object value)
         {
             return parameter.StorageType switch
@@ -111,7 +111,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 #endif
 
         /// <summary>Checks whether a parameter used to control the type of a family nested within another family.</summary>
-        /// <returns>True if the parameter used to control the type of a family nested within another family, false otherwise.</returns>
+        /// <returns><see langword="true"/> if the parameter used to control the type of a family nested within another family, <see langword="false"/> otherwise.</returns>
         public static bool IsFamilyType(this FamilyParameter parameter)
         {
 #if !R2022_OR_GREATER
