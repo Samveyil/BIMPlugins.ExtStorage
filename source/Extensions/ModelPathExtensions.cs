@@ -43,7 +43,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Opens a document detached from its central file from disk or cloud.</summary>
         /// <param name="filePath">The file to be opened.</param>
-        /// <param name="closeAllWorksets">True if to close all user-created worksets; otherwise, false.</param>
+        /// <param name="closeAllWorksets"><see langword="true"/> if to close all user-created worksets; otherwise, false.</param>
         /// <remarks>This method opens the document into memory but does not make it visible to the user in any way.</remarks>
         /// <returns>The opened document.</returns>
         public static Document OpenDetachedDocument(this ModelPath modelPath, string filePath, bool closeAllWorksets = true) =>
@@ -51,7 +51,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Opens a new local file for the current user from disk or cloud.</summary>
         /// <param name="filePath">The file to be opened.</param>
-        /// <param name="closeAllWorksets">True if to close all user-created worksets; otherwise, false.</param>
+        /// <param name="closeAllWorksets"><see langword="true"/> if to close all user-created worksets; otherwise, false.</param>
         /// <remarks>This method opens the document into memory but does not make it visible to the user in any way.</remarks>
         /// <returns>The opened document.</returns>
         public static Document OpenLocalDocument(this ModelPath centralPath, string filePath, bool closeAllWorksets = true)
@@ -73,7 +73,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         public static UIDocument OpenAndActivateDocument(this ModelPath modelPath, OpenOptions openOptions) => RevitAPI.UIApplication.OpenAndActivateDocument(modelPath, openOptions, false);
 
         /// <summary>Opens and activates a Revit document detached from its central file, include both local document or cloud document.</summary>
-        /// <param name="closeAllWorksets">True if to close all user-created worksets; otherwise, false.</param>
+        /// <param name="closeAllWorksets"><see langword="true"/> if to close all user-created worksets; otherwise, false.</param>
         /// <remarks>This method, if successful, changes the active document.</remarks>
         /// <returns>The opened document.</returns>
         public static UIDocument OpenAndActivateDetachedDocument(this ModelPath modelPath, bool closeAllWorksets = true) => 
@@ -81,7 +81,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Opens and activates a new local file for the current user, include both local document or cloud document.</summary>
         /// <param name="filePath">The file to be opened.</param>
-        /// <param name="closeAllWorksets">True if to close all user-created worksets; otherwise, false.</param>
+        /// <param name="closeAllWorksets"><see langword="true"/> if to close all user-created worksets; otherwise, false.</param>
         /// <remarks>This method, if successful, changes the active document.</remarks>
         /// <returns>The opened document.</returns>
         public static UIDocument OpenAndActivateLocalDocument(this ModelPath centralPath, string filePath, bool closeAllWorksets = true)

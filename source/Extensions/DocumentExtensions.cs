@@ -31,7 +31,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Retrieves the View3D which has the given name.</summary>
         /// <param name="viewName">The name of the View3D to be retrieved.</param>
-        /// <param name="setAsActive">True to set the View3D as active.</param>
+        /// <param name="setAsActive"><see langword="true"/> to set the View3D as active.</param>
         /// <remarks>Note if the View3D to be retrieved does not exists this method create a new one.</remarks>
         /// <returns>The matching View3D.</returns>
         public static View3D GetView3D(this Document document, string viewName, bool setAsActive=true)
@@ -275,7 +275,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of elements that pass the user-defined ElementFilter.</summary>
         /// <param name="filter">The element filter.</param>
-        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of elements.</returns>
         public static IList<Element> ToElements(this Document document, ElementFilter filter, bool toTypes=false)
         {
@@ -290,7 +290,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of elements that pass the ElementCategoryFilter.</summary>
         /// <param name="category">The category.</param>
-        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of elements.</returns>
         public static IList<Element> ToElements(this Document document, BuiltInCategory category, bool toTypes = false)
         {
@@ -308,7 +308,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>Returns the complete set of elements that pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
-        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of elements.</returns>
         public static IList<Element> ToElements(this Document document, BuiltInCategory category, ElementFilter filter, bool toTypes = false)
         {
@@ -328,7 +328,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>Returns the complete set of elements that visible in a view and pass the ElementCategoryFilter.</summary>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
-        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of elements.</returns>
         public static IList<Element> ToElements(this Document document, ElementId viewId, BuiltInCategory category, bool toTypes = false)
         {
@@ -347,7 +347,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
-        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of elements.</returns>
         public static IList<Element> ToElements(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter, bool toTypes = false)
         {
@@ -367,7 +367,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of element ids that pass the user-defined ElementFilter.</summary>
         /// <param name="filter">The element filter.</param>
-        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds(this Document document, ElementFilter filter, bool toTypes = false)
         {
@@ -382,7 +382,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of element ids that pass the ElementCategoryFilter.</summary>
         /// <param name="category">The category.</param>
-        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, bool toTypes = false)
         {
@@ -400,7 +400,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>Returns the complete set of element ids that pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
-        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds(this Document document, BuiltInCategory category, ElementFilter filter, bool toTypes = false)
         {
@@ -420,7 +420,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementCategoryFilter.</summary>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
-        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds(this Document document, ElementId viewId, BuiltInCategory category, bool toTypes = false)
         {
@@ -439,7 +439,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
-        /// <param name="toTypes">True if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
+        /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter, bool toTypes = false)
         {
