@@ -48,12 +48,18 @@ namespace BIMPlugins.ExtStorage.Extensions
             {
                 if (geomObj is GeometryInstance geomInst)
                 {
-                    foreach (var geometry in geomInst.GetInstanceGeometry())
+                    var solid = geomInst.GetInstanceGeometry()
+                        .OfType<Solid>()
+                        .OrderByDescending(s => s.Volume)
+                        .ThenByDescending(s => s.SurfaceArea)
+                        .FirstOrDefault();
+                    
+                    if (solid != null)
                     {
-                        if (geometry is Solid solid && solid.Volume > 0)
-                        {
+                        if (solid.Volume > 0)
                             return solid;
-                        }
+                        else if (element.GetBuiltInCategory() == BuiltInCategory.OST_DetailComponents && solid.SurfaceArea > 0)
+                            return solid;
                     }
                 }
                 else if (geomObj is Solid solid && solid.Volume > 0)
