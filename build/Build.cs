@@ -5,8 +5,8 @@ using Nuke.Common.ProjectModel;
 public class Build : BIMPluginsBuild
 {
     protected override int MajorVersion => 0;
-    protected override int MinorVersion => 4;
-    protected override int MaintenanceVersion => 9;
+    protected override int MinorVersion => 5;
+    protected override int MaintenanceVersion => 0;
 
 
     [Solution("BIMPlugins.ExtStorage.sln")]
