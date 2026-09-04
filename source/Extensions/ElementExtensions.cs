@@ -6,21 +6,17 @@ namespace BIMPlugins.ExtStorage.Extensions
     public static class ElementExtensions
     {
         /// <summary>Returns the element's type.</summary>
-        /// <param name="doc">The owning document. Passing <see langword="null"/> will return the active document</param>
         /// <returns>The element's type.</returns>
-        public static ElementType ToElementType(this Element element, Document doc = null)
+        public static ElementType ToElementType(this Element element)
         {
-            doc ??= RevitAPI.Document;
-            return element.GetTypeId().ToElement<ElementType>(doc);
+            return element.GetTypeId().ToElement<ElementType>(element.Document);
         }
 
         /// <summary>Returns the element's type.</summary>
-        /// <param name="doc">The owning document. Passing <see langword="null"/> will return the active document</param>
         /// <returns>The element's type.</returns>
-        public static T ToElementType<T>(this Element element, Document doc = null) where T : ElementType
+        public static T ToElementType<T>(this Element element) where T : ElementType
         {
-            doc ??= RevitAPI.Document;
-            return element.GetTypeId().ToElement<T>(doc);
+            return element.GetTypeId().ToElement<T>(element.Document);
         }
 
 
@@ -78,7 +74,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>Retrieves the location line of the element.</summary>
         public static Line ToLine(this Element element)
         {
-            return (element.Location as LocationCurve).Curve as Line;
+            return (element.Location as LocationCurve).Curve.To<Line>();
         }
 
         /// <summary>Retrieves the location point of the element.</summary>
