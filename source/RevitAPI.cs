@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using BIMPlugins.ExtStorage.Interfaces;
 using System;
 
 namespace BIMPlugins.ExtStorage
@@ -27,35 +28,11 @@ namespace BIMPlugins.ExtStorage
         public static View ActiveView { get => Document.ActiveView; }
 
 
-        /// <summary>
-        /// A generic <see cref="Autodesk.Revit.UI.IExternalEventHandler"/> implementation that executes a custom action 
-        /// on a target object using <see cref="Autodesk.Revit.UI.ExternalEvent"/>.
-        /// </summary>
-        /// <typeparam name="T">The type of the target object (typically a ViewModel).</typeparam>
-        /// <remarks>
-        /// This handler is designed to be used with <see cref="Autodesk.Revit.UI.ExternalEvent"/> to execute code 
-        /// safely within the Revit API context without violating the API context boundaries.
-        /// <br/>
-        /// Any exceptions thrown during execution are caught and displayed in a <see cref="Autodesk.Revit.UI.TaskDialog"/>.
-        /// </remarks>
-        public class MyEventHandler<T>(T target, Action<T> action) : IExternalEventHandler
-        {
-            private readonly T _target = target;
-            private readonly Action<T> _action = action;
-
-            public void Execute(UIApplication app)
-            {
-                try
-                {
-                    _action(_target);
-                }
-                catch (Exception ex)
-                {
-                    TaskDialog.Show("Error", ex.Message + ex.StackTrace);
-                }
-            }
-
-            public string GetName() => "GenericEventHandler";
-        }
+        /// <summary>Creates an instance of external event for executing the specified action.</summary>
+        /// <typeparam name="T">The type of the target object.</typeparam>
+        /// <param name="target">The object (typically a ViewModel) passed to <paramref name="action"/> when the event is executed.</param>
+        /// <param name="action">The action executed by the external event handler.</param>
+        /// <returns>An instance of ExternalEvent class, which will be used to invoke the event</returns>
+        public static ExternalEvent CreateExtEvent<T>(T target, Action<T> action) => ExternalEvent.Create(new MyEventHandler<T>(target, action));
     }
 }
