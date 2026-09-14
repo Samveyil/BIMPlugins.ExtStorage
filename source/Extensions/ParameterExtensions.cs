@@ -46,38 +46,7 @@ namespace BIMPlugins.ExtStorage.Extensions
             };
         }
 
-#if !R2022_OR_GREATER
-        /// <summary>Returns the user visible interpretation of the parameter data.</summary>
-        public static ParameterType GetParameterType(this Parameter parameter)
-        {
-            return parameter.Definition.ParameterType;
-        }
-
-        /// <summary>Returns the user visible interpretation of the parameter data.</summary>
-        public static ParameterType GetParameterType(this FamilyParameter parameter)
-        {
-            return parameter.Definition.ParameterType;
-        }
-
-        /// <summary>Returns the group ID of the parameter definition.</summary>
-        public static BuiltInParameterGroup GetParameterGroup(this Parameter parameter)
-        {
-            return parameter.Definition.ParameterGroup;
-        }
-
-        /// <summary>Returns the group ID of the parameter definition.</summary>
-        public static BuiltInParameterGroup GetParameterGroup(this FamilyParameter parameter)
-        {
-            return parameter.Definition.ParameterGroup;
-        }
-
-        /// <summary>Get the display unit type of the parameter object.</summary>
-        public static DisplayUnitType GetUnitType(this Parameter parameter)
-        {
-            return parameter.DisplayUnitType;
-        }
-
-#else
+#if R2022_OR_GREATER
         /// <summary>Gets a ForgeTypeId identifying the data type describing values of the parameter.</summary>
         public static ForgeTypeId GetParameterType(this Parameter parameter)
         {
@@ -101,12 +70,45 @@ namespace BIMPlugins.ExtStorage.Extensions
         {
             return parameter.Definition.GetGroupTypeId();
         }
+        
+#else
+        /// <summary>Returns the user visible interpretation of the parameter data.</summary>
+        public static ParameterType GetParameterType(this Parameter parameter)
+        {
+            return parameter.Definition.ParameterType;
+        }
 
+        /// <summary>Returns the user visible interpretation of the parameter data.</summary>
+        public static ParameterType GetParameterType(this FamilyParameter parameter)
+        {
+            return parameter.Definition.ParameterType;
+        }
+
+        /// <summary>Returns the group ID of the parameter definition.</summary>
+        public static BuiltInParameterGroup GetParameterGroup(this Parameter parameter)
+        {
+            return parameter.Definition.ParameterGroup;
+        }
+
+        /// <summary>Returns the group ID of the parameter definition.</summary>
+        public static BuiltInParameterGroup GetParameterGroup(this FamilyParameter parameter)
+        {
+            return parameter.Definition.ParameterGroup;
+        }
+#endif
+
+#if R2021_OR_GREATER
         /// <summary>Gets the identifier of the unit quantifying the parameter value.</summary>
         /// <remarks>The property only applies to parameters of value types.</remarks>
         public static ForgeTypeId GetUnitType(this Parameter parameter)
         {
             return parameter.GetUnitTypeId();
+        }
+#else
+        /// <summary>Get the display unit type of the parameter object.</summary>
+        public static DisplayUnitType GetUnitType(this Parameter parameter)
+        {
+            return parameter.DisplayUnitType;
         }
 #endif
 
@@ -114,10 +116,10 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <returns><see langword="true"/> if the parameter used to control the type of a family nested within another family, <see langword="false"/> otherwise.</returns>
         public static bool IsFamilyType(this FamilyParameter parameter)
         {
-#if !R2022_OR_GREATER
-            return parameter.GetParameterType() == ParameterType.FamilyType;
-#else
+#if R2022_OR_GREATER
             return Category.IsBuiltInCategory(parameter.GetParameterType());
+#else
+            return parameter.GetParameterType() == ParameterType.FamilyType;
 #endif
         }
     }
