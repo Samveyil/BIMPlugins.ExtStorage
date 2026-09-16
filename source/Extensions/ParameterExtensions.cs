@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using System;
+using System.Globalization;
 
 namespace BIMPlugins.ExtStorage.Extensions
 {
@@ -38,10 +39,23 @@ namespace BIMPlugins.ExtStorage.Extensions
         {
             return parameter.StorageType switch
             {
-                StorageType.Double => parameter.Set(Convert.ToDouble(value)),
-                StorageType.Integer => parameter.Set(Convert.ToInt32(value)),
-                StorageType.String => parameter.Set(value.ToString()),
+                StorageType.Double => parameter.Set(
+                    value is double doubleValue
+                        ? doubleValue
+                        : Convert.ToDouble(value, CultureInfo.InvariantCulture)),
+
+                StorageType.Integer => parameter.Set(
+                    value is int intValue
+                        ? intValue
+                        : (int)Convert.ToDouble(value, CultureInfo.InvariantCulture)),
+
+                StorageType.String => parameter.Set(
+                    value is string stringValue
+                        ? stringValue
+                        : value.ToString()),
+
                 StorageType.ElementId when value is ElementId elementId => parameter.Set(elementId),
+
                 _ => false
             };
         }
