@@ -17,10 +17,6 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <typeparam name="T">The element type to return (must inherit from Element).</typeparam>
         /// <param name="doc">The owning document. Passing <see langword="null"/> will return the active document</param>
         /// <returns>The element cast to type <typeparamref name="T"/>.</returns>
-        public static T ToElement<T>(this Reference reference, Document doc = null) where T : Element
-        {
-            doc ??= RevitAPI.Document;
-            return (T)doc.GetElement(reference);
-        }
+        public static T ToElement<T>(this Reference reference, Document doc = null) where T : Element => (T)reference.ToElement(doc);
     }
 }
