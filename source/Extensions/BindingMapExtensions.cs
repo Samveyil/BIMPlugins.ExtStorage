@@ -34,7 +34,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="parameterGroup">The GroupID of the parameter definition, or INVALID if the parameter is not to be associated with any predefined group.</param>
         /// <remarks>Note if a shared parameter exists this method only changes the set of categories.</remarks>
 #if !R2022_OR_GREATER
-        public static bool InsertParameter(this BindingMap bindingMap, string paramName, Guid paramGuid, List<Category> categories, bool isInstance=true, BuiltInParameterGroup parameterGroup=BuiltInParameterGroup.INVALID)
+        public static bool InsertParameter(this BindingMap bindingMap, Document doc, string paramName, Guid paramGuid, List<Category> categories, bool isInstance=true, BuiltInParameterGroup parameterGroup=BuiltInParameterGroup.INVALID)
 #else
         /// <summary>Creates a new parameter binding between a shared parameter and a set of categories in a specified group.</summary>
         /// <param name="paramName">The name of the shared parameter.</param>
@@ -68,7 +68,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
                     if (insertCategories)
                     {
-                        using (Transaction t = new Transaction(RevitAPI.Document, "Загрузка параметра"))
+                        using (Transaction t = new Transaction(doc, "Загрузка параметра"))
                         {
                             t.Start();
 
@@ -98,7 +98,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                 Binding binding = isInstance ? new InstanceBinding(catSet) : new TypeBinding(catSet);
 
                 bool result;
-                using (Transaction t = new Transaction(RevitAPI.Document, "Загрузка параметра"))
+                using (Transaction t = new Transaction(doc, "Загрузка параметра"))
                 {
                     t.Start();
 #if !R2022_OR_GREATER

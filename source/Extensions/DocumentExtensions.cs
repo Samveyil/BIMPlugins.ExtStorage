@@ -74,23 +74,25 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>Returns the complete set of elements that pass the ElementClassFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
-        public static IEnumerable<T> ToElements<T>(this Document document) where T : Element
+        public static IList<T> ToElements<T>(this Document document) where T : Element
         {
             return new FilteredElementCollector(document)
                 .OfClass(typeof(T))
-                .Cast<T>();
+                .Cast<T>()
+                .ToList();
         }
 
         /// <summary>Returns the complete set of elements that pass the ElementClassFilter and the ElementCategoryFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <param name="category">The category.</param>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
-        public static IEnumerable<T> ToElements<T>(this Document document, BuiltInCategory category) where T : Element
+        public static IList<T> ToElements<T>(this Document document, BuiltInCategory category) where T : Element
         {
             return new FilteredElementCollector(document)
                 .OfClass(typeof(T))
                 .OfCategory(category)
-                .Cast<T>();
+                .Cast<T>()
+                .ToList();
         }
 
         /// <summary>Returns the complete set of elements that pass the ElementClassFilter, the ElementCategoryFilter and the the user-defined-defined ElementFilter.</summary>
@@ -98,36 +100,39 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
-        public static IEnumerable<T> ToElements<T>(this Document document, BuiltInCategory category, ElementFilter filter) where T : Element
+        public static IList<T> ToElements<T>(this Document document, BuiltInCategory category, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document)
                 .OfClass(typeof(T))
                 .OfCategory(category)
                 .WherePasses(filter)
-                .Cast<T>();
+                .Cast<T>()
+                .ToList();
         }
 
         /// <summary>Returns the complete set of elements that pass the ElementClassFilter and the user-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
-        public static IEnumerable<T> ToElements<T>(this Document document, ElementFilter filter) where T : Element
+        public static IList<T> ToElements<T>(this Document document, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document)
                 .OfClass(typeof(T))
                 .WherePasses(filter)
-                .Cast<T>();
+                .Cast<T>()
+                .ToList();
         }
 
         /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <param name="viewId">The view id.</param>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
-        public static IEnumerable<T> ToElements<T>(this Document document, ElementId viewId) where T : Element
+        public static IList<T> ToElements<T>(this Document document, ElementId viewId) where T : Element
         {
             return new FilteredElementCollector(document, viewId)
                 .OfClass(typeof(T))
-                .Cast<T>();
+                .Cast<T>()
+                .ToList();
         }
 
         /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter and the user-defined ElementFilter.</summary>
@@ -135,12 +140,13 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="viewId">The view id.</param>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
-        public static IEnumerable<T> ToElements<T>(this Document document, ElementId viewId, ElementFilter filter) where T : Element
+        public static IList<T> ToElements<T>(this Document document, ElementId viewId, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document, viewId)
                 .OfClass(typeof(T))
                 .WherePasses(filter)
-                .Cast<T>();
+                .Cast<T>()
+                .ToList();
         }
 
         /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter and the ElementCategoryFilter.</summary>
@@ -148,12 +154,13 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
-        public static IEnumerable<T> ToElements<T>(this Document document, ElementId viewId, BuiltInCategory category) where T : Element
+        public static IList<T> ToElements<T>(this Document document, ElementId viewId, BuiltInCategory category) where T : Element
         {
             return new FilteredElementCollector(document, viewId)
                 .OfClass(typeof(T))
                 .OfCategory(category)
-                .Cast<T>();
+                .Cast<T>()
+                .ToList();
         }
 
         /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter, the ElementCategoryFilter and the user-defined ElementFilter.</summary>
@@ -162,13 +169,14 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
-        public static IEnumerable<T> ToElements<T>(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter) where T : Element
+        public static IList<T> ToElements<T>(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document, viewId)
                 .OfClass(typeof(T))
                 .OfCategory(category)
                 .WherePasses(filter)
-                .Cast<T>();
+                .Cast<T>()
+                .ToList();
         }
 
 
@@ -457,39 +465,43 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
 
-        public static IEnumerable<Element> ToModelElements(this Document document)
+        public static IList<Element> ToModelElements(this Document document)
         {
             return new FilteredElementCollector(document)
                 .WhereElementIsNotElementType()
                 .WhereElementIsViewIndependent()
                 .Where(e => e.Category?.CategoryType == CategoryType.Model && e.Category.CanAddSubcategory)
-                .Where(e => e.GetBuiltInCategory() != BuiltInCategory.OST_Parts);
+                .Where(e => e.GetBuiltInCategory() != BuiltInCategory.OST_Parts)
+                .ToList();
         }
-        public static IEnumerable<Element> ToModelElements(this Document document, ElementFilter filter)
+        public static IList<Element> ToModelElements(this Document document, ElementFilter filter)
         {
             return new FilteredElementCollector(document)
                 .WhereElementIsNotElementType()
                 .WhereElementIsViewIndependent()
                 .WherePasses(filter)
                 .Where(e => e.Category?.CategoryType == CategoryType.Model && e.Category.CanAddSubcategory)
-                .Where(e => e.GetBuiltInCategory() != BuiltInCategory.OST_Parts);
+                .Where(e => e.GetBuiltInCategory() != BuiltInCategory.OST_Parts)
+                .ToList();
         }
-        public static IEnumerable<Element> ToModelElements(this Document document, ElementId viewId)
+        public static IList<Element> ToModelElements(this Document document, ElementId viewId)
         {
             return new FilteredElementCollector(document, viewId)
                 .WhereElementIsNotElementType()
                 .WhereElementIsViewIndependent()
                 .Where(e => e.Category?.CategoryType == CategoryType.Model && e.Category.CanAddSubcategory)
-                .Where(e => e.GetBuiltInCategory() != BuiltInCategory.OST_Parts);
+                .Where(e => e.GetBuiltInCategory() != BuiltInCategory.OST_Parts)
+                .ToList();
         }
-        public static IEnumerable<Element> ToModelElements(this Document document, ElementId viewId, ElementFilter filter)
+        public static IList<Element> ToModelElements(this Document document, ElementId viewId, ElementFilter filter)
         {
             return new FilteredElementCollector(document, viewId)
                 .WhereElementIsNotElementType()
                 .WhereElementIsViewIndependent()
                 .WherePasses(filter)
                 .Where(e => e.Category?.CategoryType == CategoryType.Model && e.Category.CanAddSubcategory)
-                .Where(e => e.GetBuiltInCategory() != BuiltInCategory.OST_Parts);
+                .Where(e => e.GetBuiltInCategory() != BuiltInCategory.OST_Parts)
+                .ToList();
         }
         public static ICollection<ElementId> ToModelElementIds(this Document document)
         {
