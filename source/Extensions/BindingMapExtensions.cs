@@ -26,24 +26,26 @@ namespace BIMPlugins.ExtStorage.Extensions
             return null;
         }
 
+#if !R2022_OR_GREATER
         /// <summary>Creates a new parameter binding between a shared parameter and a set of categories in a specified group.</summary>
+        /// <param name="doc">The document</param>
         /// <param name="paramName">The name of the shared parameter.</param>
         /// <param name="paramGuid">The guid of the shared parameter.</param>
         /// <param name="categories">The list of categories to which the parameter should be bound.</param>
         /// <param name="isInstance"><see langword="true"/> if an InstanceBinding; otherwise, TypeBinding.</param>
         /// <param name="parameterGroup">The GroupID of the parameter definition, or INVALID if the parameter is not to be associated with any predefined group.</param>
         /// <remarks>Note if a shared parameter exists this method only changes the set of categories.</remarks>
-#if !R2022_OR_GREATER
         public static bool InsertParameter(this BindingMap bindingMap, Document doc, string paramName, Guid paramGuid, List<Category> categories, bool isInstance=true, BuiltInParameterGroup parameterGroup=BuiltInParameterGroup.INVALID)
 #else
         /// <summary>Creates a new parameter binding between a shared parameter and a set of categories in a specified group.</summary>
+        /// <param name="doc">The document</param>
         /// <param name="paramName">The name of the shared parameter.</param>
         /// <param name="paramGuid">The guid of the shared parameter.</param>
         /// <param name="categories">The list of categories to which the parameter should be bound.</param>
         /// <param name="isInstance"><see langword="true"/> if an InstanceBinding; otherwise, TypeBinding.</param>
         /// <param name="groupTypeId">The identifier of the parameter definition's parameter group, or empty if the parameter is not to be associated with any predefined group.</param>
         /// <remarks>Note if a shared parameter exist this method only change the set of categories.</remarks>
-        public static bool InsertParameter(this BindingMap bindingMap, string paramName, Guid paramGuid, List<Category> categories, bool isInstance = true, ForgeTypeId groupTypeId=null)
+        public static bool InsertParameter(this BindingMap bindingMap, Document doc, string paramName, Guid paramGuid, List<Category> categories, bool isInstance = true, ForgeTypeId groupTypeId=null)
 #endif
         {
             var hasParameter = false;
