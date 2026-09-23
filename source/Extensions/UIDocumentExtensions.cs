@@ -33,10 +33,30 @@ namespace BIMPlugins.ExtStorage.Extensions
 
 
         /// <inheritdoc cref="Autodesk.Revit.UI.Selection.Selection.PickPoint(string)" />
-        public static XYZ PickPoint(this UIDocument uiDoc, string statusPrompt) => uiDoc.Selection.PickPoint(statusPrompt);
+        public static XYZ PickPoint(this UIDocument uiDoc, string statusPrompt)
+        {
+            try
+            {
+                return uiDoc.Selection.PickPoint(statusPrompt);
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            {
+                return null;
+            }
+        }
 
         /// <inheritdoc cref="Autodesk.Revit.UI.Selection.Selection.PickPoint(ObjectSnapTypes, string)" />
-        public static XYZ PickPoint(this UIDocument uiDoc, ObjectSnapTypes snapSettings, string statusPrompt) => uiDoc.Selection.PickPoint(snapSettings, statusPrompt);
+        public static XYZ PickPoint(this UIDocument uiDoc, ObjectSnapTypes snapSettings, string statusPrompt)
+        {
+            try
+            {
+                return uiDoc.Selection.PickPoint(snapSettings, statusPrompt);
+            }
+            catch (Autodesk.Revit.Exceptions.OperationCanceledException)
+            {
+                return null;
+            }
+        }
 
 
         /// <inheritdoc cref="Autodesk.Revit.UI.Selection.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType, string)" />
