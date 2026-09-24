@@ -31,5 +31,36 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Converts an object's type to <typeparamref name="T" /> type</summary>
         public static T To<T>(this object obj) => (T)obj;
+
+        /// <summary>Returns a relative path from one path to another</summary>
+        /// <param name="relativeTo">
+        /// The source path the result should be relative to. This path is always considered to be a directory.
+        /// </param>
+        /// <param name="path">The destination path.</param>
+        /// <exception cref="System.ArgumentNullException">relativeTo or path is null.</exception>
+        /// <exception cref="System.ArgumentException">relativeTo or path is effectively empty.</exception>
+        /// <returns>The relative path, or path if the paths don't share the same root.</returns>
+        public static string GetRelativePath(this string relativeTo, string path)
+        {
+            string basePath = Path.GetFullPath(relativeTo);
+
+            if (!basePath.EndsWith(Path.DirectorySeparatorChar.ToString()))
+                basePath += Path.DirectorySeparatorChar;
+
+            string targetPath = Path.GetFullPath(path);
+
+            var baseUri = new Uri(basePath);
+            var targetUri = new Uri(targetPath);
+
+            if (!string.Equals(baseUri.Scheme, targetUri.Scheme, StringComparison.OrdinalIgnoreCase))
+                return path;
+
+            string relativePath = Uri.UnescapeDataString(
+                baseUri.MakeRelativeUri(targetUri).ToString());
+
+            return relativePath.Replace(
+                Path.AltDirectorySeparatorChar,
+                Path.DirectorySeparatorChar);
+        }
     }
 }
