@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace BIMPlugins.ExtStorage.Extensions
 {
@@ -52,6 +53,16 @@ namespace BIMPlugins.ExtStorage.Extensions
             var viewTypeId = document.ToElements<ViewFamilyType>()
                 .FirstOrDefault(v => v.ViewFamily == ViewFamily.ThreeDimensional)
                 .Id;
+
+            string result = Regex.Replace(
+                viewName,
+                @"[\\:\{\}\[\]\|;<>\?`~\p{C}]",
+                "_"
+            );
+
+            viewName = Regex.Replace(result,  @"\s+", " ")
+                .Trim()
+                .Trim('_');
 
             View3D view3D;
             using (Transaction t = new Transaction(document, "Создать 3D вид"))
