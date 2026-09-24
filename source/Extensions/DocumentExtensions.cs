@@ -36,10 +36,9 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <returns>The matching View3D.</returns>
         public static View3D GetView3D(this Document document, string viewName, bool setAsActive=true)
         {
-            var view3D = new FilteredElementCollector(document)
-                .OfClass(typeof(View3D))
+            var view3D = document.ToElements<View3D>()
                 .Where(e => e.Name == viewName)
-                .FirstOrDefault() as View3D;
+                .FirstOrDefault();
 
             view3D ??= document.CreateView3D(viewName);
 
@@ -50,9 +49,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
         private static View3D CreateView3D(this Document document, string viewName)
         {
-            var viewTypeId = new FilteredElementCollector(document)
-                .OfClass(typeof(ViewFamilyType))
-                .Cast<ViewFamilyType>()
+            var viewTypeId = document.ToElements<ViewFamilyType>()
                 .FirstOrDefault(v => v.ViewFamily == ViewFamily.ThreeDimensional)
                 .Id;
 
