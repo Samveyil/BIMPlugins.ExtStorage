@@ -600,10 +600,14 @@ namespace BIMPlugins.ExtStorage.Extensions
 
                 try
                 {
-                    AddUnusedAssets(document, GetUnusedAssets(document, "GetUnusedMaterials"), unusedAssetIds);
-                    AddUnusedAssets(document, GetUnusedAssets(document, "GetUnusedAppearances"), unusedAssetIds);
-                    AddUnusedAssets(document, GetUnusedAssets(document, "GetUnusedStructures"), unusedAssetIds);
-                    AddUnusedAssets(document, GetUnusedAssets(document, "GetUnusedThermals"), unusedAssetIds);
+                    unusedAssetIds.AddRange(GetUnusedAssets(document, "GetUnusedMaterials"));
+                    unusedAssetIds.AddRange(GetUnusedAssets(document, "GetUnusedAppearances"));
+                    unusedAssetIds.AddRange(GetUnusedAssets(document, "GetUnusedStructures"));
+                    unusedAssetIds.AddRange(GetUnusedAssets(document, "GetUnusedThermals"));
+
+                    unusedAssetIds = unusedAssetIds
+                        .Where(id => id.ToElement(document) != null)
+                        .ToList();
 
                     using (Transaction t = new Transaction(document, "Удалить неиспользуемое"))
                     {
@@ -625,15 +629,6 @@ namespace BIMPlugins.ExtStorage.Extensions
             if (method != null)
                 return (ICollection<ElementId>)method.Invoke(doc, null);
             return new List<ElementId>();
-        }
-        private static void AddUnusedAssets(Document doc, ICollection<ElementId> elementIds, List<ElementId> ids)
-        {
-            foreach (var id in elementIds)
-            {
-                Element elem = doc.GetElement(id);
-                if (elem != null)
-                    ids.Add(id);
-            }
         }
     }
 }
