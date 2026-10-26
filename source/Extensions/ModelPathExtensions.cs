@@ -64,7 +64,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
             WorksharingUtils.CreateNewLocal(centralPath, localPath);
 
-            return localPath.OpenDocument(filePath, FileMethods.SetOpenOptions(localPath, DetachFromCentralOption.DetachAndPreserveWorksets, closeAllWorksets));
+            return localPath.OpenDocument(filePath, FileMethods.SetOpenOptions(localPath, DetachFromCentralOption.DoNotDetach, closeAllWorksets));
         }
 
         /// <summary>Opens and activates a Revit document, include both local document or cloud document.</summary>
