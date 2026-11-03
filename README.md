@@ -1,7 +1,7 @@
 # BIMPlugins.ExtStorage
 
 [![NuGet](https://img.shields.io/nuget/v/BIMPlugins.ExtStorage.svg)](https://www.nuget.org/packages/BIMPlugins.ExtStorage)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Samveyil/BIMPlugins.ExtStorage/blob/master/LICENSE)
 
 Extension methods and helpers for the Autodesk Revit API: collecting elements, parameters and units,
 user selection, geometry, element transforms, opening documents and failure handling.
@@ -209,3 +209,11 @@ The method names stay the same, but some return types follow the Revit API of ea
 | `ParameterMethods.GetUnitType()`, `Parameter.GetUnitType()`, `FromUnit`/`ToUnit` | `DisplayUnitType` | `ForgeTypeId` (2021) |
 | `GetParameterType()`, `GetParameterGroup()` | `ParameterType`, `BuiltInParameterGroup` | `ForgeTypeId` (2022) |
 | `BindingMap.InsertParameter(..., group)` | `BuiltInParameterGroup` | `ForgeTypeId` (2022) |
+
+## License
+
+This project is [licensed](https://github.com/Samveyil/BIMPlugins.ExtStorage/blob/master/LICENSE) under the [MIT License](https://en.wikipedia.org/wiki/MIT_License).
+
+---
+
+Do you like this project? Please [star this project on GitHub](https://github.com/Samveyil/BIMPlugins.ExtStorage/stargazers)!
