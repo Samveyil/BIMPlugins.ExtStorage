@@ -83,7 +83,7 @@
 		<AssemblyName>$(PackageId)</AssemblyName>
 		<Product>$(PackageId)</Product>
 		<PackageAssemblyVersion>.$(Version)</PackageAssemblyVersion>
-		<Copyright>Copyright © $(CopyrightYears) $(Company)</Copyright>
+		<Copyright>Copyright © $(CopyrightYears) Samir Shibliev</Copyright>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -102,29 +102,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Resources\**" />
-	  <EmbeddedResource Remove="Resources\**" />
-	  <None Remove="Resources\**" />
-	  <Page Remove="Resources\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitVersion).*" IncludeAssets="build; compile" PrivateAssets="All" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Include="..\README.md">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-			<Visible>false</Visible>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="..\LICENSE">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-			<Visible>false</Visible>
-		</None>
-	</ItemGroup>
 </Project>
