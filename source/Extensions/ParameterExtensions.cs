@@ -4,6 +4,7 @@ using System.Globalization;
 
 namespace BIMPlugins.ExtStorage.Extensions
 {
+    /// <summary>Extension methods for <see cref="Autodesk.Revit.DB.Parameter"/> and <see cref="Autodesk.Revit.DB.FamilyParameter"/>.</summary>
     public static class ParameterExtensions
     {
         /// <summary>Get the parameter value.</summary>
@@ -31,6 +32,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Sets the parameter to a value.</summary>
+        /// <param name="parameter">The parameter.</param>
         /// <param name="value">The new value to which the parameter is to be set.</param>
         /// <remarks>Depending on the parameter's storage type, the input value is converted and passed to the corresponding
         /// Set overload — Set(double), Set(int), Set(string), or Set(ElementId).</remarks>
@@ -62,24 +64,28 @@ namespace BIMPlugins.ExtStorage.Extensions
 
 #if R2022_OR_GREATER
         /// <summary>Gets a ForgeTypeId identifying the data type describing values of the parameter.</summary>
+        /// <returns>The data type of the parameter, for example <see cref="Autodesk.Revit.DB.SpecTypeId.Length"/>.</returns>
         public static ForgeTypeId GetParameterType(this Parameter parameter)
         {
             return parameter.Definition.GetDataType();
         }
 
         /// <summary>Gets a ForgeTypeId identifying the data type describing values of the parameter.</summary>
+        /// <returns>The data type of the parameter, for example <see cref="Autodesk.Revit.DB.SpecTypeId.Length"/>.</returns>
         public static ForgeTypeId GetParameterType(this FamilyParameter parameter)
         {
             return parameter.Definition.GetDataType();
         }
 
         /// <summary>Returns the identifier of the parameter definition's parameter group.</summary>
+        /// <returns>The group of the parameter, for example <see cref="Autodesk.Revit.DB.GroupTypeId.Data"/>.</returns>
         public static ForgeTypeId GetParameterGroup(this Parameter parameter)
         {
             return parameter.Definition.GetGroupTypeId();
         }
 
         /// <summary>Returns the identifier of the parameter definition's parameter group.</summary>
+        /// <returns>The group of the parameter, for example <see cref="Autodesk.Revit.DB.GroupTypeId.Data"/>.</returns>
         public static ForgeTypeId GetParameterGroup(this FamilyParameter parameter)
         {
             return parameter.Definition.GetGroupTypeId();
@@ -87,24 +93,28 @@ namespace BIMPlugins.ExtStorage.Extensions
         
 #else
         /// <summary>Returns the user visible interpretation of the parameter data.</summary>
+        /// <returns>The type of the parameter, for example <see cref="Autodesk.Revit.DB.ParameterType.Length"/>.</returns>
         public static ParameterType GetParameterType(this Parameter parameter)
         {
             return parameter.Definition.ParameterType;
         }
 
         /// <summary>Returns the user visible interpretation of the parameter data.</summary>
+        /// <returns>The type of the parameter, for example <see cref="Autodesk.Revit.DB.ParameterType.Length"/>.</returns>
         public static ParameterType GetParameterType(this FamilyParameter parameter)
         {
             return parameter.Definition.ParameterType;
         }
 
         /// <summary>Returns the group ID of the parameter definition.</summary>
+        /// <returns>The group of the parameter, for example <see cref="Autodesk.Revit.DB.BuiltInParameterGroup.PG_DATA"/>.</returns>
         public static BuiltInParameterGroup GetParameterGroup(this Parameter parameter)
         {
             return parameter.Definition.ParameterGroup;
         }
 
         /// <summary>Returns the group ID of the parameter definition.</summary>
+        /// <returns>The group of the parameter, for example <see cref="Autodesk.Revit.DB.BuiltInParameterGroup.PG_DATA"/>.</returns>
         public static BuiltInParameterGroup GetParameterGroup(this FamilyParameter parameter)
         {
             return parameter.Definition.ParameterGroup;
@@ -114,12 +124,14 @@ namespace BIMPlugins.ExtStorage.Extensions
 #if R2021_OR_GREATER
         /// <summary>Gets the identifier of the unit quantifying the parameter value.</summary>
         /// <remarks>The property only applies to parameters of value types.</remarks>
+        /// <returns>The unit of the parameter value, for example <see cref="Autodesk.Revit.DB.UnitTypeId.Millimeters"/>.</returns>
         public static ForgeTypeId GetUnitType(this Parameter parameter)
         {
             return parameter.GetUnitTypeId();
         }
 #else
         /// <summary>Get the display unit type of the parameter object.</summary>
+        /// <returns>The display unit of the parameter value, for example <see cref="Autodesk.Revit.DB.DisplayUnitType.DUT_MILLIMETERS"/>.</returns>
         public static DisplayUnitType GetUnitType(this Parameter parameter)
         {
             return parameter.DisplayUnitType;

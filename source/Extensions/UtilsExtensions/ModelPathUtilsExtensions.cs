@@ -2,6 +2,7 @@
 
 namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
 {
+    /// <summary>Extension methods wrapping <see cref="Autodesk.Revit.DB.ModelPathUtils"/>.</summary>
     public static class ModelPathUtilsExtensions
     {
         /// <inheritdoc cref="Autodesk.Revit.DB.ModelPathUtils.ConvertModelPathToUserVisiblePath(Autodesk.Revit.DB.ModelPath)" />

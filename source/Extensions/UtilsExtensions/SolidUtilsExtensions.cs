@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
 {
+    /// <summary>Extension methods wrapping <see cref="Autodesk.Revit.DB.SolidUtils"/>.</summary>
     public static class SolidUtilsExtensions
     {
         /// <inheritdoc cref="Autodesk.Revit.DB.SolidUtils.Clone(Autodesk.Revit.DB.Solid)" />
