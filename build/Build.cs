@@ -4,10 +4,9 @@ using Nuke.Common.ProjectModel;
 
 public class Build : BIMPluginsBuild
 {
-    // MajorVersion 0: the package version starts with the Revit version, R2024 => 2024.5.9.
     protected override int MajorVersion => 0;
-    protected override int MinorVersion => 5;
-    protected override int MaintenanceVersion => 9;
+    protected override int MinorVersion => 6;
+    protected override int MaintenanceVersion => 0;
 
     [Solution("BIMPlugins.ExtStorage.sln")]
     protected override Solution Solution { get; }
