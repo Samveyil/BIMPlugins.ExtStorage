@@ -14,10 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # The SDK version comes from global.json (SDK 9, the same one Visual Studio MSBuild uses).
+      # SDK 9: the build project targets net9.0.
       - uses: actions/setup-dotnet@v5
         with:
-          global-json-file: global.json
+          dotnet-version: 9.0.x
 
       # Tag v0.5.9 must match MajorVersion.MinorVersion.MaintenanceVersion in build/Build.cs.
       # The packages get the Revit version as major: 2019.5.9 … 2025.5.9.
