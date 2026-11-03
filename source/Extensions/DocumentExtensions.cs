@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace BIMPlugins.ExtStorage.Extensions
 {
+    /// <summary>Extension methods for <see cref="Autodesk.Revit.DB.Document"/>: collecting elements, views, synchronization and purging.</summary>
     public static class DocumentExtensions
     {
         /// <summary>
@@ -17,6 +18,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// then saves changes back to central. A save to central is performed even if no
         /// changes were made.
         ///</summary>
+        /// <param name="document">The document.</param>
         /// <param name="comment">User description of changes made since the last Sync with Central.</param>
         /// <remarks>This method will relinquish the current the user-defined's ownership of all worksets and all elements.</remarks>
         public static void SynchronizeWithCentral(this Document document, string comment)
@@ -31,6 +33,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Retrieves the View3D which has the given name.</summary>
+        /// <param name="document">The document.</param>
         /// <param name="viewName">The name of the View3D to be retrieved.</param>
         /// <param name="setAsActive"><see langword="true"/> to set the View3D as active.</param>
         /// <remarks>Note if the View3D to be retrieved does not exists this method create a new one.</remarks>
@@ -92,6 +95,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of elements that pass the ElementClassFilter and the ElementCategoryFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="category">The category.</param>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
         public static IList<T> ToElements<T>(this Document document, BuiltInCategory category) where T : Element
@@ -105,6 +109,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of elements that pass the ElementClassFilter, the ElementCategoryFilter and the the user-defined-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
@@ -120,6 +125,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of elements that pass the ElementClassFilter and the user-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
         public static IList<T> ToElements<T>(this Document document, ElementFilter filter) where T : Element
@@ -133,6 +139,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
         public static IList<T> ToElements<T>(this Document document, ElementId viewId) where T : Element
@@ -145,6 +152,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter and the user-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
@@ -159,6 +167,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter and the ElementCategoryFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
         /// <returns>The complete set of elements of type <typeparamref name="T"/>.</returns>
@@ -173,6 +182,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter, the ElementCategoryFilter and the user-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
@@ -200,6 +210,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of element ids that pass the ElementClassFilter and the ElementCategoryFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="category">The category.</param>
         /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds<T>(this Document document, BuiltInCategory category)
@@ -212,6 +223,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of element ids that pass the ElementClassFilter, the ElementCategoryFilter and the user-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of element ids.</returns>
@@ -226,6 +238,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of element ids that pass the ElementClassFilter and the user-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementFilter filter)
@@ -238,6 +251,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementClassFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <returns>The complete set of element ids.</returns>
         public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId)
@@ -249,6 +263,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementClassFilter and the user-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of element ids.</returns>
@@ -262,6 +277,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementClassFilter and the ElementCategoryFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
         /// <returns>The complete set of element ids.</returns>
@@ -275,6 +291,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementClassFilter, the ElementCategoryFilter and the user-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
+        /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
@@ -290,6 +307,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
 
         /// <summary>Returns the complete set of elements that pass the user-defined ElementFilter.</summary>
+        /// <param name="document">The document.</param>
         /// <param name="filter">The element filter.</param>
         /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of elements.</returns>
@@ -305,6 +323,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Returns the complete set of elements that pass the ElementCategoryFilter.</summary>
+        /// <param name="document">The document.</param>
         /// <param name="category">The category.</param>
         /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of elements.</returns>
@@ -322,6 +341,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Returns the complete set of elements that pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <param name="document">The document.</param>
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
         /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
@@ -342,6 +362,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Returns the complete set of elements that visible in a view and pass the ElementCategoryFilter.</summary>
+        /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
         /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
@@ -360,6 +381,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Returns the complete set of elements that visible in a view and pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
@@ -382,6 +404,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
 
         /// <summary>Returns the complete set of element ids that pass the user-defined ElementFilter.</summary>
+        /// <param name="document">The document.</param>
         /// <param name="filter">The element filter.</param>
         /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of element ids.</returns>
@@ -397,6 +420,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Returns the complete set of element ids that pass the ElementCategoryFilter.</summary>
+        /// <param name="document">The document.</param>
         /// <param name="category">The category.</param>
         /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
         /// <returns>The complete set of element ids.</returns>
@@ -414,6 +438,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Returns the complete set of element ids that pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <param name="document">The document.</param>
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
         /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
@@ -434,6 +459,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementCategoryFilter.</summary>
+        /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
         /// <param name="toTypes"><see langword="true"/> if applies an ElementIsElementTypeFilter; otherwise, inverted ElementIsElementTypeFilter.</param>
@@ -452,6 +478,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
@@ -473,6 +500,9 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
 
+        /// <summary>Returns all model elements of the document.</summary>
+        /// <remarks>Model elements are view-independent instances of model categories that support subcategories. Parts are excluded.</remarks>
+        /// <returns>The model elements.</returns>
         public static IList<Element> ToModelElements(this Document document)
         {
             return new FilteredElementCollector(document)
@@ -482,6 +512,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .Where(e => e.GetBuiltInCategory() != BuiltInCategory.OST_Parts)
                 .ToList();
         }
+
+        /// <summary>Returns the model elements of the document that pass the user-defined ElementFilter.</summary>
+        /// <param name="document">The document.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <inheritdoc cref="ToModelElements(Document)" path="/remarks"/>
+        /// <returns>The model elements.</returns>
         public static IList<Element> ToModelElements(this Document document, ElementFilter filter)
         {
             return new FilteredElementCollector(document)
@@ -492,6 +528,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .Where(e => e.GetBuiltInCategory() != BuiltInCategory.OST_Parts)
                 .ToList();
         }
+
+        /// <summary>Returns the model elements that are visible in a view.</summary>
+        /// <param name="document">The document.</param>
+        /// <param name="viewId">The view id.</param>
+        /// <inheritdoc cref="ToModelElements(Document)" path="/remarks"/>
+        /// <returns>The model elements.</returns>
         public static IList<Element> ToModelElements(this Document document, ElementId viewId)
         {
             return new FilteredElementCollector(document, viewId)
@@ -501,6 +543,13 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .Where(e => e.GetBuiltInCategory() != BuiltInCategory.OST_Parts)
                 .ToList();
         }
+
+        /// <summary>Returns the model elements that are visible in a view and pass the user-defined ElementFilter.</summary>
+        /// <param name="document">The document.</param>
+        /// <param name="viewId">The view id.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <inheritdoc cref="ToModelElements(Document)" path="/remarks"/>
+        /// <returns>The model elements.</returns>
         public static IList<Element> ToModelElements(this Document document, ElementId viewId, ElementFilter filter)
         {
             return new FilteredElementCollector(document, viewId)
@@ -511,6 +560,10 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .Where(e => e.GetBuiltInCategory() != BuiltInCategory.OST_Parts)
                 .ToList();
         }
+
+        /// <summary>Returns the ids of all model elements of the document.</summary>
+        /// <inheritdoc cref="ToModelElements(Document)" path="/remarks"/>
+        /// <returns>The model element ids.</returns>
         public static ICollection<ElementId> ToModelElementIds(this Document document)
         {
             return new FilteredElementCollector(document)
@@ -521,6 +574,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .Select(e => e.Id)
                 .ToList();
         }
+
+        /// <summary>Returns the ids of the model elements of the document that pass the user-defined ElementFilter.</summary>
+        /// <param name="document">The document.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <inheritdoc cref="ToModelElements(Document)" path="/remarks"/>
+        /// <returns>The model element ids.</returns>
         public static ICollection<ElementId> ToModelElementIds(this Document document, ElementFilter filter)
         {
             return new FilteredElementCollector(document)
@@ -532,6 +591,12 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .Select(e => e.Id)
                 .ToList();
         }
+
+        /// <summary>Returns the ids of the model elements that are visible in a view.</summary>
+        /// <param name="document">The document.</param>
+        /// <param name="viewId">The view id.</param>
+        /// <inheritdoc cref="ToModelElements(Document)" path="/remarks"/>
+        /// <returns>The model element ids.</returns>
         public static ICollection<ElementId> ToModelElementIds(this Document document, ElementId viewId)
         {
             return new FilteredElementCollector(document, viewId)
@@ -542,6 +607,13 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .Select(e => e.Id)
                 .ToList();
         }
+
+        /// <summary>Returns the ids of the model elements that are visible in a view and pass the user-defined ElementFilter.</summary>
+        /// <param name="document">The document.</param>
+        /// <param name="viewId">The view id.</param>
+        /// <param name="filter">The element filter.</param>
+        /// <inheritdoc cref="ToModelElements(Document)" path="/remarks"/>
+        /// <returns>The model element ids.</returns>
         public static ICollection<ElementId> ToModelElementIds(this Document document, ElementId viewId, ElementFilter filter)
         {
             return new FilteredElementCollector(document, viewId)
@@ -559,7 +631,12 @@ namespace BIMPlugins.ExtStorage.Extensions
         private static readonly Guid UnusedFamiliesAndTypesRuleGuid = new Guid("E8C63650-70B7-435A-9010-EC97660C1BDA");
 
         /// <summary>Delete elements that are not used in document.</summary>
-        /// <remarks>This method gets unused element ids that are available in the Purge Unused window in the Revit and delete them</remarks>
+        /// <remarks>
+        /// This method gets unused element ids that are available in the Purge Unused window in the Revit and delete them.
+        /// It makes 3 passes, because deleting elements can make other elements unused.
+        /// Unused materials and material assets are found through internal Revit methods (reflection), so they may not be purged in future Revit versions.
+        /// The method starts its own transactions, so it must not be called inside an open transaction.
+        /// </remarks>
         public static void PurgeUnused(this Document document)
         {
             RevitAPI.UIApplication.DialogBoxShowing += new EventHandler<DialogBoxShowingEventArgs>(ExMethods.WarningDialogHide);
@@ -578,7 +655,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                     if (failureMessages.Count() != 0)
                     {
                         ICollection<ElementId> failingElementsIds = failureMessages[0].GetFailingElements();
-                        using (Transaction t = new Transaction(document, "Удалить неиспользуемое"))
+                        using (Transaction t = new Transaction(document, "Purge Unused"))
                         {
                             t.Start();
 
@@ -608,7 +685,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                             .Where(id => id.ToElement(document) != null)
                             .ToList();
 
-                        using (Transaction t = new Transaction(document, "Удалить неиспользуемое"))
+                        using (Transaction t = new Transaction(document, "Purge Unused"))
                         {
                             t.Start();
 

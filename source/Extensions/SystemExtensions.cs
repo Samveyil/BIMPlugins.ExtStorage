@@ -3,6 +3,7 @@ using System.IO;
 
 namespace BIMPlugins.ExtStorage.Extensions
 {
+    /// <summary>Extension methods for .NET types: numbers, strings and paths.</summary>
     public static class SystemExtensions
     {
         /// <summary>
@@ -20,16 +21,25 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <inheritdoc cref="System.String.IsNullOrWhiteSpace(string)"/>
         public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
 
-        /// <inheritdoc cref="System.IO.Path.Combine(string, string)"/>
+        /// <summary>Combines two strings into a path.</summary>
+        /// <param name="source">The first path to combine.</param>
+        /// <param name="path2">The second path to combine.</param>
+        /// <remarks>Works like <see cref="System.IO.Path.Combine(string, string)"/>: if <paramref name="path2"/> is an absolute path, it is returned as is.</remarks>
+        /// <returns>The combined paths.</returns>
         public static string AppendPath(this string source, string path2) => Path.Combine(source, path2);
 
         /// <summary>Returns a value indicating whether a string contains a substring when using the specified form of string comparison.</summary>
+        /// <param name="source">The string to search in.</param>
         /// <param name="value">The string to seek.</param>
         /// <param name="comparisonType">One of the enumeration values that specifies the rules to use in the comparison.</param>
         /// <returns><see langword="true"/> if the <paramref name="value"/> parameter occurs within this string, or if <paramref name="value"/> is the empty string (""); otherwise, <see langword="false"/>.</returns>
         public static bool Contains(this string source, string value, StringComparison comparisonType) => source?.IndexOf(value, comparisonType) >= 0;
 
         /// <summary>Converts an object's type to <typeparamref name="T" /> type</summary>
+        /// <typeparam name="T">The type to cast to.</typeparam>
+        /// <param name="obj">The object to cast.</param>
+        /// <exception cref="System.InvalidCastException"><paramref name="obj"/> is not of type <typeparamref name="T"/>.</exception>
+        /// <returns><paramref name="obj"/> cast to <typeparamref name="T"/>.</returns>
         public static T To<T>(this object obj) => (T)obj;
 
         /// <summary>Returns a relative path from one path to another</summary>

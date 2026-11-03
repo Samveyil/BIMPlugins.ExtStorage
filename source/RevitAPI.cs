@@ -7,11 +7,15 @@ namespace BIMPlugins.ExtStorage
 {
     /// <summary>
     /// Provides static access to the current Revit application, document, and UI components.
-    /// Also contains a generic <see cref="MyEventHandler{T}"/> for executing custom actions in the Revit API context.
+    /// Also contains <see cref="CreateExtEvent{T}"/> for executing custom actions in the Revit API context.
     /// </summary>
+    /// <remarks>
+    /// Works only inside the Revit process: accessing the class outside of Revit throws <see cref="System.TypeInitializationException"/>.
+    /// <see cref="UIDocument"/>, <see cref="Document"/> and <see cref="ActiveView"/> require an open document.
+    /// </remarks>
     public static class RevitAPI
     {
-        /// <summary>The current Revit UIApplication/>.</summary>
+        /// <summary>The current Revit UIApplication.</summary>
         public static UIApplication UIApplication { get; } = new Autodesk.Revit.UI.Events.RibbonItemEventArgs().Application;
 
         /// <summary>Returns the database level Application represented by this UI level Application.</summary>
