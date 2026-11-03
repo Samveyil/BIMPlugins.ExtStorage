@@ -8,6 +8,7 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace BIMPlugins.ExtStorage.Methods
 {
+    /// <summary>Helpers for unit types and shared parameters.</summary>
     public static class ParameterMethods
     {
 #if !R2021_OR_GREATER

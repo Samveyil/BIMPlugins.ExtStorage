@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace BIMPlugins.ExtStorage.Extensions
 {
+    /// <summary>Extension methods for <see cref="Autodesk.Revit.DB.View"/>.</summary>
     public static class ViewExtensions
     {
         /// <summary>Returns the UI view that corresponds to the specified view.</summary>

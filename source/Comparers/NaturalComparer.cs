@@ -2,8 +2,19 @@
 
 namespace BIMPlugins.ExtStorage.Comparers
 {
+    /// <summary>Compares strings in natural order: sequences of digits are compared as numbers.</summary>
+    /// <example>
+    /// <code>
+    /// var sorted = levelNames.OrderBy(n => n, new NaturalComparer()); // "Level 2" comes before "Level 10"
+    /// </code>
+    /// </example>
     public class NaturalComparer : IComparer<string>
     {
+        /// <summary>Compares two strings in natural order.</summary>
+        /// <param name="x">The first string to compare.</param>
+        /// <param name="y">The second string to compare.</param>
+        /// <remarks>Other characters are compared by their code, case-sensitive. <see langword="null"/> is less than any string.</remarks>
+        /// <returns>A negative number if <paramref name="x"/> is less than <paramref name="y"/>, zero if they are equal, otherwise a positive number.</returns>
         public int Compare(string x, string y)
         {
             if (x == null && y == null) return 0;
