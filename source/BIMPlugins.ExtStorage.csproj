@@ -63,19 +63,20 @@
 		<Optimize>true</Optimize>
 		<OutputPath>bin\Release\$(RevitVersion)\</OutputPath>
 		<NoWarn>MSB3052</NoWarn>
-		<DebugType>none</DebugType>
+		<DebugType>portable</DebugType>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<PackageId>BIMPlugins.ExtStorage</PackageId>
-		<ProjectGuid>{9813B4DD-6800-47D6-BB50-D720A5FA90D0}</ProjectGuid>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<Company>BIMPlugins</Company>
 		<Authors>Samir Shibliev</Authors>
-		<Description>Revit Package $(PackageId)</Description>
+		<Description>Extension methods and helpers for the Autodesk Revit API: element collection, parameters, units, selection, geometry, transforms and failure handling. Builds for Revit 2019–2025.</Description>
+		<PackageTags>revit;revit-api;autodesk;bim;extensions</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<CopyrightYears>$([System.DateTime]::Now.ToString('yyyy'))</CopyrightYears>
 	</PropertyGroup>
 
@@ -91,9 +92,11 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageProjectUrl>https://github.com/$(GitHubRepositoryOwner)/$(PackageId)</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/$(GitHubRepositoryOwner)/$(PackageId)</RepositoryUrl>
-		<RepositoryType>github</RepositoryType>
+		<RepositoryType>git</RepositoryType>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageIconUrl />
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(Configuration.Contains('Debug'))">
@@ -103,6 +106,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitVersion).*" IncludeAssets="build; compile" PrivateAssets="All" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" Visible="false" />
 	</ItemGroup>
 
 </Project>
