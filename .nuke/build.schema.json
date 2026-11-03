@@ -103,7 +103,7 @@
       "properties": {
         "Configurations": {
           "type": "array",
-          "description": "Configurations to build (comma-separated)",
+          "description": "Configurations to build",
           "items": {
             "type": "string"
           }
