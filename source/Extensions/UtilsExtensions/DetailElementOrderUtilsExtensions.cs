@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
 {
+    /// <summary>Extension methods wrapping <see cref="Autodesk.Revit.DB.DetailElementOrderUtils"/>: draw order of detail elements in a view.</summary>
     public static class DetailElementOrderUtilsExtensions
     {
         /// <inheritdoc cref="Autodesk.Revit.DB.DetailElementOrderUtils.BringForward(Autodesk.Revit.DB.Document,Autodesk.Revit.DB.View,Autodesk.Revit.DB.ElementId)" />

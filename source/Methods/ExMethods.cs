@@ -6,9 +6,11 @@ using System.Collections.Generic;
 
 namespace BIMPlugins.ExtStorage.Methods
 {
+    /// <summary>Miscellaneous helpers: reading files, suppressing Revit dialogs and creating DirectShapes.</summary>
     public static class ExMethods
     {
         /// <summary>Opens a text file, reads all the text in the file, and then closes the file.</summary>
+        /// <param name="filePath">The path of the file to read.</param>
         /// <remarks>Note: if the specified file does not exist, the method will return <see langword="null"/>.</remarks>
         /// <returns>A string containing all the text in the file.</returns>
         public static string ReadTextFile(string filePath)
@@ -20,6 +22,21 @@ namespace BIMPlugins.ExtStorage.Methods
             return null;
         }
 
+        /// <summary>
+        /// A <see cref="Autodesk.Revit.UI.UIApplication.DialogBoxShowing"/> handler that automatically answers dialogs shown while opening or printing documents.
+        /// </summary>
+        /// <param name="sender">The event source.</param>
+        /// <param name="e">The event arguments.</param>
+        /// <remarks>
+        /// Handles the missing third-party updater dialog (continues working with the file), the unresolved references dialog
+        /// (ignores the references and continues) and the print settings warning (OK). The print settings warning is recognized
+        /// by its Russian text only. In the Revit 2025 build only the missing third-party updater dialog is handled.
+        /// <code>
+        /// RevitAPI.UIApplication.DialogBoxShowing += ExMethods.DialogBoxHide;
+        /// // open or print documents
+        /// RevitAPI.UIApplication.DialogBoxShowing -= ExMethods.DialogBoxHide;
+        /// </code>
+        /// </remarks>
         public static void DialogBoxHide(object sender, DialogBoxShowingEventArgs e)
         {
             if (e is TaskDialogShowingEventArgs e2)
@@ -49,6 +66,16 @@ namespace BIMPlugins.ExtStorage.Methods
                 catch { }
             }
         }
+
+        /// <summary>
+        /// A <see cref="Autodesk.Revit.UI.UIApplication.DialogBoxShowing"/> handler that closes document warning dialogs with OK.
+        /// </summary>
+        /// <param name="sender">The event source.</param>
+        /// <param name="e">The event arguments.</param>
+        /// <remarks>
+        /// Closes dialogs with the id <c>Dialog_Revit_DocWarnDialog</c>. Used by <see cref="Extensions.DocumentExtensions.PurgeUnused"/>.
+        /// In the Revit 2025 build the handler does nothing.
+        /// </remarks>
         public static void WarningDialogHide(object sender, DialogBoxShowingEventArgs e)
         {
             if (e != null)

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
 {
+    /// <summary>Extension methods wrapping <see cref="Autodesk.Revit.DB.ElementTransformUtils"/>: copying, moving, rotating and mirroring elements.</summary>
+    /// <remarks>All methods modify the document and must be called inside a transaction.</remarks>
     public static class ElementTransformUtilsExtensions
     {
         /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.CopyElement(Autodesk.Revit.DB.Document,Autodesk.Revit.DB.ElementId,Autodesk.Revit.DB.XYZ)" />

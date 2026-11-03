@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace BIMPlugins.ExtStorage.Extensions
 {
+    /// <summary>Extension methods for <see cref="Autodesk.Revit.UI.UIDocument"/>: getting the selection and prompting the user to pick elements and points.</summary>
     public static class UIDocumentExtensions
     {
         private class CategorySelectionFilter(BuiltInCategory category) : ISelectionFilter
@@ -32,7 +33,11 @@ namespace BIMPlugins.ExtStorage.Extensions
             .ToList();
 
 
-        /// <inheritdoc cref="Autodesk.Revit.UI.Selection.Selection.PickPoint(string)" />
+        /// <summary>Prompts the user to pick a point on the active work plane while showing a custom status prompt string.</summary>
+        /// <param name="uiDoc">The UI document.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>The picked point.</returns>
         public static XYZ PickPoint(this UIDocument uiDoc, string statusPrompt)
         {
             try
@@ -45,7 +50,12 @@ namespace BIMPlugins.ExtStorage.Extensions
             }
         }
 
-        /// <inheritdoc cref="Autodesk.Revit.UI.Selection.Selection.PickPoint(ObjectSnapTypes, string)" />
+        /// <summary>Prompts the user to pick a point on the active work plane using the specified snap settings while showing a custom status prompt string.</summary>
+        /// <param name="uiDoc">The UI document.</param>
+        /// <param name="snapSettings">The snap types available while picking.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>The picked point.</returns>
         public static XYZ PickPoint(this UIDocument uiDoc, ObjectSnapTypes snapSettings, string statusPrompt)
         {
             try
@@ -59,7 +69,12 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
 
-        /// <inheritdoc cref="Autodesk.Revit.UI.Selection.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType, string)" />
+        /// <summary>Prompts the user to select one object while showing a custom status prompt string.</summary>
+        /// <param name="uiDoc">The UI document.</param>
+        /// <param name="objectType">The type of objects to pick: elements, faces, edges or points on elements.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>The reference to the selected object.</returns>
         public static Reference PickObject(this UIDocument uiDoc, ObjectType objectType, string statusPrompt)
         {
             try
@@ -72,7 +87,13 @@ namespace BIMPlugins.ExtStorage.Extensions
             }
         }
 
-        /// <inheritdoc cref="Autodesk.Revit.UI.Selection.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType, ISelectionFilter, string)" />
+        /// <summary>Prompts the user to select one object which passes a custom filter while showing a custom status prompt string.</summary>
+        /// <param name="uiDoc">The UI document.</param>
+        /// <param name="objectType">The type of objects to pick: elements, faces, edges or points on elements.</param>
+        /// <param name="filter">The selection filter.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>The reference to the selected object.</returns>
         public static Reference PickObject(this UIDocument uiDoc, ObjectType objectType, ISelectionFilter filter, string statusPrompt)
         {
             try
@@ -86,7 +107,12 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
 
-        /// <inheritdoc cref="Autodesk.Revit.UI.Selection.Selection.PickObjects(Autodesk.Revit.UI.Selection.ObjectType, string)" />
+        /// <summary>Prompts the user to select multiple objects while showing a custom status prompt string.</summary>
+        /// <param name="uiDoc">The UI document.</param>
+        /// <param name="objectType">The type of objects to pick: elements, faces, edges or points on elements.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>The references to the selected objects.</returns>
         public static IList<Reference> PickObjects(this UIDocument uiDoc, ObjectType objectType, string statusPrompt)
         {
             try
@@ -99,7 +125,13 @@ namespace BIMPlugins.ExtStorage.Extensions
             }
         }
 
-        /// <inheritdoc cref="Autodesk.Revit.UI.Selection.Selection.PickObjects(Autodesk.Revit.UI.Selection.ObjectType, ISelectionFilter, string)" />
+        /// <summary>Prompts the user to select multiple objects which pass a custom filter while showing a custom status prompt string.</summary>
+        /// <param name="uiDoc">The UI document.</param>
+        /// <param name="objectType">The type of objects to pick: elements, faces, edges or points on elements.</param>
+        /// <param name="filter">The selection filter.</param>
+        /// <param name="statusPrompt">The message shown on the status bar.</param>
+        /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
+        /// <returns>The references to the selected objects.</returns>
         public static IList<Reference> PickObjects(this UIDocument uiDoc, ObjectType objectType, ISelectionFilter filter, string statusPrompt)
         {
             try
@@ -114,6 +146,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
 
         /// <summary>Prompts the user to select one element while showing a custom status prompt string.</summary>
+        /// <param name="uiDoc">The UI document.</param>
         /// <param name="statusPrompt">The message shown on the status bar.</param>
         /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
         /// <returns>An element selected by user.</returns>
@@ -124,6 +157,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Prompts the user to select one element which passes a custom filter while showing a custom status prompt string.</summary>
+        /// <param name="uiDoc">The UI document.</param>
         /// <param name="filter">The selection filter.</param>
         /// <param name="statusPrompt">The message shown on the status bar.</param>
         /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
@@ -135,6 +169,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Prompts the user to select one element filtered by the specified category while showing a custom status prompt string.</summary>
+        /// <param name="uiDoc">The UI document.</param>
         /// <param name="category">The built-in category to filter the selection.</param>
         /// <param name="statusPrompt">The message shown on the status bar.</param>
         /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
@@ -147,6 +182,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Prompts the user to select one element filtered by the specified element type and a custom filter while showing a custom status prompt string.</summary>
         /// <typeparam name="T">The element type to filter the selection (must inherit from Element).</typeparam>
+        /// <param name="uiDoc">The UI document.</param>
         /// <param name="filter">The selection filter.</param>
         /// <param name="statusPrompt">The message shown on the status bar.</param>
         /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
@@ -158,6 +194,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Prompts the user to select one element filtered by the specified element type while showing a custom status prompt string.</summary>
         /// <typeparam name="T">The element type to filter the selection (must inherit from Element).</typeparam>
+        /// <param name="uiDoc">The UI document.</param>
         /// <param name="statusPrompt">The message shown on the status bar.</param>
         /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
         /// <returns>An element selected by user cast to type <typeparamref name="T"/>.</returns>
@@ -168,6 +205,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Prompts the user to select one element filtered by the specified element type and category while showing a custom status prompt string.</summary>
         /// <typeparam name="T">The element type to filter the selection (must inherit from Element).</typeparam>
+        /// <param name="uiDoc">The UI document.</param>
         /// <param name="category">The built-in category to filter the selection.</param>
         /// <param name="statusPrompt">The message shown on the status bar.</param>
         /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
@@ -179,6 +217,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
 
         /// <summary>Prompts the user to select multiple elements while showing a custom status prompt string.</summary>
+        /// <param name="uiDoc">The UI document.</param>
         /// <param name="statusPrompt">The message shown on the status bar.</param>
         /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
         /// <returns>A collection of elements selected by the user.</returns>
@@ -192,6 +231,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Prompts the user to select multiple elements which pass a custom filter while showing a custom status prompt string.</summary>
+        /// <param name="uiDoc">The UI document.</param>
         /// <param name="filter">The selection filter.</param>
         /// <param name="statusPrompt">The message shown on the status bar.</param>
         /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
@@ -206,6 +246,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Prompts the user to select multiple elements filtered by the specified category while showing a custom status prompt string.</summary>
+        /// <param name="uiDoc">The UI document.</param>
         /// <param name="category">The built-in category to filter the selection.</param>
         /// <param name="statusPrompt">The message shown on the status bar.</param>
         /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
@@ -218,6 +259,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Prompts the user to select multiple elements filtered by the specified element type and a custom filter while showing a custom status prompt string.</summary>
         /// <typeparam name="T">The element type to filter the selection (must inherit from Element).</typeparam>
+        /// <param name="uiDoc">The UI document.</param>
         /// <param name="filter">The selection filter.</param>
         /// <param name="statusPrompt">The message shown on the status bar.</param>
         /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
@@ -231,6 +273,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Prompts the user to select multiple elements filtered by the specified element type while showing a custom status prompt string.</summary>
         /// <typeparam name="T">The element type to filter the selection (must inherit from Element).</typeparam>
+        /// <param name="uiDoc">The UI document.</param>
         /// <param name="statusPrompt">The message shown on the status bar.</param>
         /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
         /// <returns>A collection of elements of type <typeparamref name="T"/> selected by user.</returns>
@@ -241,6 +284,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
         /// <summary>Prompts the user to select multiple elements filtered by the specified element type and category while showing a custom status prompt string.</summary>
         /// <typeparam name="T">The element type to filter the selection (must inherit from Element).</typeparam>
+        /// <param name="uiDoc">The UI document.</param>
         /// <param name="category">The built-in category to filter the selection.</param>
         /// <param name="statusPrompt">The message shown on the status bar.</param>
         /// <remarks>Note: if the user cancels the operation (for example, through ESC), the method will return <see langword="null"/>.</remarks>
