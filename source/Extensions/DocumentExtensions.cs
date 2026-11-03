@@ -555,73 +555,75 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
 
+        /// <summary>Id of the Performance Adviser rule "Project contains unused families and types". Does not depend on the Revit UI language.</summary>
+        private static readonly Guid UnusedFamiliesAndTypesRuleGuid = new Guid("E8C63650-70B7-435A-9010-EC97660C1BDA");
+
         /// <summary>Delete elements that are not used in document.</summary>
         /// <remarks>This method gets unused element ids that are available in the Purge Unused window in the Revit and delete them</remarks>
         public static void PurgeUnused(this Document document)
         {
             RevitAPI.UIApplication.DialogBoxShowing += new EventHandler<DialogBoxShowingEventArgs>(ExMethods.WarningDialogHide);
 
-            string desiredRule = "Проект содержит неиспользуемые семейства и типоразмеры";
-
-            PerformanceAdviser perfAdviser = PerformanceAdviser.GetPerformanceAdviser();
-
-            IList<PerformanceAdviserRuleId> allRulesList = perfAdviser.GetAllRuleIds();
-            IList<PerformanceAdviserRuleId> rulesToExecute = new List<PerformanceAdviserRuleId>();
-            foreach (PerformanceAdviserRuleId r in allRulesList)
+            try
             {
-                if (perfAdviser.GetRuleName(r).Equals(desiredRule))
-                    rulesToExecute.Add(r);
-            }
+                PerformanceAdviser perfAdviser = PerformanceAdviser.GetPerformanceAdviser();
 
-            for (int i = 0; i < 3; i++)
-            {
-                IList<FailureMessage> failureMessages = perfAdviser.ExecuteRules(document, rulesToExecute);
-                if (failureMessages.Count() != 0)
+                IList<PerformanceAdviserRuleId> rulesToExecute = perfAdviser.GetAllRuleIds()
+                    .Where(r => r.Guid == UnusedFamiliesAndTypesRuleGuid)
+                    .ToList();
+
+                for (int i = 0; i < 3; i++)
                 {
-                    ICollection<ElementId> failingElementsIds = failureMessages[0].GetFailingElements();
-                    using (Transaction t = new Transaction(document, "Удалить неиспользуемое"))
+                    IList<FailureMessage> failureMessages = perfAdviser.ExecuteRules(document, rulesToExecute);
+                    if (failureMessages.Count() != 0)
                     {
-                        t.Start();
-
-                        foreach (ElementId eid in failingElementsIds)
+                        ICollection<ElementId> failingElementsIds = failureMessages[0].GetFailingElements();
+                        using (Transaction t = new Transaction(document, "Удалить неиспользуемое"))
                         {
-                            try
+                            t.Start();
+
+                            foreach (ElementId eid in failingElementsIds)
                             {
-                                document.Delete(eid);
+                                try
+                                {
+                                    document.Delete(eid);
+                                }
+                                catch { }
                             }
-                            catch { }
+
+                            t.Commit();
                         }
-
-                        t.Commit();
                     }
-                }
 
-                List<ElementId> unusedAssetIds = [];
+                    List<ElementId> unusedAssetIds = [];
 
-                try
-                {
-                    unusedAssetIds.AddRange(GetUnusedAssets(document, "GetUnusedMaterials"));
-                    unusedAssetIds.AddRange(GetUnusedAssets(document, "GetUnusedAppearances"));
-                    unusedAssetIds.AddRange(GetUnusedAssets(document, "GetUnusedStructures"));
-                    unusedAssetIds.AddRange(GetUnusedAssets(document, "GetUnusedThermals"));
-
-                    unusedAssetIds = unusedAssetIds
-                        .Where(id => id.ToElement(document) != null)
-                        .ToList();
-
-                    using (Transaction t = new Transaction(document, "Удалить неиспользуемое"))
+                    try
                     {
-                        t.Start();
+                        unusedAssetIds.AddRange(GetUnusedAssets(document, "GetUnusedMaterials"));
+                        unusedAssetIds.AddRange(GetUnusedAssets(document, "GetUnusedAppearances"));
+                        unusedAssetIds.AddRange(GetUnusedAssets(document, "GetUnusedStructures"));
+                        unusedAssetIds.AddRange(GetUnusedAssets(document, "GetUnusedThermals"));
 
-                        document.Delete(unusedAssetIds);
+                        unusedAssetIds = unusedAssetIds
+                            .Where(id => id.ToElement(document) != null)
+                            .ToList();
 
-                        t.Commit();
+                        using (Transaction t = new Transaction(document, "Удалить неиспользуемое"))
+                        {
+                            t.Start();
+
+                            document.Delete(unusedAssetIds);
+
+                            t.Commit();
+                        }
                     }
+                    catch { }
                 }
-                catch { }
             }
-
-            RevitAPI.UIApplication.DialogBoxShowing -= new EventHandler<DialogBoxShowingEventArgs>(ExMethods.WarningDialogHide);
+            finally
+            {
+                RevitAPI.UIApplication.DialogBoxShowing -= new EventHandler<DialogBoxShowingEventArgs>(ExMethods.WarningDialogHide);
+            }
         }
         private static ICollection<ElementId> GetUnusedAssets(Document doc, string methodName)
         {
