@@ -1,0 +1,42 @@
+name: Publish
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      # The SDK version comes from global.json (SDK 9, the same one Visual Studio MSBuild uses).
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      # Tag v0.5.9 must match MajorVersion.MinorVersion.MaintenanceVersion in build/Build.cs.
+      # The packages get the Revit version as major: 2019.5.9 … 2025.5.9.
+      - name: Check tag matches build version
+        shell: pwsh
+        run: |
+          $build = Get-Content build/Build.cs -Raw
+          $parts = 'MajorVersion', 'MinorVersion', 'MaintenanceVersion' | ForEach-Object {
+            if ($build -notmatch "$_\s*=>\s*(\d+)") { throw "$_ is not found in build/Build.cs" }
+            $Matches[1]
+          }
+          $version = $parts -join '.'
+          $tag = "${{ github.ref_name }}".TrimStart('v')
+          if ($version -ne $tag) { throw "Tag v$tag does not match version $version in build/Build.cs" }
+
+      - name: Build
+        run: dotnet run --project build/_build.csproj -- Compile
+
+      # Trusted Publishing from BIMPlugins.Nuke: with --nuget-user and 'id-token: write' the target exchanges
+      # the GitHub OIDC token for a short-lived nuget.org key itself, no API key is stored anywhere.
+      - name: Push
+        run: dotnet run --project build/_build.csproj --no-build -- PushToNugetRepositiry --nuget-user SamirShibliev
