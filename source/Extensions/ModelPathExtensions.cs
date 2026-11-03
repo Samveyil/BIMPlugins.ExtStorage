@@ -10,12 +10,17 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace BIMPlugins.ExtStorage.Extensions
 {
+    /// <summary>Extension methods for <see cref="Autodesk.Revit.DB.ModelPath"/>: opening documents in background or in the UI.</summary>
     public static class ModelPathExtensions
     {
         /// <summary>Opens a document from disk or cloud.</summary>
-        /// <param name="filePath">The file to be opened.</param>
+        /// <param name="modelPath">The path of the model.</param>
+        /// <param name="filePath">The path of the file. It is used only in the error message.</param>
         /// <param name="openOptions">Options for opening the file.</param>
-        /// <remarks>This method opens the document into memory but does not make it visible to the user in any way.</remarks>
+        /// <remarks>
+        /// This method opens the document into memory but does not make it visible to the user in any way.
+        /// If the document cannot be opened, an error message box is shown and <see langword="null"/> is returned instead of throwing an exception.
+        /// </remarks>
         /// <returns>The opened document.</returns>
         public static Document OpenDocument(this ModelPath modelPath, string filePath, OpenOptions openOptions)
         {
@@ -42,17 +47,26 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Opens a document detached from its central file from disk or cloud.</summary>
+        /// <param name="modelPath">The path of the model.</param>
         /// <param name="filePath">The file to be opened.</param>
         /// <param name="closeAllWorksets"><see langword="true"/> if to close all user-created worksets; otherwise, false.</param>
-        /// <remarks>This method opens the document into memory but does not make it visible to the user in any way.</remarks>
+        /// <remarks>
+        /// This method opens the document into memory but does not make it visible to the user in any way.
+        /// If the document cannot be opened, an error message box is shown and <see langword="null"/> is returned instead of throwing an exception.
+        /// </remarks>
         /// <returns>The opened document.</returns>
         public static Document OpenDetachedDocument(this ModelPath modelPath, string filePath, bool closeAllWorksets = true) =>
             modelPath.OpenDocument(filePath, FileMethods.SetOpenOptions(modelPath, DetachFromCentralOption.DetachAndPreserveWorksets, closeAllWorksets));
 
         /// <summary>Opens a new local file for the current user from disk or cloud.</summary>
+        /// <param name="centralPath">The path of the central model.</param>
         /// <param name="filePath">The file to be opened.</param>
         /// <param name="closeAllWorksets"><see langword="true"/> if to close all user-created worksets; otherwise, false.</param>
-        /// <remarks>This method opens the document into memory but does not make it visible to the user in any way.</remarks>
+        /// <remarks>
+        /// This method opens the document into memory but does not make it visible to the user in any way.
+        /// The local file is created in the default folder for user files from the Revit options (<c>ProjectPath</c> in Revit.ini) as <c>&lt;file name&gt;_&lt;user name&gt;.rvt</c>; an existing local file with this name is deleted.
+        /// If the document cannot be opened, an error message box is shown and <see langword="null"/> is returned instead of throwing an exception.
+        /// </remarks>
         /// <returns>The opened document.</returns>
         public static Document OpenLocalDocument(this ModelPath centralPath, string filePath, bool closeAllWorksets = true)
         {
@@ -68,11 +82,14 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Opens and activates a Revit document, include both local document or cloud document.</summary>
+        /// <param name="modelPath">The path of the model.</param>
+        /// <param name="openOptions">Options for opening the file, for example from <see cref="Methods.FileMethods.SetOpenOptions"/>.</param>
         /// <remarks>This method, if successful, changes the active document.</remarks>
         /// <returns>The opened document.</returns>
         public static UIDocument OpenAndActivateDocument(this ModelPath modelPath, OpenOptions openOptions) => RevitAPI.UIApplication.OpenAndActivateDocument(modelPath, openOptions, false);
 
         /// <summary>Opens and activates a Revit document detached from its central file, include both local document or cloud document.</summary>
+        /// <param name="modelPath">The path of the model.</param>
         /// <param name="closeAllWorksets"><see langword="true"/> if to close all user-created worksets; otherwise, false.</param>
         /// <remarks>This method, if successful, changes the active document.</remarks>
         /// <returns>The opened document.</returns>
@@ -80,9 +97,10 @@ namespace BIMPlugins.ExtStorage.Extensions
             modelPath.OpenAndActivateDocument(FileMethods.SetOpenOptions(modelPath, DetachFromCentralOption.DetachAndPreserveWorksets, closeAllWorksets));
 
         /// <summary>Opens and activates a new local file for the current user, include both local document or cloud document.</summary>
+        /// <param name="centralPath">The path of the central model.</param>
         /// <param name="filePath">The file to be opened.</param>
         /// <param name="closeAllWorksets"><see langword="true"/> if to close all user-created worksets; otherwise, false.</param>
-        /// <remarks>This method, if successful, changes the active document.</remarks>
+        /// <remarks>This method, if successful, changes the active document. The local file is created in the default folder for user files from the Revit options (<c>ProjectPath</c> in Revit.ini) as <c>&lt;file name&gt;_&lt;user name&gt;.rvt</c>; an existing local file with this name is deleted.</remarks>
         /// <returns>The opened document.</returns>
         public static UIDocument OpenAndActivateLocalDocument(this ModelPath centralPath, string filePath, bool closeAllWorksets = true)
         {

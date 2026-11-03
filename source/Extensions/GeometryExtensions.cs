@@ -2,24 +2,32 @@
 
 namespace BIMPlugins.ExtStorage.Extensions
 {
+    /// <summary>Extension methods for points, lines and bounding boxes.</summary>
     public static class GeometryExtensions
     {
         private const double Tolerance = 1e-9;
 
         /// <summary>Creates an instance of a point with a new X coordinate</summary>
+        /// <param name="point">The source point.</param>
         /// <param name="x">New X coordinate</param>
+        /// <returns>A new point. The original point is not changed.</returns>
         public static XYZ SetX(this XYZ point, double x) => new XYZ(x, point.Y, point.Z);
 
         /// <summary>Creates an instance of a point with a new Y coordinate</summary>
+        /// <param name="point">The source point.</param>
         /// <param name="y">New Y coordinate</param>
+        /// <returns>A new point. The original point is not changed.</returns>
         public static XYZ SetY(this XYZ point, double y) => new XYZ(point.X, y, point.Z);
 
         /// <summary>Creates an instance of a point with a new Z coordinate</summary>
+        /// <param name="point">The source point.</param>
         /// <param name="z">New Z coordinate</param>
+        /// <returns>A new point. The original point is not changed.</returns>
         public static XYZ SetZ(this XYZ point, double z) => new XYZ(point.X, point.Y, z);
 
 
         /// <summary>Creates an instance of a line with a new X coordinate</summary>
+        /// <param name="line">The source line.</param>
         /// <param name="x">New X coordinate</param>
         /// <returns>The new bound line</returns>
         /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentsInconsistentException">
@@ -33,6 +41,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Creates an instance of a line with a new Y coordinate</summary>
+        /// <param name="line">The source line.</param>
         /// <param name="y">New Y coordinate</param>
         /// <returns>The new bound line</returns>
         /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentsInconsistentException">
@@ -46,6 +55,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         }
 
         /// <summary>Creates an instance of a line with a new Z coordinate</summary>
+        /// <param name="line">The source line.</param>
         /// <param name="z">New Z coordinate</param>
         /// <returns>The new bound line</returns>
         /// <exception cref="T:Autodesk.Revit.Exceptions.ArgumentsInconsistentException">
@@ -60,6 +70,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
 
         /// <summary> Determines whether the specified point is contained within this bounding box</summary>
+        /// <param name="bbox">The bounding box.</param>
         /// <param name="point">The <see cref="Autodesk.Revit.DB.XYZ" /> point to check for containment within this bounding box</param>
         /// <returns><see langword="true"/> if the specified point is within the bounds of this bounding box</returns>
         public static bool Contains(this BoundingBoxXYZ bbox, XYZ point) => bbox.Contains(point, false);
@@ -67,6 +78,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>
         ///     Determines whether the specified point is contained within this bounding box
         /// </summary>
+        /// <param name="bbox">The bounding box.</param>
         /// <param name="point">The <see cref="Autodesk.Revit.DB.XYZ" /> point to check for containment within this bounding box</param>
         /// <param name="strict"><see langword="true"/> if the point needs to be fully on the inside of this bounding box. A point coinciding with the box border will be considered 'outside'.</param>
         /// <returns><see langword="true"/> if the specified point is within the bounds of this bounding box</returns>
@@ -95,6 +107,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>
         ///     Determines whether this bounding box contains another bounding box
         /// </summary>
+        /// <param name="bbox">The bounding box.</param>
         /// <param name="other">The <see cref="Autodesk.Revit.DB.BoundingBoxXYZ" /> instance to compare with this bounding box</param>
         /// <returns><see langword="true"/> if this bounding box contains the other bounding box</returns>
         public static bool Contains(this BoundingBoxXYZ bbox, BoundingBoxXYZ other) => bbox.Contains(other, false);
@@ -102,6 +115,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>
         ///     Determines whether this bounding box contains another bounding box
         /// </summary>
+        /// <param name="bbox">The bounding box.</param>
         /// <param name="other">The <see cref="Autodesk.Revit.DB.BoundingBoxXYZ" /> instance to compare with this bounding box</param>
         /// <param name="strict"><see langword="true"/> if the other box needs to be fully on the inside of this bounding box. Coincident boxes will be considered 'outside'.</param>
         /// <returns><see langword="true"/> if this bounding box contains the other bounding box</returns>
@@ -130,6 +144,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>
         ///     Determines whether this bounding box overlaps with another bounding box
         /// </summary>
+        /// <param name="bbox">The bounding box.</param>
         /// <param name="other">The <see cref="Autodesk.Revit.DB.BoundingBoxXYZ" /> instance to compare with this bounding box</param>
         /// <returns><see langword="true"/> if the two bounding boxes have at least one common point</returns>
         public static bool Overlaps(this BoundingBoxXYZ bbox, BoundingBoxXYZ other)

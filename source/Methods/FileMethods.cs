@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace BIMPlugins.ExtStorage.Methods
 {
+    /// <summary>Factory methods for options used to open and save Revit documents.</summary>
     public static class FileMethods
     {
         /// <summary>Constructs a new instance of the options class configured with the specified detach option and workset configuration.</summary>

@@ -3,9 +3,13 @@ using BIMPlugins.ExtStorage.Methods;
 
 namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
 {
+    /// <summary>Extension methods for converting values between display units and Revit internal units.</summary>
+    /// <remarks>Revit stores lengths in feet and angles in radians internally.</remarks>
     public static class UnitUtilsExtensions
     {
         /// <summary>Converts the specified unit to internal Revit format</summary>
+        /// <param name="value">The value to convert, in the specified unit.</param>
+        /// <param name="unitId">The unit of <paramref name="value"/>, for example <c>UnitTypeId.Millimeters</c> (<c>DisplayUnitType.DUT_MILLIMETERS</c> before Revit 2021).</param>
         /// <returns>The converted value</returns>
 #if R2021_OR_GREATER
         public static double FromUnit(this double value, ForgeTypeId unitId)
@@ -20,6 +24,7 @@ namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
 #endif
 
         /// <summary>Converts the specified unit to internal Revit format</summary>
+        /// <param name="value">The value to convert, in the specified unit.</param>
         /// <param name="unitType">The unit type string. Supported values: <c>mm</c>, <c>cm</c>, <c>m</c>, <c>m2</c>, <c>m3</c>, <c>general</c>, <c>degrees</c>, <c>degreesMinutes</c>, <c>W</c>, <c>V</c>.</param>
         /// <returns>The converted value</returns>
         public static double FromUnit(this double value, string unitType)
@@ -28,6 +33,8 @@ namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
         }
 
         /// <summary>Converts a Revit internal format value to the specified unit</summary>
+        /// <param name="value">The value in Revit internal units.</param>
+        /// <param name="unitId">The unit to convert to, for example <c>UnitTypeId.Millimeters</c> (<c>DisplayUnitType.DUT_MILLIMETERS</c> before Revit 2021).</param>
         /// <returns>The converted value</returns>
 #if R2021_OR_GREATER
         public static double ToUnit(this double value, ForgeTypeId unitId)
@@ -42,6 +49,7 @@ namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
 #endif
 
         /// <summary>Converts a Revit internal format value to the specified unit</summary>
+        /// <param name="value">The value in Revit internal units.</param>
         /// <param name="unitType">The unit type string. Supported values: <c>mm</c>, <c>cm</c>, <c>m</c>, <c>m2</c>, <c>m3</c>, <c>general</c>, <c>degrees</c>, <c>degreesMinutes</c>, <c>W</c>, <c>V</c>.</param>
         /// <returns>The converted value</returns>
         public static double ToUnit(this double value, string unitType)
