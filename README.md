@@ -209,7 +209,3 @@ The method names stay the same, but some return types follow the Revit API of ea
 | `ParameterMethods.GetUnitType()`, `Parameter.GetUnitType()`, `FromUnit`/`ToUnit` | `DisplayUnitType` | `ForgeTypeId` (2021) |
 | `GetParameterType()`, `GetParameterGroup()` | `ParameterType`, `BuiltInParameterGroup` | `ForgeTypeId` (2022) |
 | `BindingMap.InsertParameter(..., group)` | `BuiltInParameterGroup` | `ForgeTypeId` (2022) |
-
-## License
-
-[MIT](LICENSE) © 2025 Samir Shibliev
