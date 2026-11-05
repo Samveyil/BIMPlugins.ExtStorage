@@ -7,11 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 The package is published separately for each Revit version: version `0.6.0` is released
 as `2019.6.0` … `2025.6.0`.
 
-## [0.6.1-beta.1] / 2026-11-05
-Same library code as `0.6.0`, the release process is checked on a pre-release.
+## [0.6.1] / 2026-11-05
+Same library code as `0.6.0`.
 ### Updated
-- Build with `BIMPlugins.Nuke` 1.1.5-beta.1.
-- Publish pre-release packages from tags with a suffix, e.g. `v0.6.1-beta.1` → `2025.6.1-beta.1`.
+- Build with `BIMPlugins.Nuke` 1.1.5.
 
 ## [0.6.0] / 2026-11-03 - 2026-11-05
 First release on nuget.org.
@@ -26,5 +25,5 @@ First release on nuget.org.
 ### Removed
 - `SelectionMethods.GetIfcElements` with its filters `IFCParameterFilter` and `IgnoredCategoryFilter`.
 
-[0.6.1-beta.1]: https://github.com/Samveyil/BIMPlugins.ExtStorage/compare/v0.6.0...v0.6.1-beta.1
+[0.6.1]: https://github.com/Samveyil/BIMPlugins.ExtStorage/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/Samveyil/BIMPlugins.ExtStorage/tree/v0.6.0
