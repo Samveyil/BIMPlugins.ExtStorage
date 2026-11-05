@@ -95,6 +95,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageReleaseNotes>$(PackageProjectUrl)/blob/master/CHANGELOG.md</PackageReleaseNotes>
 		<PackageIcon>icon.png</PackageIcon>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>

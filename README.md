@@ -1,7 +1,11 @@
 # BIMPlugins.ExtStorage
 
-[![NuGet](https://img.shields.io/nuget/v/BIMPlugins.ExtStorage.svg)](https://www.nuget.org/packages/BIMPlugins.ExtStorage)
+[![Revit 2019-2025](https://img.shields.io/badge/Revit-2019--2025-blue.svg)](https://github.com/Samveyil/BIMPlugins.ExtStorage)
+[![Visual Studio 2022](https://img.shields.io/badge/Visual%20Studio-2022-blue)](https://github.com/Samveyil/BIMPlugins.ExtStorage)
+[![Nuke](https://img.shields.io/badge/Nuke-Build-blue)](https://nuke.build/)
 [![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Samveyil/BIMPlugins.ExtStorage/blob/master/LICENSE)
+[![Publish](https://github.com/Samveyil/BIMPlugins.ExtStorage/actions/workflows/publish.yml/badge.svg)](https://github.com/Samveyil/BIMPlugins.ExtStorage/actions/workflows/publish.yml)
+[![NuGet](https://img.shields.io/nuget/v/BIMPlugins.ExtStorage.svg)](https://www.nuget.org/packages/BIMPlugins.ExtStorage)
 
 Extension methods and helpers for the Autodesk Revit API: collecting elements, parameters and units,
 user selection, geometry, element transforms, opening documents and failure handling.
