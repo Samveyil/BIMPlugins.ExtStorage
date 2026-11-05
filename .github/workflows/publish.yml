@@ -30,8 +30,10 @@ jobs:
             $Matches[1]
           }
           $version = $parts -join '.'
-          $tag = "${{ github.ref_name }}".TrimStart('v')
+          $tag, $suffix = "${{ github.ref_name }}".TrimStart('v').Split('-', 2)
           if ($version -ne $tag) { throw "Tag v$tag does not match version $version in build/Build.cs" }
+          # Nuke reads the VersionSuffix parameter from the VERSION_SUFFIX variable
+          if ($suffix) { "VERSION_SUFFIX=$suffix" >> $env:GITHUB_ENV }
 
       # NUKE 9.0.4 cannot find MSBuild of newer Visual Studio versions on the runner by itself,
       # so pass the path explicitly: NUKE takes it from the MSBUILD_EXE variable.
