@@ -267,7 +267,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         public static IList<T> PickElements<T>(this UIDocument uiDoc, ISelectionFilter filter, string statusPrompt) where T : Element
         {
             return uiDoc.PickElements(filter, statusPrompt)?
-                .Cast<T>()
+                .OfType<T>()
                 .ToList();
         }
 

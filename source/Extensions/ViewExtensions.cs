@@ -14,7 +14,7 @@ namespace BIMPlugins.ExtStorage.Extensions
             var uiDoc = new UIDocument(view.Document);
 
             return uiDoc.GetOpenUIViews()
-                .FirstOrDefault(v => v.ViewId.ToString() == view.Id.ToString());
+                .FirstOrDefault(v => v.ViewId.Equals(view.Id));
         }
     }
 }

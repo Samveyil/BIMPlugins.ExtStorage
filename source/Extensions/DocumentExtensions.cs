@@ -20,7 +20,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         ///</summary>
         /// <param name="document">The document.</param>
         /// <param name="comment">User description of changes made since the last Sync with Central.</param>
-        /// <remarks>This method will relinquish the current the user-defined's ownership of all worksets and all elements.</remarks>
+        /// <remarks>This method will relinquish the current user's ownership of all worksets and all elements.</remarks>
         public static void SynchronizeWithCentral(this Document document, string comment)
         {
             TransactWithCentralOptions transact = new TransactWithCentralOptions();
@@ -36,13 +36,17 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="document">The document.</param>
         /// <param name="viewName">The name of the View3D to be retrieved.</param>
         /// <param name="setAsActive"><see langword="true"/> to set the View3D as active.</param>
-        /// <remarks>Note if the View3D to be retrieved does not exists this method create a new one.</remarks>
+        /// <remarks>
+        /// If there is no such View3D, the method creates one in a transaction of its own, so it must not be called inside an open transaction.
+        /// Characters not allowed in view names (<c>\ : { } [ ] | ; &lt; &gt; ? ` ~</c>) are replaced with <c>_</c>. View templates are not considered.
+        /// </remarks>
         /// <returns>The matching View3D.</returns>
         public static View3D GetView3D(this Document document, string viewName, bool setAsActive=true)
         {
+            viewName = ToValidViewName(viewName);
+
             var view3D = document.ToElements<View3D>()
-                .Where(e => e.Name == viewName)
-                .FirstOrDefault();
+                .FirstOrDefault(v => !v.IsTemplate && v.Name == viewName);
 
             view3D ??= document.CreateView3D(viewName);
 
@@ -51,28 +55,28 @@ namespace BIMPlugins.ExtStorage.Extensions
 
             return view3D;
         }
-        private static View3D CreateView3D(this Document document, string viewName)
+
+        private static string ToValidViewName(string viewName)
         {
-            var viewTypeId = document.ToElements<ViewFamilyType>()
-                .FirstOrDefault(v => v.ViewFamily == ViewFamily.ThreeDimensional)
-                .Id;
+            var result = Regex.Replace(viewName, @"[\\:\{\}\[\]\|;<>\?`~\p{C}]", "_");
 
-            string result = Regex.Replace(
-                viewName,
-                @"[\\:\{\}\[\]\|;<>\?`~\p{C}]",
-                "_"
-            );
-
-            viewName = Regex.Replace(result,  @"\s+", " ")
+            return Regex.Replace(result, @"\s+", " ")
                 .Trim()
                 .Trim('_');
+        }
+
+        private static View3D CreateView3D(this Document document, string viewName)
+        {
+            var viewType = document.ToElements<ViewFamilyType>()
+                .FirstOrDefault(v => v.ViewFamily == ViewFamily.ThreeDimensional)
+                ?? throw new InvalidOperationException("The document has no 3D view type.");
 
             View3D view3D;
-            using (Transaction t = new Transaction(document, "Создать 3D вид"))
+            using (Transaction t = new Transaction(document, "Create 3D view"))
             {
                 t.Start();
 
-                view3D = View3D.CreateIsometric(document, viewTypeId);
+                view3D = View3D.CreateIsometric(document, viewType.Id);
                 view3D.Name = viewName;
 
                 t.Commit();
@@ -107,7 +111,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .ToList();
         }
 
-        /// <summary>Returns the complete set of elements that pass the ElementClassFilter, the ElementCategoryFilter and the the user-defined-defined ElementFilter.</summary>
+        /// <summary>Returns the complete set of elements that pass the ElementClassFilter, the ElementCategoryFilter and the user-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <param name="document">The document.</param>
         /// <param name="category">The category.</param>
@@ -137,7 +141,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .ToList();
         }
 
-        /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter.</summary>
+        /// <summary>Returns the complete set of elements that are visible in a view and pass the ElementClassFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
@@ -150,7 +154,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .ToList();
         }
 
-        /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter and the user-defined ElementFilter.</summary>
+        /// <summary>Returns the complete set of elements that are visible in a view and pass the ElementClassFilter and the user-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
@@ -165,7 +169,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .ToList();
         }
 
-        /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter and the ElementCategoryFilter.</summary>
+        /// <summary>Returns the complete set of elements that are visible in a view and pass the ElementClassFilter and the ElementCategoryFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
@@ -180,7 +184,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .ToList();
         }
 
-        /// <summary>Returns the complete set of elements that visible in a view and pass the ElementClassFilter, the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <summary>Returns the complete set of elements that are visible in a view and pass the ElementClassFilter, the ElementCategoryFilter and the user-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
@@ -201,7 +205,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>Returns the complete set of element ids that pass the ElementClassFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <returns>The complete set of element ids.</returns>
-        public static ICollection<ElementId> ToElementIds<T>(this Document document)
+        public static ICollection<ElementId> ToElementIds<T>(this Document document) where T : Element
         {
             return new FilteredElementCollector(document)
                 .OfClass(typeof(T))
@@ -213,7 +217,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="document">The document.</param>
         /// <param name="category">The category.</param>
         /// <returns>The complete set of element ids.</returns>
-        public static ICollection<ElementId> ToElementIds<T>(this Document document, BuiltInCategory category)
+        public static ICollection<ElementId> ToElementIds<T>(this Document document, BuiltInCategory category) where T : Element
         {
             return new FilteredElementCollector(document)
                 .OfClass(typeof(T))
@@ -227,7 +231,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of element ids.</returns>
-        public static ICollection<ElementId> ToElementIds<T>(this Document document, BuiltInCategory category, ElementFilter filter)
+        public static ICollection<ElementId> ToElementIds<T>(this Document document, BuiltInCategory category, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document)
                 .OfClass(typeof(T))
@@ -241,7 +245,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="document">The document.</param>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of element ids.</returns>
-        public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementFilter filter)
+        public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document)
                 .OfClass(typeof(T))
@@ -249,25 +253,25 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .ToElementIds();
         }
 
-        /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementClassFilter.</summary>
+        /// <summary>Returns the complete set of element ids that are visible in a view and pass the ElementClassFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <returns>The complete set of element ids.</returns>
-        public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId)
+        public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId) where T : Element
         {
             return new FilteredElementCollector(document, viewId)
                 .OfClass(typeof(T))
                 .ToElementIds();
         }
 
-        /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementClassFilter and the user-defined ElementFilter.</summary>
+        /// <summary>Returns the complete set of element ids that are visible in a view and pass the ElementClassFilter and the user-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of element ids.</returns>
-        public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId, ElementFilter filter)
+        public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document, viewId)
                 .OfClass(typeof(T))
@@ -275,13 +279,13 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .ToElementIds();
         }
 
-        /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementClassFilter and the ElementCategoryFilter.</summary>
+        /// <summary>Returns the complete set of element ids that are visible in a view and pass the ElementClassFilter and the ElementCategoryFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
         /// <returns>The complete set of element ids.</returns>
-        public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId, BuiltInCategory category)
+        public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId, BuiltInCategory category) where T : Element
         {
             return new FilteredElementCollector(document, viewId)
                 .OfClass(typeof(T))
@@ -289,14 +293,14 @@ namespace BIMPlugins.ExtStorage.Extensions
                 .ToElementIds();
         }
 
-        /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementClassFilter, the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <summary>Returns the complete set of element ids that are visible in a view and pass the ElementClassFilter, the ElementCategoryFilter and the user-defined ElementFilter.</summary>
         /// <typeparam name="T">The element type to collect (must inherit from Element).</typeparam>
         /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
         /// <param name="filter">The element filter.</param>
         /// <returns>The complete set of element ids.</returns>
-        public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter)
+        public static ICollection<ElementId> ToElementIds<T>(this Document document, ElementId viewId, BuiltInCategory category, ElementFilter filter) where T : Element
         {
             return new FilteredElementCollector(document, viewId)
                 .OfClass(typeof(T))
@@ -361,7 +365,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .ToElements();
         }
 
-        /// <summary>Returns the complete set of elements that visible in a view and pass the ElementCategoryFilter.</summary>
+        /// <summary>Returns the complete set of elements that are visible in a view and pass the ElementCategoryFilter.</summary>
         /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
@@ -380,7 +384,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .ToElements();
         }
 
-        /// <summary>Returns the complete set of elements that visible in a view and pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <summary>Returns the complete set of elements that are visible in a view and pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
         /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
@@ -458,7 +462,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .ToElementIds();
         }
 
-        /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementCategoryFilter.</summary>
+        /// <summary>Returns the complete set of element ids that are visible in a view and pass the ElementCategoryFilter.</summary>
         /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>
@@ -477,7 +481,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                     .ToElementIds();
         }
 
-        /// <summary>Returns the complete set of element ids that visible in a view and pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
+        /// <summary>Returns the complete set of element ids that are visible in a view and pass the ElementCategoryFilter and the user-defined ElementFilter.</summary>
         /// <param name="document">The document.</param>
         /// <param name="viewId">The view id.</param>
         /// <param name="category">The category.</param>

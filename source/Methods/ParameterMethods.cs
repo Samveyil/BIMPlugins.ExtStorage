@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Windows;
-using MessageBox = System.Windows.MessageBox;
 
 namespace BIMPlugins.ExtStorage.Methods
 {
@@ -112,7 +109,7 @@ namespace BIMPlugins.ExtStorage.Methods
                         if (line.StartsWith("PARAM"))
                         {
                             string[] parts = line.Split('\t');
-                            if (parts.Length > 1 && parts[2] == parameterName && Guid.TryParse(parts[1], out guid))
+                            if (parts.Length > 2 && parts[2] == parameterName && Guid.TryParse(parts[1], out guid))
                             {
                                 return guid;
                             }
@@ -148,7 +145,7 @@ namespace BIMPlugins.ExtStorage.Methods
                         {
                             string[] parts = line.Split('\t');
                             Guid paramGuid;
-                            if (parts.Length > 1 && Guid.TryParse(parts[1], out paramGuid))
+                            if (parts.Length > 2 && Guid.TryParse(parts[1], out paramGuid))
                             {
                                 guidsDict[parts[2]] = paramGuid;
                             }

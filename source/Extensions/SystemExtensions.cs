@@ -35,14 +35,14 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <returns><see langword="true"/> if the <paramref name="value"/> parameter occurs within this string, or if <paramref name="value"/> is the empty string (""); otherwise, <see langword="false"/>.</returns>
         public static bool Contains(this string source, string value, StringComparison comparisonType) => source?.IndexOf(value, comparisonType) >= 0;
 
-        /// <summary>Converts an object's type to <typeparamref name="T" /> type</summary>
+        /// <summary>Converts an object's type to <typeparamref name="T" /> type.</summary>
         /// <typeparam name="T">The type to cast to.</typeparam>
         /// <param name="obj">The object to cast.</param>
         /// <exception cref="System.InvalidCastException"><paramref name="obj"/> is not of type <typeparamref name="T"/>.</exception>
         /// <returns><paramref name="obj"/> cast to <typeparamref name="T"/>.</returns>
         public static T To<T>(this object obj) => (T)obj;
 
-        /// <summary>Returns a relative path from one path to another</summary>
+        /// <summary>Returns a relative path from one path to another.</summary>
         /// <param name="relativeTo">
         /// The source path the result should be relative to. This path is always considered to be a directory.
         /// </param>

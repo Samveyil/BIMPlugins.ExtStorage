@@ -10,7 +10,7 @@ namespace BIMPlugins.ExtStorage.Methods
         /// <summary>Constructs a new instance of the options class configured with the specified detach option and workset configuration.</summary>
         /// <param name="projectPath">The path to the workshared model.</param>
         /// <param name="detachOption">An option that specifies whether or not a workset-enabled document is detached from its central document.</param>
-        /// <param name="closeAllWorksets"><see langword="true"/> if to close all user-created worksets; otherwise, <see langword="false"/>.</param>
+        /// <param name="closeAllWorksets"><see langword="true"/> to close all user-created worksets; otherwise, <see langword="false"/>.</param>
         /// <remarks>Note: if <paramref name="closeAllWorksets"/> is <see langword="false"/>, only worksets whose names start with <c>#</c> or <c>!</c> will be closed.</remarks>
         /// <returns>A new <see cref="Autodesk.Revit.DB.OpenOptions"/> instance configured with the specified detach and workset options.</returns>
         public static OpenOptions SetOpenOptions(ModelPath projectPath, DetachFromCentralOption detachOption = DetachFromCentralOption.DetachAndPreserveWorksets, bool closeAllWorksets=true)
@@ -23,7 +23,7 @@ namespace BIMPlugins.ExtStorage.Methods
                 
                 if (!closeAllWorksets)
                 {
-                    List<WorksetPreview> worksets = (List<WorksetPreview>)WorksharingUtils.GetUserWorksetInfo(projectPath);
+                    IList<WorksetPreview> worksets = WorksharingUtils.GetUserWorksetInfo(projectPath);
                     List<WorksetId> worksetIds = [];
                     foreach (WorksetPreview workset in worksets)
                     {

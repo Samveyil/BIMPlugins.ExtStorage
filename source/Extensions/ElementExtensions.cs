@@ -22,15 +22,18 @@ namespace BIMPlugins.ExtStorage.Extensions
 
 
         /// <summary>Retrieves the category of the element.</summary>
-        /// <remarks>The element must have a category: for elements without one, such as some internal elements, the method throws <see cref="System.NullReferenceException"/>.</remarks>
-        /// <returns>The built-in category of the element, or <see cref="Autodesk.Revit.DB.BuiltInCategory.INVALID"/> if the category is not built-in.</returns>
+        /// <returns>
+        /// The built-in category of the element, or <see cref="Autodesk.Revit.DB.BuiltInCategory.INVALID"/> if the element
+        /// has no category or its category is not built-in.
+        /// </returns>
         public static BuiltInCategory GetBuiltInCategory(this Element element)
         {
-            if (element.Category.Id.GetValue() < 0)
+            var categoryId = element.Category?.Id;
+            if (categoryId != null && categoryId.GetValue() < 0)
             {
-                return (BuiltInCategory)element.Category.Id.GetValue();
+                return (BuiltInCategory)categoryId.GetValue();
             }
-            
+
             return BuiltInCategory.INVALID;
         }
 
@@ -45,6 +48,9 @@ namespace BIMPlugins.ExtStorage.Extensions
             options ??= new Options() { DetailLevel = ViewDetailLevel.Fine };
 
             GeometryElement geomElem = element.get_Geometry(options);
+            if (geomElem == null)
+                return null;
+
             foreach (GeometryObject geomObj in geomElem)
             {
                 if (geomObj is GeometryInstance geomInst)
@@ -70,19 +76,6 @@ namespace BIMPlugins.ExtStorage.Extensions
             }
 
             return null;
-        }
-
-        /// <summary>A list of points to retrieve from the line.</summary>
-        public enum LocationType
-        {
-            /// <summary>The origin of the line.</summary>
-            Origin,
-            /// <summary>The direction of the line: a unit vector, not a point.</summary>
-            Direction,
-            /// <summary>The start point of the line.</summary>
-            StartPoint,
-            /// <summary>The end point of the line.</summary>
-            EndPoint
         }
 
         /// <summary>Retrieves the location line of the element.</summary>
@@ -143,7 +136,20 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <returns>The matching parameter.</returns>
         public static Parameter ToParameter(this Element element, ElementId parameterId)
         {
-            return element.Parameters.Cast<Parameter>().FirstOrDefault(p => p.Id.ToString() == parameterId.ToString());
+            return element.Parameters.Cast<Parameter>().FirstOrDefault(p => p.Id.Equals(parameterId));
         }
+    }
+
+    /// <summary>The point to retrieve from a location line, for <see cref="ElementExtensions.ToPoint"/>.</summary>
+    public enum LocationType
+    {
+        /// <summary>The origin of the line.</summary>
+        Origin,
+        /// <summary>The direction of the line: a unit vector, not a point.</summary>
+        Direction,
+        /// <summary>The start point of the line.</summary>
+        StartPoint,
+        /// <summary>The end point of the line.</summary>
+        EndPoint
     }
 }

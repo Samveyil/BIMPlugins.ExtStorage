@@ -31,7 +31,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 #if !R2022_OR_GREATER
         /// <summary>Creates a new parameter binding between a shared parameter and a set of categories in a specified group.</summary>
         /// <param name="bindingMap">The parameter bindings of the document, <c>doc.ParameterBindings</c>.</param>
-        /// <param name="doc">The document</param>
+        /// <param name="doc">The document.</param>
         /// <param name="paramName">The name of the shared parameter.</param>
         /// <param name="paramGuid">The guid of the shared parameter.</param>
         /// <param name="categories">The list of categories to which the parameter should be bound.</param>
@@ -47,7 +47,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 #else
         /// <summary>Creates a new parameter binding between a shared parameter and a set of categories in a specified group.</summary>
         /// <param name="bindingMap">The parameter bindings of the document, <c>doc.ParameterBindings</c>.</param>
-        /// <param name="doc">The document</param>
+        /// <param name="doc">The document.</param>
         /// <param name="paramName">The name of the shared parameter.</param>
         /// <param name="paramGuid">The guid of the shared parameter.</param>
         /// <param name="categories">The list of categories to which the parameter should be bound.</param>
@@ -70,7 +70,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                 var bind = iter.Current as ElementBinding;
                 var def = iter.Key as InternalDefinition;
 
-                if (def.Name == paramName && def.Id.ToElement() is SharedParameterElement sharedParameter && sharedParameter.GuidValue == paramGuid)
+                if (def.Name == paramName && def.Id.ToElement(doc) is SharedParameterElement sharedParameter && sharedParameter.GuidValue == paramGuid)
                 {
                     bool insertCategories = false;
                     foreach (var category in categories)
@@ -84,7 +84,7 @@ namespace BIMPlugins.ExtStorage.Extensions
 
                     if (insertCategories)
                     {
-                        using (Transaction t = new Transaction(doc, "Загрузка параметра"))
+                        using (Transaction t = new Transaction(doc, "Bind shared parameter"))
                         {
                             t.Start();
 
@@ -114,7 +114,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                 Binding binding = isInstance ? new InstanceBinding(catSet) : new TypeBinding(catSet);
 
                 bool result;
-                using (Transaction t = new Transaction(doc, "Загрузка параметра"))
+                using (Transaction t = new Transaction(doc, "Bind shared parameter"))
                 {
                     t.Start();
 #if !R2022_OR_GREATER

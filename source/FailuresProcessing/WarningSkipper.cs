@@ -11,24 +11,19 @@ namespace BIMPlugins.ExtStorage.FailuresProcessing
     {
         /// <summary>Deletes all warnings of the transaction.</summary>
         /// <param name="accessor">The failures of the transaction being committed.</param>
-        /// <remarks>If the transaction also has errors, nothing is deleted and the failures are processed by Revit as usual.</remarks>
+        /// <remarks>Errors are left as they are and are processed by Revit as usual.</remarks>
         /// <returns>Always <see cref="Autodesk.Revit.DB.FailureProcessingResult.Continue"/>.</returns>
         public FailureProcessingResult PreprocessFailures(FailuresAccessor accessor)
         {
             IList<FailureMessageAccessor> failures = accessor.GetFailureMessages();
-            foreach (FailureMessageAccessor failureMessageAccessor in failures)
+            foreach (FailureMessageAccessor failure in failures)
             {
-                var id = failureMessageAccessor.GetFailureDefinitionId();
-                var failureSeverity = accessor.GetSeverity();
-                if (failureSeverity == FailureSeverity.Warning)
+                if (failure.GetSeverity() == FailureSeverity.Warning)
                 {
-                    accessor.DeleteWarning(failureMessageAccessor);
-                }
-                else
-                {
-                    return FailureProcessingResult.Continue;
+                    accessor.DeleteWarning(failure);
                 }
             }
+
             return FailureProcessingResult.Continue;
         }
     }

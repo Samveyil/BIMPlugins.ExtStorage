@@ -7,10 +7,10 @@ namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
     /// <remarks>Revit stores lengths in feet and angles in radians internally.</remarks>
     public static class UnitUtilsExtensions
     {
-        /// <summary>Converts the specified unit to internal Revit format</summary>
+        /// <summary>Converts the specified unit to internal Revit format.</summary>
         /// <param name="value">The value to convert, in the specified unit.</param>
         /// <param name="unitId">The unit of <paramref name="value"/>, for example <c>UnitTypeId.Millimeters</c> (<c>DisplayUnitType.DUT_MILLIMETERS</c> before Revit 2021).</param>
-        /// <returns>The converted value</returns>
+        /// <returns>The converted value.</returns>
 #if R2021_OR_GREATER
         public static double FromUnit(this double value, ForgeTypeId unitId)
         {
@@ -23,19 +23,19 @@ namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
         }
 #endif
 
-        /// <summary>Converts the specified unit to internal Revit format</summary>
+        /// <summary>Converts the specified unit to internal Revit format.</summary>
         /// <param name="value">The value to convert, in the specified unit.</param>
         /// <param name="unitType">The unit type string. Supported values: <c>mm</c>, <c>cm</c>, <c>m</c>, <c>m2</c>, <c>m3</c>, <c>general</c>, <c>degrees</c>, <c>degreesMinutes</c>, <c>W</c>, <c>V</c>.</param>
-        /// <returns>The converted value</returns>
+        /// <returns>The converted value.</returns>
         public static double FromUnit(this double value, string unitType)
         {
             return UnitUtils.ConvertToInternalUnits(value, ParameterMethods.GetUnitType(unitType));
         }
 
-        /// <summary>Converts a Revit internal format value to the specified unit</summary>
+        /// <summary>Converts a Revit internal format value to the specified unit.</summary>
         /// <param name="value">The value in Revit internal units.</param>
         /// <param name="unitId">The unit to convert to, for example <c>UnitTypeId.Millimeters</c> (<c>DisplayUnitType.DUT_MILLIMETERS</c> before Revit 2021).</param>
-        /// <returns>The converted value</returns>
+        /// <returns>The converted value.</returns>
 #if R2021_OR_GREATER
         public static double ToUnit(this double value, ForgeTypeId unitId)
         {
@@ -48,29 +48,29 @@ namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
         }
 #endif
 
-        /// <summary>Converts a Revit internal format value to the specified unit</summary>
+        /// <summary>Converts a Revit internal format value to the specified unit.</summary>
         /// <param name="value">The value in Revit internal units.</param>
         /// <param name="unitType">The unit type string. Supported values: <c>mm</c>, <c>cm</c>, <c>m</c>, <c>m2</c>, <c>m3</c>, <c>general</c>, <c>degrees</c>, <c>degreesMinutes</c>, <c>W</c>, <c>V</c>.</param>
-        /// <returns>The converted value</returns>
+        /// <returns>The converted value.</returns>
         public static double ToUnit(this double value, string unitType)
         {
             return UnitUtils.ConvertFromInternalUnits(value, ParameterMethods.GetUnitType(unitType));
         }
 
-        /// <summary>Converts millimeters to internal Revit format</summary>
-        /// <returns>Value in feet</returns>
+        /// <summary>Converts millimeters to internal Revit format.</summary>
+        /// <returns>Value in feet.</returns>
         public static double FromMillimeters(this double value) => value.FromUnit("mm");
 
-        /// <summary>Converts a Revit internal format value to millimeters</summary>
-        /// <returns>Value in millimeters</returns>
+        /// <summary>Converts a Revit internal format value to millimeters.</summary>
+        /// <returns>Value in millimeters.</returns>
         public static double ToMillimeters(this double value) => value.ToUnit("mm");
 
-        /// <summary>Converts degrees to internal Revit format</summary>
-        /// <returns>Value in radians</returns>
+        /// <summary>Converts degrees to internal Revit format.</summary>
+        /// <returns>Value in radians.</returns>
         public static double FromDegrees(this double value) => value.FromUnit("degrees");
 
-        /// <summary>Converts a Revit internal format value to degrees</summary>
-        /// <returns>Value in degrees</returns>
+        /// <summary>Converts a Revit internal format value to degrees.</summary>
+        /// <returns>Value in degrees.</returns>
         public static double ToDegrees(this double value) => value.ToUnit("degrees");
     }
 }

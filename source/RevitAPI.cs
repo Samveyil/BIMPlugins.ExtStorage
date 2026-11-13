@@ -36,7 +36,7 @@ namespace BIMPlugins.ExtStorage
         /// <typeparam name="T">The type of the target object.</typeparam>
         /// <param name="target">The object (typically a ViewModel) passed to <paramref name="action"/> when the event is executed.</param>
         /// <param name="action">The action executed by the external event handler.</param>
-        /// <returns>An instance of ExternalEvent class, which will be used to invoke the event</returns>
+        /// <returns>An instance of ExternalEvent class, which will be used to invoke the event.</returns>
         public static ExternalEvent CreateExtEvent<T>(T target, Action<T> action) => ExternalEvent.Create(new MyEventHandler<T>(target, action));
     }
 }

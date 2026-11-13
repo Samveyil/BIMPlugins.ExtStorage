@@ -93,7 +93,7 @@ var wall     = id.ToElement<Wall>();            // uses the active document when
 var wallType = wall.ToElementType<WallType>();
 var bic      = wall.GetBuiltInCategory();
 var param    = wall.ToParameter("Comments");
-var start    = wall.ToPoint(ElementExtensions.LocationType.StartPoint);
+var start    = wall.ToPoint(LocationType.StartPoint);
 var line     = wall.ToLine();
 var solid    = wall.ToSolid();
 var value    = id.GetValue();                   // int before Revit 2024, long since 2024
@@ -166,14 +166,19 @@ var parts     = solid.SplitVolumes();
 doc.SynchronizeWithCentral("Daily sync");          // relinquishes all worksets and elements
 var view3D = doc.GetView3D("Navisworks");          // finds or creates the view and activates it
 
-var path   = ModelPathUtils.ConvertUserVisiblePathToModelPath(filePath);
-var detached = path.OpenDetachedDocument(filePath);
-var local    = path.OpenLocalDocument(filePath);   // replaces an existing local copy
+var path     = ModelPathUtils.ConvertUserVisiblePathToModelPath(filePath);
+var detached = path.OpenDetachedDocument();
+var local    = path.OpenLocalDocument();           // replaces an existing local copy
+
+var doc2 = path.OpenDetachedDocument(out var error);
+if (doc2 == null)
+    TaskDialog.Show("Open", error);                // "Close the local copy of ... and try again: ..."
 
 doc.PurgeUnused();                                 // like Purge Unused, including materials; opens its own transactions
 ```
 
-> `OpenDocument` and its variants show an error dialog and return `null` when the file cannot be opened.
+> `OpenDocument`, `OpenDetachedDocument` and `OpenLocalDocument` do not throw: they return `null` when the file cannot be opened,
+> and the overload with `out error` tells why, in a message ready to show to the user.
 
 ## Failure handling
 
@@ -182,7 +187,7 @@ Hide warnings during a transaction:
 ```C#
 using var t = new Transaction(doc, "Create walls");
 t.Start();
-TransactionHandler.SetWarningResolver(t, new WarningSkipper());
+t.SetWarningResolver(new WarningSkipper());
 // ...
 t.Commit();
 ```
@@ -196,7 +201,7 @@ doc.LoadFamily(familyPath, new FamilyLoadOptions(overwriteParameters: true), out
 ## Other helpers
 
 ```C#
-var sorted = names.OrderBy(n => n, new NaturalComparer());   // "Level 2" before "Level 10"
+var sorted = names.OrderBy(n => n, NaturalComparer.OrdinalIgnoreCase);   // "Level 2" before "Level 10"
 var rounded = value.Round(5);
 var file    = directory.AppendPath("model.rvt");
 var rel     = rootFolder.GetRelativePath(filePath);

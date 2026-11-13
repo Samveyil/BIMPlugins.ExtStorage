@@ -12,12 +12,12 @@ namespace BIMPlugins.ExtStorage.FailuresProcessing
         /// <code>
         /// using var t = new Transaction(doc, "Create walls");
         /// t.Start();
-        /// TransactionHandler.SetWarningResolver(t, new WarningSkipper());
+        /// t.SetWarningResolver(new WarningSkipper());
         /// // ...
         /// t.Commit();
         /// </code>
         /// </example>
-        public static void SetWarningResolver(Transaction transaction, IFailuresPreprocessor preprocessor)
+        public static void SetWarningResolver(this Transaction transaction, IFailuresPreprocessor preprocessor)
         {
             FailureHandlingOptions failOptions = transaction.GetFailureHandlingOptions();
             failOptions.SetFailuresPreprocessor(preprocessor);

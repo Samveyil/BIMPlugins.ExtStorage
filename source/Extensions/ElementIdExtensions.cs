@@ -5,9 +5,12 @@ namespace BIMPlugins.ExtStorage.Extensions
     /// <summary>Extension methods for <see cref="Autodesk.Revit.DB.ElementId"/>: getting elements, id values and parameter filters.</summary>
     public static class ElementIdExtensions
     {
+        // Values computed by Revit, such as lengths, are rarely equal to the bit, so double filters compare within this tolerance.
+        private const double DefaultTolerance = 1e-6;
+
         /// <summary>Gets the Element.</summary>
         /// <param name="id">The element id.</param>
-        /// <param name="doc">The owning document. Passing <see langword="null"/> will return the active document</param>
+        /// <param name="doc">The owning document. Passing <see langword="null"/> will return the active document.</param>
         /// <returns>The element.</returns>
         public static Element ToElement(this ElementId id, Document doc = null)
         {
@@ -18,7 +21,7 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>Gets the Element.</summary>
         /// <typeparam name="T">The element type to return (must inherit from Element).</typeparam>
         /// <param name="id">The element id.</param>
-        /// <param name="doc">The owning document. Passing <see langword="null"/> will return the active document</param>
+        /// <param name="doc">The owning document. Passing <see langword="null"/> will return the active document.</param>
         /// <returns>The element cast to type <typeparamref name="T"/>.</returns>
         public static T ToElement<T>(this ElementId id, Document doc = null) where T : Element => (T)id.ToElement(doc);
 
@@ -61,11 +64,12 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// </summary>
         /// <param name="parameterId">The id of the parameter, for example <c>new ElementId(BuiltInParameter.ALL_MODEL_MARK)</c> or the id of a <see cref="Autodesk.Revit.DB.SharedParameterElement"/>.</param>
         /// <param name="value">The user-supplied value against which values from the document will be compared.</param>
+        /// <param name="epsilon">The tolerance within which the values are taken as equal, in the same units. The default is 1e-6.</param>
         /// <remarks>The value is in Revit internal units: feet for lengths, radians for angles.</remarks>
         /// <returns>The parameter filter. Pass it to <c>ToElements</c> or a <see cref="Autodesk.Revit.DB.FilteredElementCollector"/>.</returns>
-        public static ElementParameterFilter CreateEqualsFilter(this ElementId parameterId, double value)
+        public static ElementParameterFilter CreateEqualsFilter(this ElementId parameterId, double value, double epsilon = DefaultTolerance)
         {
-            var filterRule = ParameterFilterRuleFactory.CreateEqualsRule(parameterId, value, double.Epsilon);
+            var filterRule = ParameterFilterRuleFactory.CreateEqualsRule(parameterId, value, epsilon);
             return new ElementParameterFilter(filterRule);
         }
 
@@ -114,11 +118,12 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// </summary>
         /// <param name="parameterId">The id of the parameter, for example <c>new ElementId(BuiltInParameter.ALL_MODEL_MARK)</c> or the id of a <see cref="Autodesk.Revit.DB.SharedParameterElement"/>.</param>
         /// <param name="value">The user-supplied value against which values from the document will be compared.</param>
+        /// <param name="epsilon">The tolerance within which the values are taken as equal, in the same units. The default is 1e-6.</param>
         /// <remarks>The value is in Revit internal units: feet for lengths, radians for angles.</remarks>
         /// <returns>The parameter filter. Pass it to <c>ToElements</c> or a <see cref="Autodesk.Revit.DB.FilteredElementCollector"/>.</returns>
-        public static ElementParameterFilter CreateNotEqualsFilter(this ElementId parameterId, double value)
+        public static ElementParameterFilter CreateNotEqualsFilter(this ElementId parameterId, double value, double epsilon = DefaultTolerance)
         {
-            var filterRule = ParameterFilterRuleFactory.CreateNotEqualsRule(parameterId, value, double.Epsilon);
+            var filterRule = ParameterFilterRuleFactory.CreateNotEqualsRule(parameterId, value, epsilon);
             return new ElementParameterFilter(filterRule);
         }
 
@@ -151,11 +156,12 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// </summary>
         /// <param name="parameterId">The id of the parameter, for example <c>new ElementId(BuiltInParameter.ALL_MODEL_MARK)</c> or the id of a <see cref="Autodesk.Revit.DB.SharedParameterElement"/>.</param>
         /// <param name="value">The user-supplied value against which values from the document will be compared.</param>
+        /// <param name="epsilon">The tolerance within which the values are taken as equal, in the same units. The default is 1e-6.</param>
         /// <remarks>The value is in Revit internal units: feet for lengths, radians for angles.</remarks>
         /// <returns>The parameter filter. Pass it to <c>ToElements</c> or a <see cref="Autodesk.Revit.DB.FilteredElementCollector"/>.</returns>
-        public static ElementParameterFilter CreateGreaterOrEqualFilter(this ElementId parameterId, double value)
+        public static ElementParameterFilter CreateGreaterOrEqualFilter(this ElementId parameterId, double value, double epsilon = DefaultTolerance)
         {
-            var filterRule = ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameterId, value, double.Epsilon);
+            var filterRule = ParameterFilterRuleFactory.CreateGreaterOrEqualRule(parameterId, value, epsilon);
             return new ElementParameterFilter(filterRule);
         }
 

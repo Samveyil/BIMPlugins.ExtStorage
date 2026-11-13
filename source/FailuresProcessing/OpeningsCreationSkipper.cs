@@ -13,9 +13,9 @@ namespace BIMPlugins.ExtStorage.FailuresProcessing
     /// </remarks>
     public class OpeningsCreationSkipper : IFailuresPreprocessor
     {
-        /// <summary>Resolves the first failure that can be fixed by deleting elements.</summary>
+        /// <summary>Resolves the first error that can be fixed by deleting elements.</summary>
         /// <param name="accessor">The failures of the transaction being committed.</param>
-        /// <remarks>Revit calls the preprocessor again after the commit is retried, so the remaining failures are resolved one by one.</remarks>
+        /// <remarks>Revit calls the preprocessor again after the commit is retried, so the remaining errors are resolved one by one.</remarks>
         /// <returns>
         /// <see cref="Autodesk.Revit.DB.FailureProcessingResult.ProceedWithCommit"/> if an error was resolved;
         /// otherwise <see cref="Autodesk.Revit.DB.FailureProcessingResult.Continue"/>.
@@ -23,25 +23,17 @@ namespace BIMPlugins.ExtStorage.FailuresProcessing
         public FailureProcessingResult PreprocessFailures(FailuresAccessor accessor)
         {
             IList<FailureMessageAccessor> failures = accessor.GetFailureMessages();
-            foreach (FailureMessageAccessor failureMessageAccessor in failures)
+            foreach (FailureMessageAccessor failure in failures)
             {
-                if (failureMessageAccessor.HasResolutionOfType(FailureResolutionType.DeleteElements))
+                if (failure.GetSeverity() == FailureSeverity.Error &&
+                    failure.HasResolutionOfType(FailureResolutionType.DeleteElements))
                 {
-                    failureMessageAccessor.SetCurrentResolutionType(FailureResolutionType.DeleteElements);
-
-                    var id = failureMessageAccessor.GetFailureDefinitionId();
-                    var failureSeverity = accessor.GetSeverity();
-                    if (failureSeverity == FailureSeverity.Error)
-                    {
-                        accessor.ResolveFailure(failureMessageAccessor);
-                        return FailureProcessingResult.ProceedWithCommit;
-                    }
-                    else
-                    {
-                        return FailureProcessingResult.Continue;
-                    }
+                    failure.SetCurrentResolutionType(FailureResolutionType.DeleteElements);
+                    accessor.ResolveFailure(failure);
+                    return FailureProcessingResult.ProceedWithCommit;
                 }
             }
+
             return FailureProcessingResult.Continue;
         }
     }

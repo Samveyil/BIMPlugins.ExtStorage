@@ -54,7 +54,7 @@ namespace BIMPlugins.ExtStorage.Extensions
                 StorageType.String => parameter.Set(
                     value is string stringValue
                         ? stringValue
-                        : value.ToString()),
+                        : value?.ToString()),
 
                 StorageType.ElementId when value is ElementId elementId => parameter.Set(elementId),
 
