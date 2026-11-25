@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 The package is published separately for each Revit version: version `0.6.0` is released
 as `2019.6.0` … `2025.6.0`.
 
+## [0.8.0] / 2026-11-25
+### Breaking changes
+- `Element.Mirror(plane)` and `ElementId.Mirror(doc, plane)` returning one element are removed. They created a mirrored copy,
+  as Revit's `MirrorElement` does, but returned the original element. Use `Mirror(plane)` / `Mirror(doc, plane)` of the
+  list overloads: `mirrorCopies` is now optional and `true` by default, so the call is the same and returns the ids of the
+  mirrored copies; `Mirror(plane, mirrorCopies: false)` mirrors the element itself. `MirrorElements` takes the same default.
+- `OpenLocalDocument`, `OpenAndActivateLocalDocument` and `SetSaveAsOptions` got optional parameters (see Features),
+  so add-ins built against 0.7.0 must be rebuilt.
+### Features
+- `OpenLocalDocument` and `OpenAndActivateLocalDocument` take `existingFile`: what to do with an existing local file
+  of the same name, the two choices of Revit's dialog. `ExistingLocalFile.Overwrite` (the default, as before) deletes it,
+  `ExistingLocalFile.AppendTimestamp` renames it `<file name>_<user name>_yyyyMMdd_HHmmss.rvt`.
+- `SetSaveAsOptions(saveAsCentral: false)` creates options for a document without worksharing.
+### Changed
+- `OpenAndActivateDocument`, `OpenAndActivateDetachedDocument` and `OpenAndActivateLocalDocument` return `null` when the
+  document cannot be opened instead of throwing, as the `Open…Document` methods do, and have overloads with `out string error`.
+- `GetUnitType`, `ToUnit` and `FromUnit` throw `ArgumentException` for an unknown unit type such as `"mm2"`
+  instead of converting the value as millimetres.
+- `ToLine` returns `null` for an element not located by a straight line instead of throwing.
+### Fixed
+- `GetView3D` finds Revit's own 3D views again, such as `{3D}` and `{3D - user}`: since 0.7.0 it replaced the braces
+  before the lookup, did not find these views and created a new view named `3D - user` instead.
+- `GetView3D` no longer fails for a document open in the background: such a document cannot be made active.
+- `SetValue` reads `"2,5"` as 2.5, not 25: a comma in text is taken as the decimal separator. Text that is not a number,
+  and a fractional number for an integer parameter, are not set and give `false` instead of an exception or a truncated value.
+- `GetSharedParameterGUIDs`, `GetSharedParameterGUIDByName` and `GetSharedParameterGUIDsDict` return `null`
+  (`Guid.Empty`) when the shared parameter file does not exist or cannot be read, instead of throwing.
+  `FindExternalDefinition` returns `null` when no shared parameter file is set instead of failing.
+- `ToSolid` returns the largest solid of the element in every case: for geometry outside a family instance
+  it returned the first solid.
+- `BoundingBoxXYZ.Overlaps` is exact for rotated boxes: it reported nearby rotated boxes as overlapping.
+- `ToParameter(parameterId)` finds built-in and shared parameters directly instead of searching all the parameters of the element.
+- A user name with characters not allowed in file names, such as `DOMAIN\user`, no longer breaks the local file path.
+
 ## [0.7.0] / 2026-11-13
 ### Breaking changes
 - `LocationType` moved out of `ElementExtensions` into the `BIMPlugins.ExtStorage.Extensions` namespace:
@@ -65,6 +99,7 @@ First release on nuget.org.
 ### Removed
 - `SelectionMethods.GetIfcElements` with its filters `IFCParameterFilter` and `IgnoredCategoryFilter`.
 
+[0.8.0]: https://github.com/Samveyil/BIMPlugins.ExtStorage/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/Samveyil/BIMPlugins.ExtStorage/compare/v0.6.1...v0.7.0
 [0.6.1]: https://github.com/Samveyil/BIMPlugins.ExtStorage/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/Samveyil/BIMPlugins.ExtStorage/tree/v0.6.0

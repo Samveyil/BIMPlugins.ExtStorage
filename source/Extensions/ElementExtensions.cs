@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BIMPlugins.ExtStorage.Extensions
@@ -42,7 +43,10 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="element">The element.</param>
         /// <param name="options">User preferences for parsing of geometry. Passing <see langword="null"/> will return a default Options object.</param>
         /// <param name="isSymbolGeometry"><see langword="true"/> if computes the geometric representation of the symbol which generates this instance; otherwise, of the instance.</param>
-        /// <returns>The element's solid. This return may be <see langword="null"/> if there is no matching geometry.</returns>
+        /// <returns>
+        /// The largest solid of the element, the one of the greatest volume, from its own geometry and from the family geometry alike.
+        /// A detail component may give a flat solid with no volume. <see langword="null"/> if there is no matching geometry.
+        /// </returns>
         public static Solid ToSolid(this Element element, Options options = null, bool isSymbolGeometry = false)
         {
             options ??= new Options() { DetailLevel = ViewDetailLevel.Fine };
@@ -51,39 +55,36 @@ namespace BIMPlugins.ExtStorage.Extensions
             if (geomElem == null)
                 return null;
 
+            var solids = new List<Solid>();
             foreach (GeometryObject geomObj in geomElem)
             {
                 if (geomObj is GeometryInstance geomInst)
-                {
-                    var solid = (isSymbolGeometry ? geomInst.GetSymbolGeometry() : geomInst.GetInstanceGeometry())
-                        .OfType<Solid>()
-                        .OrderByDescending(s => s.Volume)
-                        .ThenByDescending(s => s.SurfaceArea)
-                        .FirstOrDefault();
-                    
-                    if (solid != null)
-                    {
-                        if (solid.Volume > 0)
-                            return solid;
-                        else if (element.GetBuiltInCategory() == BuiltInCategory.OST_DetailComponents && solid.SurfaceArea > 0)
-                            return solid;
-                    }
-                }
-                else if (geomObj is Solid solid && solid.Volume > 0)
-                {
-                    return solid;
-                }
+                    solids.AddRange((isSymbolGeometry ? geomInst.GetSymbolGeometry() : geomInst.GetInstanceGeometry()).OfType<Solid>());
+                else if (geomObj is Solid solid)
+                    solids.Add(solid);
             }
 
-            return null;
+            var largest = solids
+                .OrderByDescending(s => s.Volume)
+                .ThenByDescending(s => s.SurfaceArea)
+                .FirstOrDefault();
+
+            if (largest == null)
+                return null;
+
+            if (largest.Volume > 0)
+                return largest;
+
+            return element.GetBuiltInCategory() == BuiltInCategory.OST_DetailComponents && largest.SurfaceArea > 0
+                ? largest
+                : null;
         }
 
         /// <summary>Retrieves the location line of the element.</summary>
-        /// <remarks>The element must be located by a straight line, as walls or beams are. Otherwise the method throws an exception.</remarks>
-        /// <returns>The location line of the element.</returns>
+        /// <returns>The location line of the element, or <see langword="null"/> if it is not located by a straight line, as walls or beams are.</returns>
         public static Line ToLine(this Element element)
         {
-            return (element.Location as LocationCurve).Curve.To<Line>();
+            return (element.Location as LocationCurve)?.Curve as Line;
         }
 
         /// <summary>Retrieves the location point of the element.</summary>
@@ -133,9 +134,17 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>Retrieves the parameter from the element via the given id.</summary>
         /// <param name="element">The element.</param>
         /// <param name="parameterId">The id of the parameter to be retrieved.</param>
-        /// <returns>The matching parameter.</returns>
+        /// <returns>The matching parameter, or <see langword="null"/> if the element has no such parameter.</returns>
         public static Parameter ToParameter(this Element element, ElementId parameterId)
         {
+            // Built-in and shared parameters are found directly; only other parameters are looked for among all of them.
+            var id = parameterId.GetValue();
+            if (id < 0)
+                return element.get_Parameter((BuiltInParameter)id);
+
+            if (parameterId.ToElement(element.Document) is SharedParameterElement sharedParameter)
+                return element.get_Parameter(sharedParameter.GuidValue);
+
             return element.Parameters.Cast<Parameter>().FirstOrDefault(p => p.Id.Equals(parameterId));
         }
     }

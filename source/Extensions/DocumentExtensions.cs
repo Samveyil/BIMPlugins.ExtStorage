@@ -35,23 +35,30 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <summary>Retrieves the View3D which has the given name.</summary>
         /// <param name="document">The document.</param>
         /// <param name="viewName">The name of the View3D to be retrieved.</param>
-        /// <param name="setAsActive"><see langword="true"/> to set the View3D as active.</param>
+        /// <param name="setAsActive"><see langword="true"/> to set the View3D as active; ignored for a document that is not the active one.</param>
         /// <remarks>
+        /// The name is looked up as given first, so Revit's own views such as <c>{3D}</c> or <c>{3D - user}</c> are found.
         /// If there is no such View3D, the method creates one in a transaction of its own, so it must not be called inside an open transaction.
-        /// Characters not allowed in view names (<c>\ : { } [ ] | ; &lt; &gt; ? ` ~</c>) are replaced with <c>_</c>. View templates are not considered.
+        /// A new view gets the name with characters not allowed in view names (<c>\ : { } [ ] | ; &lt; &gt; ? ` ~</c>) replaced with <c>_</c>,
+        /// and a view of that name is reused next time. View templates are not considered.
         /// </remarks>
         /// <returns>The matching View3D.</returns>
         public static View3D GetView3D(this Document document, string viewName, bool setAsActive=true)
         {
-            viewName = ToValidViewName(viewName);
+            var validName = ToValidViewName(viewName);
 
-            var view3D = document.ToElements<View3D>()
-                .FirstOrDefault(v => !v.IsTemplate && v.Name == viewName);
+            var views3D = document.ToElements<View3D>()
+                .Where(v => !v.IsTemplate)
+                .ToList();
 
-            view3D ??= document.CreateView3D(viewName);
+            var view3D = views3D.FirstOrDefault(v => v.Name == viewName)
+                ?? views3D.FirstOrDefault(v => v.Name == validName)
+                ?? document.CreateView3D(validName);
 
-            if (setAsActive)
-                new UIDocument(document).ActiveView = view3D;
+            // Only the active document can show a view; a document open in the background cannot.
+            var uiDoc = RevitAPI.UIApplication.ActiveUIDocument;
+            if (setAsActive && uiDoc != null && uiDoc.Document.Equals(document))
+                uiDoc.ActiveView = view3D;
 
             return view3D;
         }

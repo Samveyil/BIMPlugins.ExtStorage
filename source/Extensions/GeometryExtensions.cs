@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using System;
 using System.Linq;
 
 namespace BIMPlugins.ExtStorage.Extensions
@@ -138,20 +139,51 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="bbox">The bounding box.</param>
         /// <param name="other">The <see cref="Autodesk.Revit.DB.BoundingBoxXYZ" /> instance to compare with this bounding box.</param>
         /// <returns><see langword="true"/> if the two bounding boxes have at least one common point.</returns>
-        /// <remarks>
-        /// A box with a transform is compared by the axis-aligned extents of its corners in model coordinates,
-        /// so two rotated boxes close to each other may be reported as overlapping.
-        /// </remarks>
+        /// <remarks>Boxes with a transform, rotated ones included, are compared exactly.</remarks>
         public static bool Overlaps(this BoundingBoxXYZ bbox, BoundingBoxXYZ other)
         {
-            Extents(bbox, out var boxMin, out var boxMax);
-            Extents(other, out var otherMin, out var otherMax);
+            // Separating axis test: two boxes do not overlap if and only if their corners, projected onto one of these axes,
+            // fall into two separate intervals. The axes are the 3 edges of each box and the 9 cross products of them.
+            var cornersA = Corners(bbox);
+            var cornersB = Corners(other);
+            var axesA = Axes(bbox);
+            var axesB = Axes(other);
 
-            var overlapX = !(boxMax.X < otherMin.X - Tolerance || boxMin.X > otherMax.X + Tolerance);
-            var overlapY = !(boxMax.Y < otherMin.Y - Tolerance || boxMin.Y > otherMax.Y + Tolerance);
-            var overlapZ = !(boxMax.Z < otherMin.Z - Tolerance || boxMin.Z > otherMax.Z + Tolerance);
+            var axes = axesA
+                .Concat(axesB)
+                .Concat(axesA.SelectMany(a => axesB.Select(b => a.CrossProduct(b))))
+                .Where(axis => axis.GetLength() > Tolerance)
+                .Select(axis => axis.Normalize());
 
-            return overlapX && overlapY && overlapZ;
+            foreach (var axis in axes)
+            {
+                Project(cornersA, axis, out var minA, out var maxA);
+                Project(cornersB, axis, out var minB, out var maxB);
+
+                if (maxA < minB - Tolerance || minA > maxB + Tolerance)
+                    return false;
+            }
+
+            return true;
+        }
+
+        // The directions of the edges of the box in model coordinates.
+        private static XYZ[] Axes(BoundingBoxXYZ box)
+        {
+            var transform = box.Transform;
+            return [transform.BasisX, transform.BasisY, transform.BasisZ];
+        }
+
+        private static void Project(XYZ[] corners, XYZ axis, out double min, out double max)
+        {
+            min = double.MaxValue;
+            max = double.MinValue;
+            foreach (var corner in corners)
+            {
+                var value = corner.DotProduct(axis);
+                min = Math.Min(min, value);
+                max = Math.Max(max, value);
+            }
         }
 
         // The 8 corners of the box in model coordinates. Transforming only Min and Max is not enough:
@@ -175,13 +207,6 @@ namespace BIMPlugins.ExtStorage.Extensions
             }
 
             return corners;
-        }
-
-        private static void Extents(BoundingBoxXYZ box, out XYZ min, out XYZ max)
-        {
-            var corners = Corners(box);
-            min = new XYZ(corners.Min(c => c.X), corners.Min(c => c.Y), corners.Min(c => c.Z));
-            max = new XYZ(corners.Max(c => c.X), corners.Max(c => c.Y), corners.Max(c => c.Z));
         }
     }
 }

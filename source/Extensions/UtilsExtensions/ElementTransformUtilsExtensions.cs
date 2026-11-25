@@ -13,13 +13,6 @@ namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
             return ElementTransformUtils.CopyElement(element.Document, element.Id, translation);
         }
 
-        /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.MirrorElement(Document, Autodesk.Revit.DB.ElementId, Autodesk.Revit.DB.Plane)" />
-        public static Element Mirror(this Element element, Plane plane)
-        {
-            ElementTransformUtils.MirrorElement(element.Document, element.Id, plane);
-            return element;
-        }
-
         /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.MoveElement(Document, Autodesk.Revit.DB.ElementId, Autodesk.Revit.DB.XYZ)" />
         public static Element Move(this Element element, XYZ translation)
         {
@@ -34,18 +27,17 @@ namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
             return element;
         }
 
+        /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.MirrorElements(Document, ICollection{Autodesk.Revit.DB.ElementId}, Autodesk.Revit.DB.Plane, bool)" />
+        public static IList<ElementId> Mirror(this Element element, Plane plane, bool mirrorCopies = true)
+        {
+            return ElementTransformUtils.MirrorElements(element.Document, [element.Id], plane, mirrorCopies);
+        }
+
 
         /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.CopyElement(Autodesk.Revit.DB.Document,Autodesk.Revit.DB.ElementId,Autodesk.Revit.DB.XYZ)" />
         public static ICollection<ElementId> Copy(this ElementId elementId, Document doc, XYZ translation)
         {
             return ElementTransformUtils.CopyElement(doc, elementId, translation);
-        }
-
-        /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.MirrorElement(Document, Autodesk.Revit.DB.ElementId, Autodesk.Revit.DB.Plane)" />
-        public static ElementId Mirror(this ElementId elementId, Document doc, Plane plane)
-        {
-            ElementTransformUtils.MirrorElement(doc, elementId, plane);
-            return elementId;
         }
 
         /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.MoveElement(Document, Autodesk.Revit.DB.ElementId, Autodesk.Revit.DB.XYZ)" />
@@ -60,6 +52,12 @@ namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
         {
             ElementTransformUtils.RotateElement(doc, elementId, axis, angle);
             return elementId;
+        }
+
+        /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.MirrorElements(Document, ICollection{Autodesk.Revit.DB.ElementId}, Autodesk.Revit.DB.Plane, bool)" />
+        public static IList<ElementId> Mirror(this ElementId elementId, Document doc, Plane plane, bool mirrorCopies = true)
+        {
+            return ElementTransformUtils.MirrorElements(doc, [elementId], plane, mirrorCopies);
         }
 
 
@@ -94,12 +92,6 @@ namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
             return ElementTransformUtils.CopyElements(sourceView, [element.Id], destinationView, null, null);
         }
 
-        /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.MirrorElements(Document, ICollection{Autodesk.Revit.DB.ElementId}, Autodesk.Revit.DB.Plane, bool)" />
-        public static IList<ElementId> Mirror(this Element element, Plane plane, bool mirrorCopies)
-        {
-            return ElementTransformUtils.MirrorElements(element.Document, [element.Id], plane, mirrorCopies);
-        }
-
 
         /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.CopyElements(Document, ICollection{Autodesk.Revit.DB.ElementId}, Document, Transform, Autodesk.Revit.DB.CopyPasteOptions)" />
         public static ICollection<ElementId> Copy(this ElementId elementId,
@@ -131,12 +123,6 @@ namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
         public static ICollection<ElementId> Copy(this ElementId elementId, View sourceView, View destinationView)
         {
             return ElementTransformUtils.CopyElements(sourceView, [elementId], destinationView, null, null);
-        }
-
-        /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.MirrorElements(Document, ICollection{Autodesk.Revit.DB.ElementId}, Autodesk.Revit.DB.Plane, bool)" />
-        public static IList<ElementId> Mirror(this ElementId elementId, Document doc, Plane plane, bool mirrorCopies)
-        {
-            return ElementTransformUtils.MirrorElements(doc, [elementId], plane, mirrorCopies);
         }
 
 
@@ -178,12 +164,6 @@ namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
             return ElementTransformUtils.CopyElements(sourceView, elements, destinationView, null, null);
         }
 
-        /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.MirrorElements(Document, ICollection{Autodesk.Revit.DB.ElementId}, Autodesk.Revit.DB.Plane, bool)" />
-        public static IList<ElementId> MirrorElements(this ICollection<ElementId> elements, Document doc, Plane plane, bool mirrorCopies)
-        {
-            return ElementTransformUtils.MirrorElements(doc, elements, plane, mirrorCopies);
-        }
-
         /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.MoveElements(Document, ICollection{Autodesk.Revit.DB.ElementId}, Autodesk.Revit.DB.XYZ)" />
         public static ICollection<ElementId> MoveElements(this ICollection<ElementId> elements, Document doc, XYZ translation)
         {
@@ -196,6 +176,12 @@ namespace BIMPlugins.ExtStorage.Extensions.UtilsExtensions
         {
             ElementTransformUtils.RotateElements(doc, elements, axis, angle);
             return elements;
+        }
+
+        /// <inheritdoc cref="Autodesk.Revit.DB.ElementTransformUtils.MirrorElements(Document, ICollection{Autodesk.Revit.DB.ElementId}, Autodesk.Revit.DB.Plane, bool)" />
+        public static IList<ElementId> MirrorElements(this ICollection<ElementId> elements, Document doc, Plane plane, bool mirrorCopies = true)
+        {
+            return ElementTransformUtils.MirrorElements(doc, elements, plane, mirrorCopies);
         }
     }
 }

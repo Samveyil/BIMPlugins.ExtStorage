@@ -43,17 +43,19 @@ namespace BIMPlugins.ExtStorage.Methods
         }
 
 
-        /// <summary>Creates a new <see cref="Autodesk.Revit.DB.SaveAsOptions"/> instance configured to save the document as a central worksharing file, overwriting any existing file.</summary>
-        /// <returns>A <see cref="Autodesk.Revit.DB.SaveAsOptions"/> instance with <see cref="Autodesk.Revit.DB.SaveAsOptions.OverwriteExistingFile"/> and <see cref="Autodesk.Revit.DB.WorksharingSaveAsOptions.SaveAsCentral"/> set to <see langword="true"/>.</returns>
-        public static SaveAsOptions SetSaveAsOptions()
+        /// <summary>Creates a new <see cref="Autodesk.Revit.DB.SaveAsOptions"/> instance that overwrites any existing file.</summary>
+        /// <param name="saveAsCentral">
+        /// <see langword="true"/> to save a workshared document as a central file. Pass <see langword="false"/> for a document
+        /// without worksharing, such as <c>doc.IsWorkshared</c> gives: saving it with worksharing options fails.
+        /// </param>
+        /// <returns>A <see cref="Autodesk.Revit.DB.SaveAsOptions"/> instance with <see cref="Autodesk.Revit.DB.SaveAsOptions.OverwriteExistingFile"/> set to <see langword="true"/>.</returns>
+        public static SaveAsOptions SetSaveAsOptions(bool saveAsCentral = true)
         {
-            WorksharingSaveAsOptions worksharingOptions = new WorksharingSaveAsOptions();
-            worksharingOptions.SaveAsCentral = true;
-            
-            SaveAsOptions saveOptions = new SaveAsOptions();
-            saveOptions.OverwriteExistingFile = true;
-            saveOptions.SetWorksharingOptions(worksharingOptions);
-            
+            var saveOptions = new SaveAsOptions { OverwriteExistingFile = true };
+
+            if (saveAsCentral)
+                saveOptions.SetWorksharingOptions(new WorksharingSaveAsOptions { SaveAsCentral = true });
+
             return saveOptions;
         }
     }

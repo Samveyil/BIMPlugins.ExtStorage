@@ -35,31 +35,67 @@ namespace BIMPlugins.ExtStorage.Extensions
         /// <param name="parameter">The parameter.</param>
         /// <param name="value">The new value to which the parameter is to be set.</param>
         /// <remarks>Depending on the parameter's storage type, the input value is converted and passed to the corresponding
-        /// Set overload — Set(double), Set(int), Set(string), or Set(ElementId).</remarks>
+        /// Set overload — Set(double), Set(int), Set(string), or Set(ElementId).
+        /// Text is read as a number with a dot or a comma as the decimal separator, so <c>"2,5"</c> and <c>"2.5"</c> are both 2.5.
+        /// An integer parameter takes only whole numbers: <c>2.7</c> is not set.</remarks>
         /// <returns>The SetValue method will return <see langword="true"/> if the parameter was successfully set to the new value, otherwise <see langword="false"/>.</returns>
         public static bool SetValue(this Parameter parameter, object value)
         {
-            return parameter.StorageType switch
+            switch (parameter.StorageType)
             {
-                StorageType.Double => parameter.Set(
-                    value is double doubleValue
-                        ? doubleValue
-                        : Convert.ToDouble(value, CultureInfo.InvariantCulture)),
+                case StorageType.Double:
+                    return TryToDouble(value, out var doubleValue) && parameter.Set(doubleValue);
 
-                StorageType.Integer => parameter.Set(
-                    value is int intValue
-                        ? intValue
-                        : (int)Convert.ToDouble(value, CultureInfo.InvariantCulture)),
+                case StorageType.Integer:
+                    if (value is int intValue)
+                        return parameter.Set(intValue);
 
-                StorageType.String => parameter.Set(
-                    value is string stringValue
-                        ? stringValue
-                        : value?.ToString()),
+                    return TryToDouble(value, out var number)
+                        && number == Math.Truncate(number)
+                        && number >= int.MinValue && number <= int.MaxValue
+                        && parameter.Set((int)number);
 
-                StorageType.ElementId when value is ElementId elementId => parameter.Set(elementId),
+                case StorageType.String:
+                    return parameter.Set(value as string ?? value?.ToString());
 
-                _ => false
-            };
+                case StorageType.ElementId when value is ElementId elementId:
+                    return parameter.Set(elementId);
+
+                default:
+                    return false;
+            }
+        }
+
+        // A number from a number, a bool or text. In text a comma is taken as the decimal separator, as a dot is:
+        // with the invariant culture alone "2,5" would be read as 25, the comma being its thousands separator.
+        private static bool TryToDouble(object value, out double result)
+        {
+            switch (value)
+            {
+                case double d:
+                    result = d;
+                    return true;
+
+                case string text:
+                    return double.TryParse(text.Trim().Replace(',', '.'),
+                        NumberStyles.Float, CultureInfo.InvariantCulture, out result);
+
+                case IConvertible convertible:
+                    try
+                    {
+                        result = convertible.ToDouble(CultureInfo.InvariantCulture);
+                        return true;
+                    }
+                    catch (Exception ex) when (ex is FormatException or InvalidCastException or OverflowException)
+                    {
+                        result = 0;
+                        return false;
+                    }
+
+                default:
+                    result = 0;
+                    return false;
+            }
         }
 
 #if R2022_OR_GREATER
